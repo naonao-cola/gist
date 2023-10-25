@@ -150,7 +150,7 @@ ps -ef | grep **
 free -h
 ```
 
-压缩
+#### 压缩
 
 ```bash
 # 压缩 tar
@@ -161,4 +161,13 @@ tar -xvf studio.tar -C /tmp/extract/
 tar -zcvf studio.tar.gz directory_to_compress
 #解压 tar.gz 到 目录
 tar -zxvf studio.tar.gz  -C /tmp/extract/
+```
+
+#### 磁盘用量
+
+```bash
+df -hl # 查看磁盘剩余空间
+df -h  #查看每个根路径的分区大小
+du -sh [目录名] #返回该目录的大小
+du -sm [文件夹] #返回该文件夹总M数
 ```
