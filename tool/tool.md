@@ -22,6 +22,18 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 
 ```
 
+#### tldr
+
+```bash
+sudo apt-get install tldr
+sudo tldr --update
+#没有目录则自己创建 /home/ubuntu/.local/share/tldr
+```
+
+
+
+
+
 #### frp 部署
 
 1、从github 下载，解压下载的压缩包。
