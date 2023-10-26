@@ -113,13 +113,14 @@ else:
         ],
         zip_safe=False,
     )
-
 ```
 
 ***
 
-```
+# 安装包
 
+```bash
+pip install -i https://pypi.tuna.tsinghua.edu.cn/simple numpy
 ```
 
 ```
