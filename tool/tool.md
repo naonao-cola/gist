@@ -30,10 +30,6 @@ sudo tldr --update
 #没有目录则自己创建 /home/ubuntu/.local/share/tldr
 ```
 
-
-
-
-
 #### frp 部署
 
 1、从github 下载，解压下载的压缩包。
@@ -205,6 +201,29 @@ sudo groupadd docker
 sudo gpasswd -a ${USER} docker
 sudo service docker restart
 newgrp - docker
+```
+
+#### screen
+
+```bash
+# 创建窗口test
+screen -S test
+
+# 列出所有
+screen -ls
+#进入screen
+screen -r <screen的pid>
+
+# 断开当前窗口(继续运行)
+ctrl + a + d
+ctrl + d
 
 
+# 退出当前窗口
+exit
+# 对于正在启动的后台进程修改名字
+screen -S [原始任务名] -X sessionname [修改后的任务名]
+
+#清除损坏的screen
+screen --wipe
 ```
