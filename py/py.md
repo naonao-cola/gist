@@ -130,6 +130,4 @@ pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 # 更新全部包，三方工具
 pip3 install pip-review
 pip-review --local --interactive
-
-
 ```

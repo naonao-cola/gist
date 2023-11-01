@@ -169,7 +169,19 @@ tar -xvf studio.tar -C /tmp/extract/
 tar -zcvf studio.tar.gz directory_to_compress
 #解压 tar.gz 到 目录
 tar -zxvf studio.tar.gz  -C /tmp/extract/
+
+# 压缩文件
+rar a -r test.rar file
+# 解压文件
+unrar x test.rar  
+ 
+# 压缩文件
+zip -r test.zip file
+# 解压文件
+unzip test.zip -d file
 ```
+
+
 
 #### 磁盘用量
 
