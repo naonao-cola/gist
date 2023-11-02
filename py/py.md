@@ -131,3 +131,13 @@ pip3 config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 pip3 install pip-review
 pip-review --local --interactive
 ```
+
+# python 库推荐
+
+```bash
+import pickle as pkl  # 序列化库
+from pathlib2 import Path # 路径库
+import importlib # 导包库
+import hydra     # 配置库
+import inspect   # 获取属性库
+```
