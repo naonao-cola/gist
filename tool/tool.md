@@ -174,14 +174,12 @@ tar -zxvf studio.tar.gz  -C /tmp/extract/
 rar a -r test.rar file
 # 解压文件
 unrar x test.rar  
- 
+
 # 压缩文件
 zip -r test.zip file
 # 解压文件
 unzip test.zip -d file
 ```
-
-
 
 #### 磁盘用量
 
@@ -238,4 +236,24 @@ screen -S [原始任务名] -X sessionname [修改后的任务名]
 
 #清除损坏的screen
 screen --wipe
+```
+
+#### wsl2 安装cuda
+
+```bash
+# 参考文档 https://blog.csdn.net/iwanvan/article/details/122119595
+# 安装的时候注意版本问题
+apt-cache showpkg cuda
+apt-get install <package_name>=<version_name>
+
+# 卸载
+#To remove CUDA Toolkit:
+sudo apt-get --purge remove "*cuda*" "*cublas*" "*cufft*" "*cufile*" "*curand*" \
+ "*cusolver*" "*cusparse*" "*gds-tools*" "*npp*" "*nvjpeg*" "nsight*" "*nvvm*"
+#To remove NVIDIA Drivers:
+sudo apt-get --purge remove "*nvidia*" "libxnvctrl*"
+#To clean up the uninstall:
+sudo apt-get autoremove
+
+
 ```
