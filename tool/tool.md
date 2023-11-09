@@ -254,6 +254,46 @@ sudo apt-get --purge remove "*cuda*" "*cublas*" "*cufft*" "*cufile*" "*curand*" 
 sudo apt-get --purge remove "*nvidia*" "libxnvctrl*"
 #To clean up the uninstall:
 sudo apt-get autoremove
+```
+
+#### tmux
+
+```bash
+# 查看有所有tmux会话
+tmux ls
+# 新建tmux窗口
+tmux new -s <session-name>
+
+# 分离会话,快捷键：Ctrl+b d
+tmux detach  
+# 重新连接会话
+tmux attach -t <session-name> 
+tmux at -t <session-name>
+#关闭会话
+exit
+# 划分上下两个窗格,Ctrl+b “
+tmux split
+
+# 划分左右两个窗格 Ctrl+b %
+tmux split -h
 
 
+# 光标切换到上方窗格,Ctrl+b 方向键上
+tmux select-pane -U
+
+
+”	        # 将当前面板平分为上下两块
+%	        # 将当前面板平分为左右两块
+x	        # 关闭当前面板
+!	        # 将当前面板置于新窗口；即新建一个窗口，其中仅包含当前面板
+Ctrl+方向键	# 以1个单元格为单位移动边缘以调整当前面板大小
+Alt+方向键	# 以5个单元格为单位移动边缘以调整当前面板大小
+Space	    # 在预置的面板布局中循环切换；依次包括even-horizontal、even-vertical、main-horizontal、main-vertical、tiled
+q	        # 显示面板编号
+o	        # 在当前窗口中选择下一面板
+方向键	    # 移动光标以选择面板
+{	        # 向前置换当前面板
+}	        # 向后置换当前面板
+Alt+o	    # 逆时针旋转当前窗口的面板
+Ctrl+o	    # 顺时针旋转当前窗口的面板
 ```
