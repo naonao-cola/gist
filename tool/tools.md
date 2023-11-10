@@ -305,5 +305,6 @@ Ctrl+o        # 顺时针旋转当前窗口的面板
 # 参考这两篇，利用action 同步及更新page文档
 https://gitee.com/heartaotime/gitee-pages-action
 https://zhuanlan.zhihu.com/p/353862378
+https://juejin.cn/post/7049317964281020446
 
 ```
