@@ -1,8 +1,9 @@
 ﻿
 
 
-# lua
 
+#
+# lua
 ```lua
 set_project("AIRuntime")
 
@@ -277,8 +278,8 @@ target("test")
 
 
 ```
-# 命令行
 
+# 命令行
 ```bash
 
 xmake f -c
