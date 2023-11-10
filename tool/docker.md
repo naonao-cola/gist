@@ -35,3 +35,24 @@ docker system info
 # 删除废弃容器
 docker system prune
 ```
+
+
+# dockerfile
+
+```dockefile
+# 1.使用一个基础镜像，例如Ubuntu
+FROM ubuntu:latest
+
+# 2.更新包管理器
+RUN apt-get update
+
+# 3.安装软件包
+# 这些为c++编译调式需要的基本的依赖包，可根据需要自行添加其他依赖性
+RUN apt-get install -y --fix-missing gcc g++ gdb  cmake rsync
+
+# 4.清理临时文件
+RUN apt-get clean
+WORKDIR /
+RUN rm -rf /tmp/CMake
+
+```
