@@ -1,4 +1,4 @@
-# 
+#
 
 # fzf安装
 
@@ -6,7 +6,7 @@
 sudo  apt install fzf
 source /usr/share/doc/fzf/examples/completion.zsh
 source /usr/share/doc/fzf/examples/key-bindings.zsh
-# 快捷键 ctrl + T  art + c   ctrl + r  fzf 
+# 快捷键 ctrl + T  art + c   ctrl + r  fzf
 # 配置
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --preview '(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
@@ -140,7 +140,7 @@ ssh -o Port=6000 test@x.x.x.x
 # 8
 # 当您开始新行时，只需键入@以显示包含所有可用功能的弹出窗口
 
-# 9 
+# 9
 # 在两个::之间输入表情英文，MarkText支持快捷选择小表情
 ```
 
@@ -175,7 +175,7 @@ tar -zxvf studio.tar.gz  -C /tmp/extract/
 # 压缩文件
 rar a -r test.rar file
 # 解压文件
-unrar x test.rar  
+unrar x test.rar
 
 # 压缩文件
 zip -r test.zip file
@@ -267,9 +267,9 @@ tmux ls
 tmux new -s <session-name>
 
 # 分离会话,快捷键：Ctrl+b d
-tmux detach  
+tmux detach
 # 重新连接会话
-tmux attach -t <session-name> 
+tmux attach -t <session-name>
 tmux at -t <session-name>
 #关闭会话
 exit
@@ -298,4 +298,12 @@ o            # 在当前窗口中选择下一面板
 }            # 向后置换当前面板
 Alt+o        # 逆时针旋转当前窗口的面板
 Ctrl+o        # 顺时针旋转当前窗口的面板
+```
+
+# gitee同步
+```bash
+# 参考这两篇，利用action 同步及更新page文档
+https://gitee.com/heartaotime/gitee-pages-action
+https://zhuanlan.zhihu.com/p/353862378
+
 ```
