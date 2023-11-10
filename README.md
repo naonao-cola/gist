@@ -1,9 +1,5 @@
-# gist
+# 爱喝可乐的闹闹
 
-:smirk: :smirk:  :smirk:
+> [Github](https://github.com/naonao-cola)
 
-代码片段
-
-工具合集
-
-linux 命令
+> [Gitee](https://gitee.com/naoano)
