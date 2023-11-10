@@ -1,11 +1,9 @@
-[c++](./cxx/)
+[c++](./cxx/gist.md)
 
 [python](./py/py.md)
 
-##### tool
+ [tool](./tool/tools.md)
 
-[docker](./tool/docker.md)
+ [docker](./tool/docker.md)
 
-[tool](./tool/tool.md)
-
-
+ 
