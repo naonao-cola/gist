@@ -2,8 +2,7 @@
 
 ```bash
 # 注意后面的空格 跟 点
-docker build -t gxx:v1 -f /home/ubuntu/download/docker_files/
-Dockerfile .
+docker build -t gxx:v1 -f /home/ubuntu/download/docker_files/  Dockerfile .
 
 
 #删除镜像

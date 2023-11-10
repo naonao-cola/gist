@@ -1,4 +1,4 @@
-# 
+#
 
 # Python程序打包
 
@@ -116,7 +116,9 @@ else:
         zip_safe=False,
     )
 ```
-
+```bash
+python setup.py bdist_wheel BSO
+```
 ***
 
 # 安装包
@@ -142,4 +144,101 @@ from pathlib2 import Path # 路径库
 import importlib # 导包库
 import hydra     # 配置库
 import inspect   # 获取属性库
+```
+
+# 路径处理库pathlib
+```python
+from pathlib2 import Path
+# 获取当前目录
+# D:\IDEA\ipoad_ywk\test\demo_pathlib
+current_path = Path.cwd()
+# 获取Home目录
+home_path = Path.home()
+
+# 获取上级父目录
+# D:\IDEA\ipoad_ywk\test
+print(current_path.parent)
+# 获取上上级父目录
+# D:\IDEA\ipoad_ywk
+print(current_path.parent.parent)
+# 获取上上上级父目录
+# D:\IDEA
+print(current_path.parent.parent.parent)
+
+# 文件名操作
+# 返回目录中最后一个部分的扩展名
+example_path = Path("D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.txt")
+print(example_path.suffix)  # .txt
+# 返回目录中多个扩展名列表
+example_paths = Path("D:\IDEA\ipoad_ywk\test\demo_pathlib\abc.tar.gz")
+print(example_paths.suffixes)  # ['.tar', '.gz']
+# 返回目录中最后一部分文件名，但不包含后缀
+example_path = Path("D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.txt")
+print(example_path.stem)  # demo
+# 返回目录中最后一部分文件名
+example_path = Path(r'D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.txt')
+print(example_path.name)  # demo.txt
+# 替换目录最后一部分的文件名并返回一个新的路径
+new_path1 = example_path.with_name('def.txt')
+print(new_path1)  # D:\IDEA\ipoad_ywk\test\demo_pathlib\def.txt
+# 替换目录最后一部分的文件名并返回一个新的路径
+new_path2 = example_path.with_suffix('.gif')
+print(new_path2)  # D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.gif
+
+
+# 路径拼接分解
+# 直接传进去一个完整字符串
+example_path0 = Path(r'D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.txt')
+# D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.txt <class 'pathlib2.WindowsPath'>
+print(example_path0, type(example_path0))
+# 直接传进一个完整字符串
+example_path1 = Path('/Users/Anders/Documents/powershell-2.jpg')
+# \Users\Anders\Documents\powershell-2.jpg <class 'pathlib2.WindowsPath'>
+print(example_path1, type(example_path1))
+# 也可以传进多个字符串
+example_path2 = Path('/', 'Users', 'dongh', 'Documents', 'python_learn', 'pathlib_', 'file1.txt')
+print(example_path2)  # \Users\dongh\Documents\python_learn\pathlib_\file1.txt
+# 也可以利用Path.joinpath()
+example_path3 = Path('/Users/Anders/Documents/').joinpath('python_learn')
+print(example_path3)  # \Users\Anders\Documents\python_learn
+# #利用 / 可以创建子路径
+example_path4 = Path('/Users/Anders/Documents')
+print(example_path4)  # \Users\Anders\Documents
+example_path5 = example_path4 / 'python_learn/pic-2.jpg'
+print(example_path5)  # \Users\Anders\Documents\python_learn\pic-2.jpg
+
+
+# 遍历文件夹
+example_path = Path(r"D:\IDEA\ipoad_ywk\test\demo_pathlib")
+var = [path for path in example_path.iterdir()]
+print(var)
+
+
+
+example_path = Path('/Users/Anders/Documents/test1/test2/test3')
+# 创建文件目录，在这个例子中因为本身不存在test1,test2,test3，由于parents为True，所以都会被创建出来。
+example_path.mkdir(parents = True, exist_ok = True)
+# 删除路径对象目录，如果要删除的文件夹内包含文件就会报错
+example_path.rmdir()
+
+
+
+example_path = Path('/Users/Anders/Documents/pic-2.jpg')
+# 判断对象是否存在
+print(example_path.exists())
+# 输出如下：
+# True
+
+# 判断对象是否是目录
+print(example_path.is_dir())
+# 输出如下：
+# False
+
+# 判断对象是否是文件
+print(example_path.is_file())
+# 输出如下：
+# True
+
+
+
 ```

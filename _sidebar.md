@@ -6,4 +6,7 @@
 
 [docker](./tool/docker.md)
 
+
+[xmake](./tool/xmake.md)
+
  
