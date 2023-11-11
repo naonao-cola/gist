@@ -1,5 +1,5 @@
 ﻿
-## **xmake**
+## xmake
 ### lua
 第一个参考文件
 
@@ -302,6 +302,6 @@ xmake l find_package x264
 xmake l find_package conan::OpenSSL/1.0.2g
 ```
 
-## **cmake**
+## cmake
 
 ### cmakelist

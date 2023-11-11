@@ -62,7 +62,7 @@ docker system prune
 
 ## dockerfile
 
-```dockefile
+```dockerfile
 # 1.使用一个基础镜像，例如Ubuntu
 FROM ubuntu:latest
 
