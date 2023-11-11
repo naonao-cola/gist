@@ -3,10 +3,9 @@
 ![logo](./images/profile.jpg)
 
 # 闹闹 <small>3.5</small>
+# 一个正在慢慢整理迭代的个人知识库
 
 码坛皮条客 | 团队背锅侠 | AI绝缘体 | BUG收割机
-
-销售型程序员 | 零代码编程践行者 | ctrlcv开发布道师
 
 领导难以启齿的过去 | 同事不堪回首的曾经 | 产品挥之不去的噩梦 | 测试心里永远无法抹去的痛
 
@@ -14,9 +13,3 @@
 [Get Started](#docsify)
 
 
-<span id="busuanzi_container_site_pv" style='display:none'>
-    👀 本站总访问量：<span id="busuanzi_value_site_pv"></span> 次
-</span>
-<span id="busuanzi_container_site_uv" style='display:none'>
-    | 🚴‍♂️ 本站总访客数：<span id="busuanzi_value_site_uv"></span> 人
-</span>

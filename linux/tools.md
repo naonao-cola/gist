@@ -105,7 +105,7 @@ remotePort = 6000
 ssh -o Port=6000 test@x.x.x.x
 ```
 
-## marktext 常规使用
+## marktext
 
 ```bash
 ###
