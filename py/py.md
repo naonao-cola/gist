@@ -1,6 +1,4 @@
-#
-
-# Python程序打包
+## Python程序打包
 
 ```python
 # import setuptools
@@ -121,7 +119,7 @@ python setup.py bdist_wheel BSO
 ```
 ***
 
-# 安装包
+## 安装包
 
 ```bash
 pip install -i https://pypi.tuna.tsinghua.edu.cn/simple numpy
@@ -136,7 +134,7 @@ pip3 install pip-review
 pip-review --local --interactive
 ```
 
-# python 库推荐
+## python 库推荐
 
 ```bash
 import pickle as pkl  # 序列化库
@@ -146,7 +144,7 @@ import hydra     # 配置库
 import inspect   # 获取属性库
 ```
 
-# 路径处理库pathlib
+## 路径处理库pathlib
 ```python
 from pathlib2 import Path
 # 获取当前目录

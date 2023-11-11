@@ -7,13 +7,25 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css"-->
 
+  <link rel="stylesheet" media="(prefers-color-scheme: dark)"
+    href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple-dark.css">
+  <link rel="stylesheet" media="(prefers-color-scheme: light)"
+    href="https://cdn.jsdelivr.net/npm/docsify-themeable@0/dist/css/theme-simple.css">
+  <style>
+    :root {
+      /* Reduce the font size */
+      --base-font-size: 16px;
 
-  <!-- 文件夹样式 -->
-  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar-folder.min.css" /-->
-  <!-- 箭头样式 -->
-  <!-- <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar.min.css" /> -->
+      /* Change the theme color hue (0-360) */
+      /* --theme-hue: 325; */
+
+      /* Add sidebar navigation bullets */
+      --sidebar-nav-link-before-content-l1: "😀";
+      --sidebar-nav-link-before-content-l2: "💩";
+    }
+  </style>
 </head>
 
 <body>
@@ -33,8 +45,8 @@
       disqus: 'shortname',
       // 页面右侧toc
       toc: {
-        tocMaxLevel: 2,
-        target: "h1, h2, h3, h4, h5, h6",
+        tocMaxLevel: 6,
+        target: " h1, h2, h3, h4, h5, h6",
       },
       // 全文搜索
       search: {
@@ -83,8 +95,8 @@
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-docker.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-lua.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
-
   <!-- 多tab支持 -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1/dist/docsify-tabs.min.js"></script>
   <!-- 代码复制 -->
@@ -105,6 +117,13 @@
   <script src="https://cdn.jsdelivr.net/npm/docsify-plugin-toc@1.1.0/dist/docsify-plugin-toc.min.js"></script>
   <!-- emoji -->
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+
+
+
+
+
+
+
 </body>
 
 </html>

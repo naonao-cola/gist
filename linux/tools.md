@@ -1,6 +1,4 @@
-#
-
-# fzf安装
+## fzf安装
 
 ```bash
 sudo  apt install fzf
@@ -12,19 +10,19 @@ export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --preview '(highlight -O 
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
 ```
 
-# oh my zsh
+## oh my zsh
 
 ```bash
 
 ```
 
-# the fuck
+## the fuck
 
 ```bash
 
 ```
 
-# tldr
+## tldr
 
 ```bash
 sudo apt-get install tldr
@@ -32,7 +30,7 @@ sudo tldr --update
 #没有目录则自己创建 /home/ubuntu/.local/share/tldr
 ```
 
-# frp 部署
+## frp 部署
 
 1、从github 下载，解压下载的压缩包。
 
@@ -107,7 +105,7 @@ remotePort = 6000
 ssh -o Port=6000 test@x.x.x.x
 ```
 
-# marktext 常规使用
+## marktext 常规使用
 
 ```bash
 ###
@@ -144,7 +142,7 @@ ssh -o Port=6000 test@x.x.x.x
 # 在两个::之间输入表情英文，MarkText支持快捷选择小表情
 ```
 
-# SHELL
+## SHELL
 
 ```bash
 chmod u+x **.sh
@@ -152,7 +150,7 @@ chmod u+x **.sh
 export PATH=$PATH:/home/ay2021/scripts
 ```
 
-# 进程 内存
+## 进程 内存
 
 ```bash
 ps -aux | grep **
@@ -160,7 +158,7 @@ ps -ef | grep **
 free -h
 ```
 
-# 压缩
+## 压缩
 
 ```bash
 # 压缩 tar
@@ -183,7 +181,7 @@ zip -r test.zip file
 unzip test.zip -d file
 ```
 
-# 磁盘用量
+## 磁盘用量
 
 ```bash
 df -hl # 查看磁盘剩余空间
@@ -192,7 +190,7 @@ du -sh [目录名] #返回该目录的大小
 du -sm [文件夹] #返回该文件夹总M数
 ```
 
-# screen
+## screen
 
 ```bash
 # 创建窗口test
@@ -212,7 +210,7 @@ screen -S [原始任务名] -X sessionname [修改后的任务名]
 screen --wipe
 ```
 
-# wsl2 安装cuda
+## wsl2 安装cuda
 
 ```bash
 # 参考文档 https://blog.csdn.net/iwanvan/article/details/122119595
@@ -230,7 +228,7 @@ sudo apt-get --purge remove "*nvidia*" "libxnvctrl*"
 sudo apt-get autoremove
 ```
 
-# tmux
+## tmux
 
 ```bash
 # 查看有所有tmux会话

@@ -1,11 +1,6 @@
 ﻿
-
-
-#
-
-# xmake
-## lua
-
+## **xmake**
+### lua
 第一个参考文件
 
 ```lua
@@ -283,7 +278,7 @@ target("test")
 
 ```
 
-## 命令行
+### 命令行
 ```bash
 xmake create -l C++ -P ./hello
 
@@ -307,6 +302,6 @@ xmake l find_package x264
 xmake l find_package conan::OpenSSL/1.0.2g
 ```
 
-# cmake
+## **cmake**
 
-## cmakelist
+### cmakelist

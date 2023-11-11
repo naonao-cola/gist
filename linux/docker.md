@@ -1,5 +1,4 @@
-
-# docker安装
+## docker安装
 
 ```bash
 sudo apt update # 更新索引
@@ -22,7 +21,7 @@ sudo service docker restart
 newgrp - docker
 ```
 
-# docker
+## docker
 
 ```bash
 # 注意后面的空格 跟 点
@@ -61,7 +60,7 @@ docker system prune
 ```
 
 
-# dockerfile
+## dockerfile
 
 ```dockefile
 # 1.使用一个基础镜像，例如Ubuntu

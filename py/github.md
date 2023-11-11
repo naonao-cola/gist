@@ -1,5 +1,4 @@
-﻿
-# gitee同步
+﻿## gitee同步
 ```bash
 # 参考这两篇，利用action 同步及更新page文档
 https://gitee.com/heartaotime/gitee-pages-action
@@ -13,5 +12,5 @@ https://github.com/yanglbme/gitee-pages-action
 
 ```
 
-# github仓库推荐
+## github仓库推荐
 
