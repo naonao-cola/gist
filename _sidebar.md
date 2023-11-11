@@ -2,7 +2,7 @@
 
 [python](./py/py.md)
 
-[tool](./tool/tools.md)
+[linux](./tool/tools.md)
 
 [docker](./tool/docker.md)
 
