@@ -2,11 +2,11 @@
 
 [python](./py/py.md)
 
-[linux](./tool/tools.md)
+[linux](./linux/tools.md)
 
-[docker](./tool/docker.md)
+[docker](./linux/docker.md)
 
 
-[xmake](./tool/xmake.md)
+[compile](./linux/compile.md)
 
  
