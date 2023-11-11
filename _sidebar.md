@@ -11,8 +11,7 @@
 - [**github**](./py/github.md)
 
 
-- **Links**
-- [**Github**](https://github.com/naonao-cola)
+
 
 
 
