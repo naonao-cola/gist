@@ -9,6 +9,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
 
+
   <!-- 侧边栏插件的样式 -->
   <link rel="stylesheet" href="//vox.cab/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
 </head>
@@ -17,7 +18,7 @@
   <div id="app">🏃‍🏃‍🏃‍💨加载中...</div>
   <script>
     window.$docsify = {
-      name: 'naonao blog',
+      name: 'Blog',
       repo: 'https://github.com/naonao-cola',
        el: '#app',
       loadNavbar: true, // 默认加载 _navbar.md，作为顶部导航栏
@@ -45,22 +46,20 @@
         paths: 'auto',// 注意：仅适用于 paths: 'auto' 模式
         // 占位文字
         placeholder: {
-          '/': 'Click here to search'
+          '/zh-cn/': '搜索',
+          '/': 'Type to search'
         },
-        noData: 'No Results!',
+        // 支持本地化
+        noData: {
+          '/zh-cn/': '找不到结果',
+          '/': 'No Results'
+        },
         // Headline depth, 1 - 6
         depth: 6,
         // whether or not to hide other sidebar content
         hideOtherSidebarContent: false,
         // To avoid search index collision between multiple websites under the same domain
         namespace: 'This website',
-      },
-      // 底部导航
-      pagination: {
-        previousText: "上一页",
-        nextText: "下一页",
-        crossChapter: true,
-        crossChapterText: true,
       },
 
       // 字数统计
@@ -112,6 +111,7 @@
         lang: "zh-CN",
         loading: "lazy"
       },
+
     }
   </script>
   <!-- Docsify v4 -->
@@ -173,6 +173,8 @@
 
   <!-- 阅读进度条 -->
   <script src="https://cdn.jsdelivr.net/npm/docsify-progress@latest/dist/progress.min.js"></script>
+
+
 </body>
 
 </html>
