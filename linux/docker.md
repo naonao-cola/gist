@@ -1,4 +1,28 @@
-## docker
+
+# docker安装
+
+```bash
+sudo apt update # 更新索引
+#安装依赖
+sudo apt install apt-transport-https ca-certificates curl gnupg2 software-properties-common
+#添加官方GPG密钥
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+#官方仓库安装
+sudo add-apt-repository \
+"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+$(lsb_release -cs) \
+stable"
+#安装
+sudo apt install docker-ce
+#免sudo
+sudo groupadd docker
+sudo gpasswd -a ${USER} docker
+sudo service docker restart
+newgrp - docker
+```
+
+# docker
 
 ```bash
 # 注意后面的空格 跟 点

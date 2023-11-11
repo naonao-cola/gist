@@ -192,50 +192,22 @@ du -sh [目录名] #返回该目录的大小
 du -sm [文件夹] #返回该文件夹总M数
 ```
 
-# docker安装
-
-```bash
-sudo apt update # 更新索引
-#安装依赖
-sudo apt install apt-transport-https ca-certificates curl gnupg2 software-properties-common
-#添加官方GPG密钥
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-
-#官方仓库安装
-sudo add-apt-repository \
-"deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-$(lsb_release -cs) \
-stable"
-#安装
-sudo apt install docker-ce
-#免sudo
-sudo groupadd docker
-sudo gpasswd -a ${USER} docker
-sudo service docker restart
-newgrp - docker
-```
-
 # screen
 
 ```bash
 # 创建窗口test
 screen -S test
-
 # 列出所有
 screen -ls
 #进入screen
 screen -r <screen的pid>
-
 # 断开当前窗口(继续运行)
 ctrl + a + d
 ctrl + d
-
-
 # 退出当前窗口
 exit
 # 对于正在启动的后台进程修改名字
 screen -S [原始任务名] -X sessionname [修改后的任务名]
-
 #清除损坏的screen
 screen --wipe
 ```
@@ -265,7 +237,6 @@ sudo apt-get autoremove
 tmux ls
 # 新建tmux窗口
 tmux new -s <session-name>
-
 # 分离会话,快捷键：Ctrl+b d
 tmux detach
 # 重新连接会话
@@ -275,15 +246,12 @@ tmux at -t <session-name>
 exit
 # 划分上下两个窗格,Ctrl+b “
 tmux split
-
 # 划分左右两个窗格 Ctrl+b %
 tmux split -h
 
 
 # 光标切换到上方窗格,Ctrl+b 方向键上
 tmux select-pane -U
-
-
 ”            # 将当前面板平分为上下两块
 %            # 将当前面板平分为左右两块
 x            # 关闭当前面板
@@ -300,16 +268,3 @@ Alt+o        # 逆时针旋转当前窗口的面板
 Ctrl+o        # 顺时针旋转当前窗口的面板
 ```
 
-# gitee同步
-```bash
-# 参考这两篇，利用action 同步及更新page文档
-https://gitee.com/heartaotime/gitee-pages-action
-https://zhuanlan.zhihu.com/p/353862378
-https://juejin.cn/post/7049317964281020446
-
-##github 参考
-## branch 参数默认是 master，如果你是部署在 gh-pages(或者 main) 分支等等，务必指定 branch: gh-pages(或者 branch: main)。
-## 对于 gitee-repo 参数，如果你的项目在 Gitee 的地址为 https://gitee.com/用户名/xxx ，那么 gitee-repo 就填写为 用户名/xxx
-https://github.com/yanglbme/gitee-pages-action
-
-```
