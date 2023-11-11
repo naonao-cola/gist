@@ -8,8 +8,8 @@
   <meta name="description" content="Description">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
   <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
-  
-  
+
+
   <!-- 文件夹样式 -->
   <!--link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/sidebar-folder.min.css" /-->
   <!-- 箭头样式 -->
@@ -22,10 +22,10 @@
     window.$docsify = {
       name: 'naonao blog',
       repo: 'https://github.com/naonao-cola',
-	  loadNavbar: true, // 默认加载 _navbar.md，作为顶部导航栏
+      loadNavbar: true, // 默认加载 _navbar.md，作为顶部导航栏
       loadSidebar: true,
       // 开启目录,最大层级为2
-      subMaxLevel: 5,
+      subMaxLevel: 6,
       alias: {
         "/.*/_sidebar.md": "/_sidebar.md",
       },
@@ -34,7 +34,7 @@
       // 页面右侧toc
       toc: {
         tocMaxLevel: 2,
-        target: "h2, h3, h4, h5, h6",
+        target: "h1, h2, h3, h4, h5, h6",
       },
       // 全文搜索
       search: {
@@ -73,7 +73,7 @@
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/disqus.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
-  
+
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
   <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
