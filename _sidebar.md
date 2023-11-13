@@ -1,7 +1,7 @@
 - [**c++**](./cxx/gist.md)
 
 - [**python**](./py/py.md)
-  
+
 - [**linux**](./linux/tools.md)
 
 - [**docker**](./linux/docker.md)
