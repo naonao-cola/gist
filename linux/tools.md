@@ -268,7 +268,7 @@ Ctrl+o        # 顺时针旋转当前窗口的面板
 
 ## vscode插件
 
-### # koroFileHeader注释插件
+### koroFileHeader注释插件
 
 ```bash
 # Ctrl + win + i

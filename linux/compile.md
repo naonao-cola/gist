@@ -1,6 +1,7 @@
-﻿
-## xmake
+﻿## xmake
+
 ### lua
+
 第一个参考文件
 
 ```lua
@@ -176,10 +177,10 @@ includes(
     "sample/ort_test/xmake.lua",
     "sample/trt_test/xmake.lua"
 )
-
 ```
 
 第二个参考文件
+
 ```lua
 target("AIFramework")
     set_kind("shared")
@@ -206,6 +207,7 @@ target_end()
 ```
 
 第三个参考文件
+
 ```lua
 -- project
 set_project("CGraph")
@@ -274,11 +276,10 @@ target("test")
         -- configs = {foo = 1}
         local configs = target:fileconfig("src/main.cpp")
     end)
-
-
 ```
 
 ### 命令行
+
 ```bash
 xmake create -l C++ -P ./hello
 

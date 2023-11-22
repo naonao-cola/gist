@@ -59,7 +59,6 @@ docker system info
 docker system prune
 ```
 
-
 ## dockerfile
 
 ```dockerfile
@@ -77,5 +76,4 @@ RUN apt-get install -y --fix-missing gcc g++ gdb  cmake rsync
 RUN apt-get clean
 WORKDIR /
 RUN rm -rf /tmp/CMake
-
 ```
