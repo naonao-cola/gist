@@ -266,7 +266,20 @@ end
 add_files("test/*.c", "test2/test2.c", {defines = "TEST2", languages = "c99", includedirs = ".", cflags = "-O0"})
 -- 强制禁用 cxflags,cflags 等编译选项的自动检测
 add_files("src/*.c", {force = {cxflags = "-DTEST", mflags = "-framework xxx"}})
+--添加编译命令,编码格式
+set_xmakever("2.7.9")
+set_project("cpp_pg")
+set_languages("cxx17")
 
+set_encodings("source:utf-8", "target:utf-8")
+
+add_cxflags("/utf-8")
+add_cxflags("/Zc:__cplusplus")
+target("app")
+
+    set_kind("binary")
+    add_includedirs("src")
+    add_files("src/**.cpp")
 
 --指定文件加参数
 target("test")
