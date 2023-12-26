@@ -368,66 +368,61 @@ set_target_properties(
 )
 ```
 
-
-
-
-
 #### 模板
 
 ```cmake
 cmake_minimum_required( VERSION 3.8 FATAL_ERROR)
 project(main VERSION 1.0.0 LANGUAGES CXX)
- 
+
 #set dirs
 set(PROJECT_ROOT ${CMAKE_CURRENT_LIST_DIR})
 message("project dir:${PROJECT_ROOT}")
- 
+
 SET(CMAKE_EXPORT_COMPILE_COMMANDS ON)   #导出clangd需要的文件，用于智能提示和基于语议的补全
- 
+
 SET(BIN_DESTINATION ${PROJECT_SOURCE_DIR}/bin)
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${BIN_DESTINATION})
 SET(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${BIN_DESTINATION})
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${BIN_DESTINATION})
- 
+
 #set compile flags
 #add_definitions(-std=c++11 -g -rdynamic)
 set(CMAKE_CXX_FLAGS "-g3 -rdynamic -std=c++11")
 set(CMAKE_CXX_FLAGS_DEBUG "-g3 -O0 -fsanitize=address -fno-omit-frame-pointer -fsanitize=leak")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -DNDEBUG")
- 
+
 #include dirs
 include_directories(./)
- 
+
 #link dirs
 link_directories(${BIN_DESTINATION})
- 
+
 #libraries
 SET(SRC_BASE_CALC base_calc.cpp)
 add_library(base_calc SHARED ${SRC_BASE_CALC})
- 
+
 SET(SRC_ADD add_calc.cpp)
 add_library(add SHARED ${SRC_ADD})
 target_link_libraries(add base_calc)
- 
+
 SET(SRC_SUB sub_calc.cpp)
 add_library(sub SHARED ${SRC_SUB})
 target_link_libraries(sub base_calc)
- 
+
 SET(SRC_MULTI multi_calc.cpp)
 add_library(multi SHARED ${SRC_MULTI})
 target_link_libraries(multi base_calc)
- 
+
 SET(SRC_DIV div_calc.cpp)
 add_library(div SHARED ${SRC_DIV})
 target_link_libraries(div base_calc)
- 
- 
+
+
 #execute 
 SET(SRC_MAIN main.cpp calc_service.cpp)
 set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})    
 add_executable( ${PROJECT_NAME} ${SRC_MAIN})
 target_link_libraries(${PROJECT_NAME} add sub multi div pthread)
-
 ```
 
 ```cmake
@@ -542,10 +537,7 @@ message(STATUS ${PROJECT_NAME})
 PROJECT_NAME      project()设置的工程名
 PROJECT_SOURCE_DIR    工程源码目录，例如 ~/Hello/
 PROJECT_BINARY_DIR    生成文件目录，例如 ~/Hello/build
-
 ```
-
-
 
 ```cmake
 作者：pingo
@@ -649,8 +641,6 @@ set(CMAKE_BUILD_TYPE "Release")  # 调试使用Debug，可以查看中间变量�
 add_executable( test02 test02.cpp )
 ```
 
-
-
 适用于cpp文件在一个文件夹(src/中)，头文件在另一个文件夹内（include/中），且没有调用第三方库，最终编译成一个可执行文件的情况。
 
 ```cmake
@@ -673,10 +663,6 @@ include_directories(./include/)
 # 6，把源码编译成一个可执行文件，文件名为test03（可以随便取名），会保存在当前目录下
 add_executable( test03 ${DIR_SRC} )
 ```
-
-
-
-
 
 适用于cpp文件在一个文件夹(src/中)，头文件在另一个文件夹内（include/中），且调用了第三方库（比如已经安装在系统中的opencv），最终编译成一个可执行文件的情况。
 
@@ -706,10 +692,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 # 7，把源码编译成一个可执行文件，文件名为test03（可以随便取名），会保存在当前目录下
 add_executable( test04 ${DIR_SRC} )
 target_link_libraries( test04 ${OpenCV_LIBS} )  # 可执行文件名 链接 OpenCV库
-
 ```
-
-
 
 使用cmake构建一个工程，该工程创建了两个静态库，另外生成一个引用这两个静态库的可执行文件。
 
@@ -725,7 +708,6 @@ include_directories (${PROJECT_SOURCE_DIR}/inc)                # 添加头文件
 # refer：https://www.jianshu.com/p/07acea4e86a3
 ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/libsrc)                # 先执行这个目录下的cmake生成静态库
 ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src)                        # 在生成库后，此时再链接库生成可执行文件
-
 ```
 
 ```cmake
