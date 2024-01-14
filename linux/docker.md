@@ -68,6 +68,9 @@ docker volume inspect My_Volume
 #将数据卷怪再到容器
 docker docker run -v foo:/data alpine ls /data## 部署深度学习docker
 ```
+Docker Image及Image命令详解
+参考链接 https://blog.51cto.com/u_15870611/5837740
+
 ---
 
 ## 部署深度学习docker

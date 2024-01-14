@@ -67,7 +67,7 @@ jobs:
 ```
 
 ---
-## ## git 操作
+## git 操作
 ```cpp
 //第一种方式，忽略本地修改，强拉远程,master为远程分支名字
 git fetch --all
@@ -91,5 +91,17 @@ git rm -r --cached vs2002/
 *.inl text eol=native
 ```
 
+45 个 git 合代码的经典操作场景
+参考链接： https://mp.weixin.qq.com/s/J8IByWMSQEj_y2xhhoz4sg
+刘江git 命令速查
+参考链接： https://mp.weixin.qq.com/s/J8IByWMSQEj_y2xhhoz4sg
+最全的git用法
+参考链接： https://mp.weixin.qq.com/s/VSnkoeWLu7D8c6d73LEAxQ
+git图展示高频Git命令
+参考链接： https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
+
 ---
 ## github仓库推荐
+
+---
+## vpn
