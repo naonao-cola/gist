@@ -1,16 +1,20 @@
 ﻿## 编码
 跨win/linux项目的编码选择和编译选项设置，首选： UTF-8 With BOOM，以下是对编码造成问题的说明
-参考链接 https://github.com/lovepika/thinking_file_encoding_cpp
+
+参考链接: https://github.com/lovepika/thinking_file_encoding_cpp
 
 Visual Studio Code 配置 C/C++ 开发环境的最佳实践(VSCode + Clangd + XMake)
-参考链接 https://zhuanlan.zhihu.com/p/398790625
+
+参考链接: https://zhuanlan.zhihu.com/p/398790625
 
 
 ---
 ## c++代码调试的艺术
 微信读书，讲解了VS2022的调试，以及linux下c++的调试技巧
-https://weread.qq.com/web/reader/423320c07228f7b6423975a
+
+参考链接: https://weread.qq.com/web/reader/423320c07228f7b6423975a
 在VS studio中调试dll的方法(软件调用dll)，可以附加到进程，也可以开启本地调试
+
 参考链接：https://blog.csdn.net/daidi1989/article/details/79916399
 在VS studio查看内存的办法
 ```c++
@@ -22,6 +26,7 @@ https://weread.qq.com/web/reader/423320c07228f7b6423975a
 ## c++性能优化
 要优化程序执行效率，第一步就是发现执行过程中的热点问题。大多数情况下，需要依靠专门的工具采集信息，并且将性能问题可视化。比如：火焰图、调用链路耗时分布图，cpu cache命中次数，段页切换次数等。
 常见工具：gpref，valgrind，profiling(CLion内置，可一键生成火焰图)，SLS（特别适用于分布式场景，强烈推荐），vld，Arthas(阿里出品，Java程序性能分析神器)，apiMonitor，permon(windows自带性能分析工具)
+
 参考链接：http://www.chunel.cn/archives/topic-01-performanceoptimization
 
 ---
@@ -89,12 +94,12 @@ void f()
 
 ---
 ## 模板编程
-github 的一个仓库这个可以主要看一下
-参考链接： https://github.com/wuye9036/CppTemplateTutorial
+github 的一个仓库这个可以主要看一下。参考链接： https://github.com/wuye9036/CppTemplateTutorial
 
-小亮老师的课程也可以看一下,看一下模板编程的内容
-B站主页 https://space.bilibili.com/263032155/channel/collectiondetail?sid=53025
-github 链接 https://github.com/parallel101/course
+小亮老师的课程也可以看一下,看一下模板编程的内容。
+
+B站主页： https://space.bilibili.com/263032155/channel/collectiondetail?sid=53025
+github链接： https://github.com/parallel101/course
 
 ![](../images/c++_1.png)
 
@@ -102,8 +107,10 @@ github 链接 https://github.com/parallel101/course
 ## 设计模式
 
 22种设计模式的C++实现
+
 参考链接： https://zhuanlan.zhihu.com/p/476220724
 另外的比较简洁的代码实现。
+
 参考链接：https://gitee.com/naoano/design_pattern
 常用的设计模式：工厂模式，桥接模式，观察者模式，状态模式。
 

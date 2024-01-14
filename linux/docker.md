@@ -69,22 +69,25 @@ docker volume inspect My_Volume
 docker docker run -v foo:/data alpine ls /data## 部署深度学习docker
 ```
 Docker Image及Image命令详解
-参考链接 https://blog.51cto.com/u_15870611/5837740
+
+参考链接: https://blog.51cto.com/u_15870611/5837740
 
 ---
 
 ## 部署深度学习docker
-参考链接
-https://blog.csdn.net/guoqingru0311/article/details/119532502
+
+参考链接: https://blog.csdn.net/guoqingru0311/article/details/119532502
+
 深度学习的dockerfile文件仓库，这个仓库里面有各种写好的dockerfile文件，可以自己改改适配自己的环境
-https://github.com/ufoym/deepo
-dockerhub链接
-https://hub.docker.com/r/ufoym/deepo
+
+参考链接: https://github.com/ufoym/deepo
+
+dockerhub链接,参考链接: https://hub.docker.com/r/ufoym/deepo
 
 示例
-nvidia的docker的官方镜像，里面不同的tag对应不同的版本
-https://hub.docker.com/r/nvidia/cuda
+nvidia的docker的官方镜像，里面不同的tag对应不同的版本。参考链接: https://hub.docker.com/r/nvidia/cuda
 NVIDIA官方提供的docker镜像nvidia/cuda，里面已经编译安装了cuda,但需完善并安装cudnn.注意:这里的cuda版本要跟宿主机显卡驱动匹配.
+
 ```bash
 apt install cuda-toolkit-10-0
 #将cudnn解压，执行以下命令：
@@ -93,8 +96,7 @@ sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64/
 sudo chmod a+r /usr/local/cuda/include/cudnn.h
 sudo chmod a+r /usr/local/cuda/lib64/libcudnn*
 ```
-可以参考下面的这个链接
-https://blog.csdn.net/guoqingru0311/article/details/119532502
+可以参考下面的这个链接：https://blog.csdn.net/guoqingru0311/article/details/119532502
 
 ---
 ## 添加数据卷

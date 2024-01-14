@@ -1,8 +1,8 @@
 ﻿
 ## 提pr
 先fork别人的项目，本地修改上传到自己的仓库，再向原始仓库提pr
-参考链接
-https://blog.csdn.net/vim_wj/article/details/78300239
+
+参考链接:https://blog.csdn.net/vim_wj/article/details/78300239
 
 
 ---
@@ -27,9 +27,12 @@ https://zhuanlan.zhihu.com/p/461511123
 ## github action 持续集成
 
 基础知识讲解
-https://zhuanlan.zhihu.com/p/643085910
+
+参考链接: https://zhuanlan.zhihu.com/p/643085910
+
 B站视频讲解，26分钟，1.5倍速观看即可
-https://www.bilibili.com/video/BV1RE411R7Uy/?vd_source=1d8a232b177c2a5e28ac445019114cec
+
+参考链接: https://www.bilibili.com/video/BV1RE411R7Uy/?vd_source=1d8a232b177c2a5e28ac445019114cec
 
 本人yaml文件参考，需要在github与gitee添加令牌身份验证
 ```yaml
@@ -92,11 +95,15 @@ git rm -r --cached vs2002/
 ```
 
 45 个 git 合代码的经典操作场景
+
 参考链接： https://mp.weixin.qq.com/s/J8IByWMSQEj_y2xhhoz4sg
 刘江git 命令速查
+
 参考链接： https://mp.weixin.qq.com/s/J8IByWMSQEj_y2xhhoz4sg
 最全的git用法
+
 参考链接： https://mp.weixin.qq.com/s/VSnkoeWLu7D8c6d73LEAxQ
+
 git图展示高频Git命令
 参考链接： https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
 
