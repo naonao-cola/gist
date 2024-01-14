@@ -156,6 +156,15 @@ export PATH=$PATH:/home/ay2021/scripts
 ps -aux | grep **
 ps -ef | grep **
 free -h
+
+#文件传输
+scp -r tvt@192.168.0.75:/data/test-data  ./
+rsync -r -v --exclude "*.jpg" tvt@192.168.0.75:/data/test-data  ./
+
+#修改权限
+chmod 777 ./data
+#获取root权限  或者 sudo -sH
+sudo su
 ```
 
 ## 压缩

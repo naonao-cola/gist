@@ -21,12 +21,12 @@ sudo service docker restart
 newgrp - docker
 ```
 
+---
 ## docker
 
 ```bash
 # 注意后面的空格 跟 点
 docker build -t gxx:v1 -f /home/ubuntu/download/docker_files/  Dockerfile .
-
 
 #删除镜像
 docker rmi gcc
@@ -34,8 +34,6 @@ docker rmi gcc
 docker rm -f cxx
 #更新容器属性
 docker update --restart=always cxx
-
-
 
 #启动 gpu容器
 # 参考链接 https://www.cnblogs.com/chester-cs/p/14444247.html
@@ -59,7 +57,6 @@ docker system info
 # 删除废弃容器
 docker system prune
 
-
 # 数据卷
 docker volume create My_Volume
 #查看所有的数据卷
@@ -68,19 +65,35 @@ docker volume ls
 #查看某个数据卷信息，可以看到创建时间、设备类型、标签、挂载点、名字等信息
 docker volume inspect My_Volume
 
-
 #将数据卷怪再到容器
 docker docker run -v foo:/data alpine ls /data## 部署深度学习docker
 ```
+---
 
 ## 部署深度学习docker
+参考链接
+https://blog.csdn.net/guoqingru0311/article/details/119532502
+深度学习的dockerfile文件仓库，这个仓库里面有各种写好的dockerfile文件，可以自己改改适配自己的环境
+https://github.com/ufoym/deepo
+dockerhub链接
+https://hub.docker.com/r/ufoym/deepo
 
+示例
+nvidia的docker的官方镜像，里面不同的tag对应不同的版本
+https://hub.docker.com/r/nvidia/cuda
+NVIDIA官方提供的docker镜像nvidia/cuda，里面已经编译安装了cuda,但需完善并安装cudnn.注意:这里的cuda版本要跟宿主机显卡驱动匹配.
 ```bash
-# 参考链接 https://blog.csdn.net/guoqingru0311/article/details/119532502
-
-# 深度学习的dockerfile文件仓库  https://github.com/ufoym/deepo 
+apt install cuda-toolkit-10-0
+#将cudnn解压，执行以下命令：
+sudo cp cuda/include/cudnn.h /usr/local/cuda/include/
+sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64/
+sudo chmod a+r /usr/local/cuda/include/cudnn.h
+sudo chmod a+r /usr/local/cuda/lib64/libcudnn*
 ```
+可以参考下面的这个链接
+https://blog.csdn.net/guoqingru0311/article/details/119532502
 
+---
 ## 添加数据卷
 
 先停止docker 服务，`systemctl stop docker`
@@ -377,3 +390,6 @@ RUN apt-get clean
 WORKDIR /
 RUN rm -rf /tmp/CMake
 ```
+
+---
+## docker compose
