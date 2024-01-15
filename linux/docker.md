@@ -85,7 +85,10 @@ Docker Image及Image命令详解
 dockerhub链接,参考链接: https://hub.docker.com/r/ufoym/deepo
 
 示例
-nvidia的docker的官方镜像，里面不同的tag对应不同的版本。参考链接: https://hub.docker.com/r/nvidia/cuda
+nvidia的docker的官方镜像，里面不同的tag对应不同的版本。
+
+参考链接: https://hub.docker.com/r/nvidia/cuda
+
 NVIDIA官方提供的docker镜像nvidia/cuda，里面已经编译安装了cuda,但需完善并安装cudnn.注意:这里的cuda版本要跟宿主机显卡驱动匹配.
 
 ```bash
