@@ -291,6 +291,11 @@ paddle2onnx --model_dir ./  --model_filename inference.pdmodel --params_filename
 paddle2onnx --model_dir ./ --model_filename inference.pdmodel  --params_filename inference.pdiparams --save_file ./reshape/cls.onnx  --opset_version 10 --input_shape_dict="{'x':[-1,3,-1,-1]}"  --enable_onnx_checker True
 3*32*320
 
+# 升级之后改尺寸换为
+python -m paddle2onnx.optimize --input_model model.onnx \
+                               --output_model new_model.onnx \
+                               --input_shape_dict "{'x':[1,3,224,224]}"
+
 
 E:\demo\3rdparty\TensorRT-8.4.1.5\bin\trtexec.exe --minShapes=x:1x3x640x640 --optShapes=x:1x3x640x640 --maxShapes=x:1x3x640x640 --onnx=E:\demo\rep\AIFramework\models\ort_models\ch_PP-OCRv4_det_infer\reshape\det.onnx --saveEngine=E:\demo\rep\AIFramework\models\ort_models\ch_PP-OCRv4_det_infer\reshape\det.trt.engine
 
