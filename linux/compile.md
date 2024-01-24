@@ -314,6 +314,16 @@ xmake project -k vsxmake2022 -m "release,debug" v2022
 xmake l find_package x264
 # 追加第三方包管理器前缀来测试
 xmake l find_package conan::OpenSSL/1.0.2g
+
+
+#下载安装好Cuda SDK后，在macosx上会默认安装到/Developer/NVIDIA/CUDA-x.x目录下，Windows上可以通过CUDA_PATH的环境
+#变量找到对应的SDK目录，而 Linux下默认会安装到/usr/local/cuda目录下
+#手动指定Cuda SDK环境目录：
+xmake f --cuda=/usr/local/cuda-9.1/  
+#或者通过xmake g/global命令切到全局设置，避免每次切换编译模式都要重新配置一遍。
+xmake g --cuda=/usr/local/cuda-9.1/  
+#如果想要测试xmake对当前cuda环境的探测支持，可以直接运行
+xmake l detect.sdks.find_cuda
 ```
 
 ## cmake
