@@ -114,9 +114,11 @@ else:
         zip_safe=False,
     )
 ```
+
 ```bash
 python setup.py bdist_wheel BSO
 ```
+
 ***
 
 ## 安装包
@@ -145,6 +147,7 @@ import inspect   # 获取属性库
 ```
 
 ## 路径处理库pathlib
+
 ```python
 from pathlib2 import Path
 # 获取当前目录
@@ -236,7 +239,4 @@ print(example_path.is_dir())
 print(example_path.is_file())
 # 输出如下：
 # True
-
-
-
 ```

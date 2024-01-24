@@ -1,5 +1,4 @@
-<<<<<<< HEAD
-﻿## gitee同步
+## gitee同步
 
 ```bash
 # 参考这两篇，利用action 同步及更新page文档
@@ -13,7 +12,7 @@ https://juejin.cn/post/7049317964281020446
 https://github.com/yanglbme/gitee-pages-action
 ```
 
-## ## git 操作
+## git 操作
 
 ```cpp
 //第一种方式，忽略本地修改，强拉远程,master为远程分支名字
@@ -29,19 +28,20 @@ git stash pop
 git rm -r --cached vs2002/
 ```
 
-
-
 ## github仓库推荐
-=======
-﻿
+
+---
+
 ## 提pr
+
 先fork别人的项目，本地修改上传到自己的仓库，再向原始仓库提pr
 
 参考链接:https://blog.csdn.net/vim_wj/article/details/78300239
 
-
 ---
+
 ## gitee同步
+
 ```bash
 # 参考这两篇，利用action 同步及更新page文档
 https://gitee.com/heartaotime/gitee-pages-action
@@ -55,10 +55,10 @@ https://github.com/yanglbme/gitee-pages-action
 
 # 保持自己github的forks自动和上游仓库同步并推送到 gitee
 https://zhuanlan.zhihu.com/p/461511123
-
 ```
 
 ---
+
 ## github action 持续集成
 
 基础知识讲解
@@ -70,6 +70,7 @@ B站视频讲解，26分钟，1.5倍速观看即可
 参考链接: https://www.bilibili.com/video/BV1RE411R7Uy/?vd_source=1d8a232b177c2a5e28ac445019114cec
 
 本人yaml文件参考，需要在github与gitee添加令牌身份验证
+
 ```yaml
 name: Sync
 
@@ -105,7 +106,9 @@ jobs:
 ```
 
 ---
+
 ## git 操作
+
 ```cpp
 //第一种方式，忽略本地修改，强拉远程,master为远程分支名字
 git fetch --all
@@ -122,6 +125,7 @@ git rm -r --cached vs2002/
 
 .gitkeep 文件是防止空目录不上传的文件
 .gitattributes 文件是控制格式的文件，
+
 ```gitignore
 # To shield the difference between Windows and Linux systems.
 *.h text eol=native
@@ -146,8 +150,9 @@ git图展示高频Git命令
 参考链接： https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
 
 ---
+
 ## github仓库推荐
 
 ---
-## vpn
 
+## vpn
