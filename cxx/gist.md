@@ -1,7 +1,5 @@
 ## 编码
 
-
-
 跨win/linux项目的编码选择和编译选项设置，首选： UTF-8 With BOOM，以下是对编码造成问题的说明
 
 参考链接
@@ -13,14 +11,6 @@ Visual Studio Code 配置 C/C++ 开发环境的最佳实践(VSCode + Clangd + XM
 参考链接
 
  https://zhuanlan.zhihu.com/p/398790625
-
-```c++
-
-```
-
-=======
-
-
 
 ---
 
@@ -99,7 +89,7 @@ class ExportImpl : public IExport
 
 ---
 
-### std::unique_ptr
+## std::unique_ptr
 
 shared_ptr和unique_ptr在反复多次申请和来回赋值的情况下，有一定的性能差距，同时shared_ptr自身内存占用也比unique_ptr大（主要都是因为shared_ptr中的cas校验机制）。很多大型项目，是明文禁止使用shared_ptr的。大家平日写代码的时候，可以注意一下不需要共享所有权时应该使用unique_ptr而不是shared_ptr.
 unique_ptr从概念上更简单，动作更加可预见（你知道析构动作什么时候发生）而且更快（不需要隐式维护使用计数）。
