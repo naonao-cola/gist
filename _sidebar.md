@@ -10,8 +10,8 @@
 
 - [**docker**](./linux/docker.md)
 
-- [**compile**](./linux/compile.md)
+- [**compile**](./cxx/compile.md)
 
-- [**github**](./py/github.md)
+- [**github**](./github/github.md)
 
  

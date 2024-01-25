@@ -1,4 +1,3 @@
-
 ## docker安装
 
 ```bash
@@ -378,7 +377,9 @@ RUN apt-get clean
 WORKDIR /
 RUN rm -rf /tmp/CMake
 ```
+
 =======
+
 ## docker安装
 
 ```bash
@@ -403,6 +404,7 @@ newgrp - docker
 ```
 
 ---
+
 ## docker
 
 ```bash
@@ -449,6 +451,7 @@ docker volume inspect My_Volume
 #将数据卷怪再到容器
 docker docker run -v foo:/data alpine ls /data## 部署深度学习docker
 ```
+
 Docker Image及Image命令详解
 
 参考链接: https://blog.51cto.com/u_15870611/5837740
@@ -480,9 +483,11 @@ sudo cp cuda/lib64/libcudnn* /usr/local/cuda/lib64/
 sudo chmod a+r /usr/local/cuda/include/cudnn.h
 sudo chmod a+r /usr/local/cuda/lib64/libcudnn*
 ```
+
 可以参考下面的这个链接：https://blog.csdn.net/guoqingru0311/article/details/119532502
 
 ---
+
 ## 添加数据卷
 
 先停止docker 服务，`systemctl stop docker`
@@ -781,5 +786,5 @@ RUN rm -rf /tmp/CMake
 ```
 
 ---
-## docker compose
 
+## docker compose
