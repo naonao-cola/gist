@@ -1,28 +1,26 @@
 ## 编码
 
-跨win/linux项目的编码选择和编译选项设置，首选： UTF-8 With BOOM
 
-以下是对编码造成问题的说明
 
-https://github.com/lovepika/thinking_file_encoding_cpp
+跨win/linux项目的编码选择和编译选项设置，首选： UTF-8 With BOOM，以下是对编码造成问题的说明
 
-## 多线程
+参考链接
 
-## 线程池
+ https://github.com/lovepika/thinking_file_encoding_cpp
+
+Visual Studio Code 配置 C/C++ 开发环境的最佳实践(VSCode + Clangd + XMake)
+
+参考链接
+
+ https://zhuanlan.zhihu.com/p/398790625
 
 ```c++
 
 ```
 
 =======
-﻿## 编码
-跨win/linux项目的编码选择和编译选项设置，首选： UTF-8 With BOOM，以下是对编码造成问题的说明
 
-参考链接: https://github.com/lovepika/thinking_file_encoding_cpp
 
-Visual Studio Code 配置 C/C++ 开发环境的最佳实践(VSCode + Clangd + XMake)
-
-参考链接: https://zhuanlan.zhihu.com/p/398790625
 
 ---
 
