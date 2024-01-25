@@ -117,7 +117,7 @@ void f()
 
 github 的一个仓库这个可以主要看一下。参考链接： https://github.com/wuye9036/CppTemplateTutorial
 
-小亮老师的课程也可以看一下,看一下模板编程的内容。
+小彭老师的课程也可以看一下,看一下模板编程的内容。
 
 B站主页： https://space.bilibili.com/263032155/channel/collectiondetail?sid=53025
 
