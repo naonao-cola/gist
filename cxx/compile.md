@@ -1,5 +1,17 @@
 ﻿## xmake
 
+xmake  常见问题解答
+
+参考链接  https://zhuanlan.zhihu.com/p/611388172
+
+非官方的xmake教程 
+
+参考链接  https://www.zhihu.com/column/c_1537535487199281152?utm_source=wechat_session&utm_medium=social&utm_oi=953224858981593088
+
+xmake 远程包管理入门
+
+参考链接  https://zhuanlan.zhihu.com/p/412503965
+
 ### lua
 
 第一个参考文件
