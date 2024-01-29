@@ -187,6 +187,7 @@ new_path2 = example_path.with_suffix('.gif')
 print(new_path2)  # D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.gif
 
 
+
 # 路径拼接分解
 # 直接传进去一个完整字符串
 example_path0 = Path(r'D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.txt')
@@ -213,6 +214,11 @@ print(example_path5)  # \Users\Anders\Documents\python_learn\pic-2.jpg
 example_path = Path(r"D:\IDEA\ipoad_ywk\test\demo_pathlib")
 var = [path for path in example_path.iterdir()]
 print(var)
+p = Path(r'd:\test')
+# WindowsPath('d:/test')
+p.iterdir()                     # 相当于os.listdir
+p.glob('*')                     # 相当于os.listdir, 但是可以添加匹配条件
+p.rglob('*')                    # 相当于os.walk, 也可以添加匹配条件
 
 
 
@@ -248,6 +254,29 @@ p = Path(file_name)
 new_file_name = p.with_suffix(".csv")
 # 修改文件名
 p.rename(new_file_name)
+
+
+#文件读写
+p = Path('C:/Users/Administrator/Desktop/text.txt')
+with p.open(encoding='utf-8') as f:
+    print(f.readline())
+
+#read_bytes()：以'rb'模式读取文件，并返回bytes类型数据
+#write_bytes(data)： 以'wb'方式将数据写入文件
+p = Path('C:/Users/Administrator/Desktop/text.txt')
+p.write_bytes(b'Binary file contents')
+# 20
+p.read_bytes()
+# b'Binary file contents'
+
+#read_text(encoding=None, errors=None)： 以'r'方式读取路径对应文件，返回文本
+#write_text(data, encoding=None, errors=None)：以'w'方式写入字符串到路径对应文件
+p = Path('C:/Users/Administrator/Desktop/text.txt')
+p.write_text('Text file contents')
+# 18
+p.read_text()
+# 'Text file contents'
+
 ```
 
 ## json
