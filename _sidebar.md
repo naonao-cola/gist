@@ -14,4 +14,6 @@
 
 - [**github**](./github/github.md)
 
+- [**数学之美**](./math/math.md)
+
  
