@@ -239,4 +239,13 @@ print(example_path.is_dir())
 print(example_path.is_file())
 # 输出如下：
 # True
+
+# 原始文件名
+file_name = "example.txt"
+# 将文件名转化为Path对象
+p = Path(file_name)
+# 更改文件扩展名为csv
+new_file_name = p.with_suffix(".csv")
+# 修改文件名
+p.rename(new_file_name)
 ```
