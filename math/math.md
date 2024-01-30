@@ -1,5 +1,19 @@
 ﻿
 
+## 轮廓面积
+
+```c++
+
+void area(cv::Point2d p1, cv::Point2d p2, cv::Point2d p3) {
+	double s = std::abs((p1.x * p2.y + p2.x * p3.y + p3.x * p1.y -p1.x*p3.y   - p2.x*p1.y  -p3.x*p2.y) / 2);
+	printf_s("A = %.6f\n", s);
+}
+std::vector<cv::Point2f> v1;
+v1.emplace_back(pts[0]);
+v1.emplace_back(pts[1]);
+v1.emplace_back(pts[2]);
+cv::contourArea(v1);
+```
 ## 二维变化
 
 ![](../images/rotate.jpg)
@@ -23,27 +37,97 @@
 则物体绕OA轴旋转变换的矩阵表示可确定如下：
 ![](../images/rotate_5.jpg)
 
+### 根据对应的三维点估计刚体变换的旋转平移矩阵
+```c++
+ //公式推导与python代码 https://blog.csdn.net/u012836279/article/details/80203170
+ //c++ 代码  https://blog.csdn.net/kewei9/article/details/74157236
+
+ void test_affine3d(std::vector<cv::Point3f> srcPoints, std::vector<cv::Point3f>dstPoints, int pointsNum, TRigidTrans3D& transform) {
+	cv::Mat src_avg, dst_avg,src_rep,dst_rep, srcMat, dstMat;
+	cv::Mat src_mat = cv::Mat(srcPoints, true).reshape(1, pointsNum);
+	cv::Mat dst_mat = cv::Mat(dstPoints, true).reshape(1, pointsNum);
+	cv::reduce(src_mat, src_avg, 0, cv::REDUCE_AVG);
+	cv::reduce(dst_mat, dst_avg, 0, cv::REDUCE_AVG);
+	cv::repeat(src_avg, pointsNum, 1, src_rep);
+	cv::repeat(dst_avg, pointsNum, 1, dst_rep);
+	srcMat  = (src_mat - src_rep).t();
+	dstMat  = (dst_mat - dst_rep).t();
+
+	cv::Mat matS = srcMat * dstMat.t();
+	cv::Mat matU, matW, matV;
+	cv::SVDecomp(matS, matW, matU, matV);
+
+	cv::Mat matTemp = matU * matV;
+	float det = cv::determinant(matTemp); //计算矩阵的行列式
+
+	float datM[] = { 1, 0, 0, 0, 1, 0, 0, 0, det };
+	cv::Mat matM(3, 3, CV_32FC1, datM);
+	cv::Mat matR = matV.t() * matM * matU.t();
+
+	transform.matR = matR.clone();
+	float* datR = (float*)(matR.data);
+	transform.X = dst_avg.at<float>(0, 0)- (src_avg.at<float>(0, 0) * datR[0] + src_avg.at<float>(0, 1) * datR[1] + src_avg.at<float>(0, 2) * datR[2]);
+	transform.Y = dst_avg.at<float>(0, 1)- (src_avg.at<float>(0, 0) * datR[3] + src_avg.at<float>(0, 1) * datR[4] + src_avg.at<float>(0, 2) * datR[5]);
+	transform.Z = dst_avg.at<float>(0, 2)- (src_avg.at<float>(0, 0) * datR[6] + src_avg.at<float>(0, 1) * datR[7] + src_avg.at<float>(0, 2) * datR[8]);
+}
+#include <random>
+#define _USE_MATH_DEFINES
+#include <math.h>
+
+void test_data() {
+	//旋转矩阵关系  https://blog.csdn.net/changbaolong/article/details/8307052
+	//测试的旋转矩阵，平移矩阵
+	cv::Mat matR = (cv::Mat_<float>(3, 3) << std::cos(30.0 / 180.0 * M_PI), std::sin(30.0 / 180.0 * M_PI), 0.f,-std::sin(30.0 / 180.0 * M_PI), std::cos(30.0 / 180.0 * M_PI), 0.f,0.f, 0.f, 1.f);
+	cv::Mat matT = (cv::Mat_<float>(3, 1) << 246.f, 102.f, 58.f);
+
+	std::vector<cv::Point3f> srcPoints, dstPoints;
+	cv::RNG rng;
+	for (int i = 0; i < 10;i++) srcPoints.emplace_back(rng.uniform((double)0, (double)1000), rng.uniform((double)0, (double)1000), rng.uniform((double)0, (double)1000));
+
+	//根据原始数据，生成目标点，需要注意类型
+	for (int i = 0; i < 10;i++) {
+		cv::Mat src = (cv::Mat_<float>(3, 1) << srcPoints[i].x, srcPoints[i].y, srcPoints[i].z);
+		cv::Mat dst = matR * src + matT;
+		dstPoints.emplace_back(dst.at<float>(0, 0), dst.at<float>(1, 0), dst.at<float>(2, 0));
+	}
+	TRigidTrans3D transform;
+	test_affine3d(srcPoints, dstPoints,10,transform);
+
+	XLOG << transform.matR << std::endl;
+	XLOG << transform.X << std::endl;
+	XLOG << transform.Y << std::endl;
+	XLOG << transform.Z << std::endl;
+
+	//第二种方法
+	std::vector<cv::Point3f> srcPoints_vec, dstPoints_vec;
+	for (int j = 0; j < 10;j++) {
+		srcPoints_vec.push_back(srcPoints[j]);
+		dstPoints_vec.push_back(dstPoints[j]);
+	}
+	cv::Mat aff(3, 4, CV_64F);
+	std::vector<uchar> inliers;
+	cv::estimateAffine3D(srcPoints_vec, dstPoints_vec,aff,inliers);
+	XLOG << aff << std::endl;
+	return;
+}
+
+```
+
 ## eigen
 ### eigen基本类型
 ```c++
 #include <iostream>
-
 using namespace std;
-
 #include <ctime>
 // Eigen 核心部分
 #include <Eigen/Core>
 // 稠密矩阵的代数运算（逆，特征值等）
 #include <Eigen/Dense>
-
 using namespace Eigen;
-
 #define MATRIX_SIZE 50
-
 /****************************
 * 本程序演示了 Eigen 基本类型的使用
 ****************************/
-
 int main(int argc, char **argv) {
   // Eigen 中所有向量和矩阵都是Eigen::Matrix，它是一个模板类。它的前三个参数为：数据类型，行，列
   // 声明一个2*3的float矩阵
@@ -150,16 +234,11 @@ int main(int argc, char **argv) {
 ```c++
 #include <iostream>
 #include <cmath>
-
 using namespace std;
-
 #include <Eigen/Core>
 #include <Eigen/Geometry>
-
 using namespace Eigen;
-
 // 本程序演示了 Eigen 几何模块的使用方法
-
 int main(int argc, char **argv) {
 
   // Eigen/Geometry 模块提供了各种旋转和平移的表示
@@ -489,4 +568,47 @@ namespace nao {
 }//namespace nao
 #endif // !__TRANSFORM_H__
 /*----------------------------------------------------------------------------- (C) COPYRIGHT LEI *****END OF FILE------------------------------------------------------------------------------*/
+```
+opencv 中获取仿射矩阵的函数
+```c++
+//这个函数得到的是2行3列的矩阵，原点左乘这个矩阵，可以得到目标点
+cv::Mat cv::getAffineTransform( // Return 2-by-3 matrix 返回2*3矩阵
+	const cv::Point2f* src,	 // Coordinates *three* of vertices 3个顶点坐标
+	const cv::Point2f* dst 	// Target coords, three vertices 目标坐标，3个顶点
+);
+// 另一个
+cv::Mat cv::getRotationMatrix2D( // Return 2-by-3 matrix
+	cv::Point2f center // Center of rotation 旋转中心
+	double angle, // Angle of rotation 旋转角
+	double scale // Rescale after rotation 在旋转之后重新调节
+);
+
+//获取逆仿射矩阵
+//给定2*3矩阵的仿射变换，通常希望能够计算逆变换，它可以用于将所有转换点“放回”它们原来的地方
+void cv::invertAffineTransform(
+	cv::InputArray M, // Input 2-by-3 matrix
+	cv::OutputArray iM // Output also a 2-by-3 matrix
+);
+
+
+```
+仿射变换的函数
+```c++
+void cv::warpAffine(
+	cv::InputArray src, 	// Input image
+	cv::OutputArray dst, 	// Result image
+	cv::InputArray M, 	// 2-by-3 transform mtx 2*3转换矩阵
+	cv::Size dsize, 	// Destination image size 目标图像大小
+	int flags = cv::INTER_LINEAR, 	// Interpolation, inverse 设置插值方法 ，附加选项cv::WARP_INVERSE_MAP允许从dst到src而不是从src到dst的反向转换
+	int borderMode = cv::BORDER_CONSTANT, 	// Pixel extrapolation 像素外推的方法
+	const cv::Scalar& borderValue = cv::Scalar() 		// For constant borders 边界的值
+);
+
+void cv::transform(
+	cv::InputArray src, // Input N-by-1 array (Ds channels) Ds 通道的N*1矩阵
+	cv::OutputArray dst, // Output N-by-1 array (Dd channels) Dd通道的N*1矩阵
+	cv::InputArray mtx // Transform matrix (Ds-by-Dd) 变换矩阵是Ds * Dd矩阵
+);
+
+
 ```

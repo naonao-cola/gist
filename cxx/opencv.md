@@ -150,3 +150,219 @@ int main() {
   cv::waitKey(0);
 }
 ```
+
+## 生成随机颜色
+```c++
+cv::RNG rng(12345);
+std::vector<cv::Vec3b> colors;
+cv::Vec3b vec3 = cv::Vec3b(rng.uniform(0, 256), rng.uniform(0, 256), rng.uniform(0, 256));
+colors.push_back(vec3);
+```
+
+## 自动曝光
+```c++
+
+ int GetLightAvg(LightRange* lr, cv::Mat& image) {
+	 memset(lr, 0, sizeof(LightRange));
+	 //uchar v;
+	 unsigned long color = 0;
+	 int count = 0;
+	 // 计算各个灰度值的计数
+	 for (int i = 0; i < image.cols / 10; i++) {
+		 for (int j = 0; j < image.rows / 10; j++) {
+			 uchar v = image.data[image.step[0] * j * 10 + i * 10];
+			 lr->rang[v]++;//计算0-255色彩的直方分布图
+			 color = color + v;//对各个像素点的灰度值求和
+			 count++;
+		 }
+	 }
+	 if (count == 0)
+		 return 0;
+	 lr->avg = color / count;//计算灰度平均值
+
+	 int count_low = 0;
+	 double num = 0.02;
+	 num += lr->avg / 40.0 * 0.01;
+
+	 for (int i = 0; i < 256; i++) {
+		 count_low += lr->rang[i];
+		 if (count_low > count * num) {
+			 lr->avg_low = i;
+			 if (lr->avg_low > 50) lr->avg_low = 50;
+			 break;
+		 }
+	 }
+	 int count_height = 0;
+	 for (int i = 255; i >= 0; i--) {
+		 count_height += lr->rang[i];
+		 if (count_height > count * num) {
+			 lr->avg_hight = i; /* + (255-i)*0.8;*/ // zoujiayun 不改变原有的设置
+			 break;
+		 }
+	 }
+	 return lr->avg;
+ }
+
+ void test_auto_expo(cv::Mat src, cv::Mat& dst, float* alpha, float* beta) {
+
+	 if (alpha != nullptr)
+		 *alpha = 0;
+	 if (beta != nullptr)
+		 *beta = 0;
+
+	 cv::Mat srcMat = src.clone();
+	 auto dstMat = dst.clone();
+	 //如果是BGR图，转Y U V
+	 bool isBGR = src.channels() != 1;
+	 cv::Mat U, V;
+	 if (isBGR)
+	 {
+		 //分离yuv
+		 cv::Mat yuv;
+		 cv::cvtColor(srcMat, yuv, cv::COLOR_BGR2YUV);
+		 cv::Mat YUV[3];
+		 cv::split(yuv, YUV);
+
+		 //srcMat gray
+		 srcMat = YUV[0];
+		 //暂存数据
+		 U = YUV[1];
+		 V = YUV[2];
+
+		 //dstMat gray
+		 dstMat = cv::Mat(srcMat.rows, srcMat.cols, CV_8UC1);
+	 }
+
+	 LightRange lr = { 0 };
+	 GetLightAvg(&lr, srcMat);
+	 double min = lr.avg_low;
+	 double max = lr.avg_hight;
+	 if (lr.avg_low != lr.avg_hight)
+	 {
+		 double rate = 220 / (max - min);
+		 if (rate > 5)
+			 rate = 5;
+
+		 //根据算法生成新旧像素值对应表
+		 cv::Mat table(1, 256, CV_8UC1);
+		 for (int i = 0; i < 256; ++i)
+		 {
+			 int newPixel = (int)((i - min) * rate * (1 + (255 - i) * lr.avg / (255.0 * 255.0)));
+			 (table.data)[i] = newPixel < 0 ? 0 : (newPixel > 255 ? 255 : newPixel);
+		 }
+
+		 //计算一个近似alpha beta: 去掉 低值强制为0和高值强制为255的部分，剩下的曲线取两端当作直线计算alpha beta
+		 if (alpha != nullptr || beta != nullptr)
+		 {
+			 //计算被设置为0的最大像素值
+			 int low = 254;
+			 double lowAim = table.data[254];
+			 for (int i = 0; i < 255; ++i)
+			 {
+				 if (table.data[i + 1] > 0)
+				 {
+					 low = i;
+					 lowAim = table.data[i];
+					 break;
+				 }
+			 }
+			 //计算被设置为255的最小像素值
+			 int high = 1;
+			 double highAim = table.data[1];
+			 for (int i = 255; i > 0; --i)
+			 {
+				 if (table.data[i - 1] < 255)
+				 {
+					 high = i;
+					 highAim = table.data[i];
+					 break;
+				 }
+			 }
+			 //两点连线当作转换关系，计算alpha beta
+			 if (high > low)
+			 {
+				 if (alpha != nullptr)
+					 *alpha = (255.0f - high + low) / (high - low);
+				 if (beta != nullptr)
+					 *beta = -(*alpha + 1) * low;
+			 }
+			 else {
+				 if (alpha != nullptr)
+					 *alpha = 0;
+				 if (beta != nullptr)
+					 *beta = 0;
+			 }
+		 }
+		 //根据像素变换表，转换图像。
+		 cv::LUT(srcMat, table, dstMat);
+
+		 //如果是BGR图，融合UV数据。
+		 if (isBGR){
+			 cv::Mat YUV[3];
+			 YUV[0] = dstMat;
+			 YUV[1] = U;
+			 YUV[2] = V;
+			 cv::Mat yuv;
+			 cv::merge(YUV, 3, yuv);
+			 cv::cvtColor(yuv, dst, cv::COLOR_YUV2BGR);
+		 }
+	 }
+	 else {
+		 //直接复制图像
+		 if (isBGR)
+			 dstMat = dst;
+		 srcMat.copyTo(dstMat);
+		 if (alpha != nullptr)
+			 *alpha = 0;
+		 if (beta != nullptr)
+			 *beta = 0;
+	 }
+	 return;
+ }
+```
+
+## vtk
+```c++
+#include "opencv2/viz.hpp"
+ //https://www.freesion.com/article/85591447912/
+ //https://blog.csdn.net/qq_48034474/article/details/120455843
+ void test_vtk() {
+	 cv::Mat point_cloud = cv::Mat::zeros(500, 500, CV_32FC3);
+	 int k = 0;
+	 for (int i = 0; i < 500;i++) {
+		 for (int j = 0; j < 500;j++) {
+				 point_cloud.at<cv::Vec3f>(i, j)[0] = rand()/500  ;
+				 point_cloud.at<cv::Vec3f>(i, j)[1] = rand()/500 ;
+				 point_cloud.at<cv::Vec3f>(i, j)[2] = rand()/500;
+		 }
+		 k++;
+	 }
+
+
+	 cv::viz::Viz3d window("window");
+	 window.showWidget("Coordinate Widget", cv::viz::WCoordinateSystem(20));
+	 //第二个参数设置颜色
+	 cv::viz::WCloud cloud(point_cloud,cv::viz::Color::blue());
+	 //第三个参数的，可以设置旋转矩阵
+	 window.showWidget("cloud", cloud);
+
+
+	 // 构造平面    cv::viz::WPlane
+	 // 构造线      cv::viz::WLine
+	 // 构造球体    cv::viz::WSphere
+	 // 构造箭头    cv::viz::WArrow
+	 // 构建平面圆(圆环属性) cv::viz::WCircle
+	 // 点云		cv::viz::WPaintedCloud
+	 // 多段线		cv::viz::WPolyLine
+	 // 网格        cv::viz::WGrid
+	 // 立方体      cv::viz::WCube
+	 // 文本2D      cv::viz::WText
+	 // 文本3D		cv::viz::WText3D
+	 while (!window.wasStopped()){
+		 window.spinOnce(1, false);
+		 // 设置新的位姿 window.setWidgetPose("plane", pose);
+	 }
+ }
+
+```
+
