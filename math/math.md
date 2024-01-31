@@ -13,7 +13,47 @@ v1.emplace_back(pts[0]);
 v1.emplace_back(pts[1]);
 v1.emplace_back(pts[2]);
 cv::contourArea(v1);
+
+//行列式求解
+std::vector<cv::Point2d> pts;
+pts.emplace_back(0   ,4079);
+pts.emplace_back(351 , 4079);
+pts.emplace_back(0 , 3125);
+pts.emplace_back(306.509827, 4028.913330);
+
+cv::Mat m1 = (cv::Mat_<double>(3, 3) << 0.000000, 4079.000000,1, 351.000000, 4079.000000, 1,0.000000, 3125.000000,1);
+cv::Mat m2 = (cv::Mat_<double>(3, 3) << 0.000000, 4079.000000, 1,351.000000, 4079.000000, 1,306.509827, 4028.913330,1);
+cv::Mat m3 = (cv::Mat_<double>(3, 3) << 0.000000, 4079.000000,1, 0.000000, 3125.000000,  1, 306.509827, 4028.913330,1);
+cv::Mat m4 = (cv::Mat_<double>(3, 3) << 351.000000, 4079.000000,1, 0.000000, 3125.000000,1, 306.509827, 4028.913330,1);
+double s1 = 0.5 * std::abs(cv::determinant(m1));
+double s2 = 0.5 * std::abs(cv::determinant(m2));
+double s3 = 0.5 * std::abs(cv::determinant(m3));
+double s4 = 0.5 * std::abs(cv::determinant(m4));
+
 ```
+## 矩阵运算
+
+### 特征值与特征向量
+A为n阶矩阵，若数λ和n维非0列向量x满足Ax=λx，那么数λ称为A的特征值，x称为A的对应于特征值λ的特征向量。式Ax=λx也可写成( A-λE)x=0，并且|λE-A|叫做A 的特征多项式。当特征多项式等于0的时候，称为A的特征方程，特征方程是一个齐次线性方程组，求解特征值的过程其实就是求解特征方程的解。
+
+![](../images/mat_1.png)
+![](../images/mat_2.png)
+![](../images/mat_3.png)
+
+计算A的特征值与特征向量
+![](../images/mat_4.png)
+
+```c++
+//https://blog.csdn.net/weixin_46537710/article/details/106337476
+Mat src;
+image.convertTo(src, CV_32FC1);
+cv::Mat eValuesMat;//特征值
+cv::Mat eVectorsMat;//特征向量
+eigen(src, eValuesMat, eVectorsMat);//通过openCV中eigen函数得到特征值与特征向量
+```
+### 矩阵分解
+
+
 ## 二维变化
 
 ![](../images/rotate.jpg)
