@@ -40,7 +40,7 @@ A为n阶矩阵，若数λ和n维非0列向量x满足Ax=λx，那么数λ称为A�
 <p align="center">
   <img src="../images/mat_1.png" width=100%/>
 </p>
-
+![](../images/mat_1.png)
 <p align="center">
   <img src="../images/mat_2.png" style="max-width: 800px; width: 100%">
 </p>
