@@ -36,9 +36,9 @@ double s4 = 0.5 * std::abs(cv::determinant(m4));
 ### 特征值与特征向量
 A为n阶矩阵，若数λ和n维非0列向量x满足Ax=λx，那么数λ称为A的特征值，x称为A的对应于特征值λ的特征向量。式Ax=λx也可写成( A-λE)x=0，并且|λE-A|叫做A 的特征多项式。当特征多项式等于0的时候，称为A的特征方程，特征方程是一个齐次线性方程组，求解特征值的过程其实就是求解特征方程的解。
 
-<p align="center">
-  <img src="../images/mat_1.png" style="max-width: 800px; width: 100%">
-</p>
+<div style ="align: center">
+  <img src="../images/mat_1.png"/>
+</div>
 
 <p align="center">
   <img src="../images/mat_2.png" style="max-width: 800px; width: 100%">
