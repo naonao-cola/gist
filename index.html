@@ -21,7 +21,7 @@
     window.$docsify = {
       name: 'Blog',
       repo: 'https://github.com/naonao-cola',
-       el: '#app',
+      el: '#app',
       loadNavbar: true, // 默认加载 _navbar.md，作为顶部导航栏
       loadSidebar: true,
       // 开启目录,最大层级为2
@@ -98,7 +98,7 @@
         logo: '🔝',				// logo:字符串或svg矢量图代码，默认为svg代码图标。
         bgColor: '#2096ff'    	// 背景颜色，#fff、pink等，logo为svg图标时，不填。
       },
-       giscus: {
+      giscus: {
         repo: "SeaHI-Robot/docsify_template",
         repoId: "R_kgDOKG_QPQ",
         category: "Announcements",
@@ -114,23 +114,23 @@
       },
       markdown: {
         renderer: {
-            image: function(href, title, text) {
-                // 按照原来的渲染 img
-                var image_html = this.origin.image.apply(this, arguments)
-                // 用 figure 包一下图片，实现居中
-                return '<figure>' + image_html + '<figcaption>' + text +
-                    '</figcaption></figure>'
-            }
+          image: function (href, title, text) {
+            // 按照原来的渲染 img
+            var image_html = this.origin.image.apply(this, arguments)
+            // 用 figure 包一下图片，实现居中
+            return '<figure>' + image_html + '<figcaption>' + text +
+              '</figcaption></figure>'
+          }
         }
-      }，
+      }
     }
   </script>
-<style>
-figure {
-    text-align: center
-}
-</style>
-  
+  <style>
+    figure {
+      text-align: center
+    }
+  </style>
+
   <!-- Docsify v4 -->
   <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
 

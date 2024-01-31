@@ -37,28 +37,15 @@ double s4 = 0.5 * std::abs(cv::determinant(m4));
 A为n阶矩阵，若数λ和n维非0列向量x满足Ax=λx，那么数λ称为A的特征值，x称为A的对应于特征值λ的特征向量。式Ax=λx也可写成( A-λE)x=0，并且|λE-A|叫做A 的特征多项式。当特征多项式等于0的时候，称为A的特征方程，特征方程是一个齐次线性方程组，求解特征值的过程其实就是求解特征方程的解。
 
 
-<p align="center">
-  <img src="../images/mat_1.png" width=100%/>
-</p>
-
-
 ![](../images/mat_1.png)
 
-
-<p align="center">
-  <img src="../images/mat_2.png" style="max-width: 800px; width: 100%">
-</p>
+![](../images/mat_2.png)
 
 
+![](../images/mat_3.png)
 
-<p align="center">
-  <img src="../images/mat_3.png" style="max-width: 300px; width: 100%">
-</p>
 
 计算A的特征值与特征向量
-
-
-
 
 ```c++
 //https://blog.csdn.net/weixin_46537710/article/details/106337476
@@ -71,10 +58,7 @@ eigen(src, eValuesMat, eVectorsMat);//通过openCV中eigen函数得到特征值�
 求出特征值和特征向量有什么好处呢？ 就是我们可以将矩阵A特征分解。如果我们求出了矩阵A的n个特征值 ，以及这n个特征值所对应的特征向量。那么矩阵A就可以用下式的特征分解表示：
 
 
-
-<p align="center">
-  <img src="../images/mat_5.png" style="max-width: 600px; width: 100%">
-</p>
+![](../images/mat_5.png)
 
 其中W是这n个特征向量所张成的n×n维矩阵，而Σ为这n个特征值为主对角线的n×n维矩阵。要进行特征分解，矩阵A必须为方阵。
 
@@ -82,38 +66,23 @@ eigen(src, eValuesMat, eVectorsMat);//通过openCV中eigen函数得到特征值�
 #### svd分解
 SVD也是对矩阵进行分解，但是和特征分解不同，SVD并不要求要分解的矩阵为方阵。假设我们的矩阵A是一个m×n的矩阵，那么我们定义矩阵A的SVD为：
 
-
-
-<p align="center">
-  <img src="../images/mat_6.png" style="max-width: 600px; width: 100%">
-</p>
-
+![](../images/mat_6.png)
 
 其中U是一个m * m的矩阵， 中间的是一个m * n的矩阵，除了主对角线上的元素以外全为0，主对角线上的每个元素都称为奇异值， V是一个 n*n的矩阵。 U和V都是酉矩阵，即满足它的共轭转置与自身相乘等于单位矩阵。酉矩阵是满秩的，每一列都是单位向量，其每两列都是正交的。这类矩阵性质非常好。
-<p align="center">
-  <img src="../images/mat_7.png" style="max-width: 800px; width: 100%">
-</p>
 
-<p align="center">
-  <img src="../images/mat_8.png" style="max-width: 800px; width: 100%">
-</p>
+![](../images/mat_7.png)
 
+![](../images/mat_8.png)
 
 对于奇异值,它跟我们特征分解中的特征值类似，在奇异值矩阵中也是按照从大到小排列，而且奇异值的减少特别的快，在很多情况下，前10%甚至1%的奇异值的和就占了全部的奇异值之和的99%以上的比例。也就是说，我们也可以用最大的k个的奇异值和对应的左右奇异向量来近似描述矩阵。
 
-
-<p align="center">
-  <img src="../images/mat_9.png" style="max-width: 600px; width: 100%">
-</p>
+![](../images/mat_9.png)
 
 如下图所示，现在我们的矩阵A只需要灰色的部分的三个小矩阵就可以近似描述了。
 
-<p align="center">
-  <img src="../images/mat_10.png" style="max-width: 800px; width: 100%">
-</p>
-<p align="center">
-  <img src="../images/mat_11.png" style="max-width: 800px; width: 100%">
-</p>
+![](../images/mat_10.png)
+
+![](../images/mat_11.png)
 
 
 #### QR分解
@@ -121,45 +90,32 @@ SVD也是对矩阵进行分解，但是和特征分解不同，SVD并不要求�
 
 ## 二维变化
 
-<p align="center">
-  <img src="../images/rotate.jpg" style="max-width: 800px; width: 100%">
-</p>
+![](../images/rotate.jpg)
 
-<p align="center">
-  <img src="../images/rotate_1.png" style="max-width: 1000px; width: 100%">
-</p>
+![](../images/rotate_1.png)
+
 
 ## 三维空间中的旋转变换
 
 绕Z轴旋转
 
-<p align="center">
-  <img src="../images/rotate_2.jpg" style="max-width: 800px; width: 100%">
-</p>
+![](../images/rotate_2.jpg)
 
 绕X轴旋转
 
-<p align="center">
-  <img src="../images/rotate_3.jpg" style="max-width: 800px; width: 100%">
-</p>
+![](../images/rotate_3.jpg)
 
 绕Y轴旋转
 
-<p align="center">
-  <img src="../images/rotate_4.jpg" style="max-width: 800px; width: 100%">
-</p>
+![](../images/rotate_4.jpg)
 
 绕任意轴旋转的公式：给定具有单位长的
-<p align="center">
-  <img src="../images/rotate_6.jpg" style="max-width: 800px; width: 100%">
-</p>
+
+![](../images/rotate_6.jpg)
 
 则物体绕OA轴旋转变换的矩阵表示可确定如下：
 
-<p align="center">
-  <img src="../images/rotate_5.jpg" style="max-width: 800px; width: 100%">
-</p>
-
+![](../images/rotate_5.jpg)
 
 
 ### 根据对应的三维点估计刚体变换的旋转平移矩阵
