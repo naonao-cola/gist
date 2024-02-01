@@ -1,3 +1,8 @@
+## 现代c++ 教程
+高速上手C++ 11/14/17/20
+参考链接：
+ https://zhuanlan.zhihu.com/p/266554398
+https://github.com/changkun/modern-cpp-tutorial
 ## 编码
 
 跨win/linux项目的编码选择和编译选项设置，首选： UTF-8 With BOOM，以下是对编码造成问题的说明

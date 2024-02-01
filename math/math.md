@@ -1,6 +1,157 @@
 ﻿
+## 平面几何
+```c++
+//两点距离
+double dist_p2p(const cv::Point2f& a, const cv::Point2f& b)
+{
+	return std::sqrt(std::pow(a.x - b.x, 2) + std::pow(a.y - b.y, 2));
+}
 
-## 轮廓面积
+//计算两直线交点
+ cv::Point2d get2lineIPoint(cv::Point2d lineOnePt1, cv::Point2d lineOnePt2, cv::Point2d lineTwoPt1, cv::Point2d lineTwoPt2)
+ {
+	double x1 = lineOnePt1.x, y1 = lineOnePt1.y, x2 = lineOnePt2.x, y2 = lineOnePt2.y;
+	double a1 = -(y2 - y1), b1 = x2 - x1, c1 = (y2 - y1) * x1 - (x2 - x1) * y1; // 一般式：a1x+b1y1+c1=0
+	double x3 = lineTwoPt1.x, y3 = lineTwoPt1.y, x4 = lineTwoPt2.x, y4 = lineTwoPt2.y;
+	double a2 = -(y4 - y3), b2 = x4 - x3, c2 = (y4 - y3) * x3 - (x4 - x3) * y3; // 一般式：a2x+b2y1+c2=0
+	bool r = false;                                                             // 判断结果
+	double x0 = 0, y0 = 0;                                                      // 交点
+	double angle = 0;                                                           // 夹角
+
+	cv::Point2d result(-1, -1);
+	// 判断相交
+	if (b1 == 0 && b2 != 0) // l1垂直于x轴，l2倾斜于x轴
+		r = true;
+	else if (b1 != 0 && b2 == 0) // l1倾斜于x轴，l2垂直于x轴
+		r = true;
+	else if (b1 != 0 && b2 != 0 && a1 / b1 != a2 / b2)
+		r = true;
+
+	if (r)
+	{
+		//计算交点
+		x0 = (b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1);
+		y0 = (a1 * c2 - a2 * c1) / (a2 * b1 - a1 * b2);
+		// 计算夹角
+		double a = sqrt(pow(x4 - x2, 2) + pow(y4 - y2, 2));
+		double b = sqrt(pow(x4 - x0, 2) + pow(y4 - y0, 2));
+		double c = sqrt(pow(x2 - x0, 2) + pow(y2 - y0, 2));
+		angle = acos((b * b + c * c - a * a) / (2 * b * c)) * 180 / CV_PI;
+	}
+	result.x = x0;
+	result.y = y0;
+     return result;
+ }
+
+//点到直线的距离
+float dist_p2l(cv::Point pointP, cv::Point pointA, cv::Point pointB) {
+	//求直线方程
+	int A = 0, B = 0, C = 0;
+	A = pointA.y - pointB.y;
+	B = pointB.x - pointA.x;
+	C = pointA.x * pointB.y - pointA.y * pointB.x;
+	//代入点到直线距离公式
+	float distance = 0;
+	distance = ((float)abs(A * pointP.x + B * pointP.y + C)) / ((float)sqrtf(A * A + B * B));
+	return distance;
+}
+
+//点到直线的垂足
+cv::Point2f calculate_foot_point(cv::Point2f line_pt1, cv::Point2f line_pt2, cv::Point2f src_pt) {
+
+cv::Point2f root_pt(0, 0);
+  if (line_pt1.x == line_pt2.x) {
+    //线与x轴垂直
+    root_pt.x = line_pt1.x;
+    root_pt.y = src_pt.y;
+  }
+  else if (line_pt1.y == line_pt2.y) {
+    //线与Y轴垂直
+    root_pt.x = src_pt.x;
+    root_pt.y = line_pt1.y;
+  }
+  else {
+  //线与 x轴 y轴 都不垂直
+    double a1 = -(line_pt2.y -line_pt1.y);
+    double b1 = (line_pt2.x - line_pt1.x);
+    double c1 = (line_pt2.y - line_pt1.y) * line_pt1.x - (line_pt2.x - line_pt1.x) * line_pt1.y;
+
+    root_pt.x = (b1 * b1 * src_pt.x - a1 * b1 * src_pt.y - a1 * c1) / (a1 * a1 + b1 * b1);
+    root_pt.y = (a1 * a1 * src_pt.y - a1 * b1 * src_pt.x - b1 * c1) / (a1 * a1 + b1 * b1);
+  }
+  return root_pt;
+}
+
+//获取直线的斜率 截距
+cv::Point2f get_lines_fangcheng(const Tival::FindLineResult& ll) {
+	float k = 0; //直线斜率
+	float b = 0; //直线截距
+
+	double x_diff = 0;
+	if (abs(ll.start_point.x - ll.end_point.x) < 2) {
+		x_diff = abs(ll.start_point.x - ll.end_point.x);
+	}
+	k = (double)(ll.start_point.y - ll.end_point.y)/*(lines[i][3] - lines[i][1])*/ / (double)(x_diff/*ll.start_point.x - ll.end_point.x*/)/*(lines[i][2] - lines[i][0])*/; //求出直线的斜率// -3.1415926/2-----+3.1415926/2
+	b = /*(double)lines[i][1] - k * (double)lines[i][0]*/(double)ll.end_point.y   - k * (double)ll.end_point.x;
+	cv::Point2f pt(k, b);
+	return pt;
+}
+
+//已知直线两点，与任意一点的一个坐标的一个值，求另一个值
+double get_line_x(cv::Point2f line_p1, cv::Point2f line_p2, double y) {
+
+	double x1 = line_p1.x, y1 = line_p1.y, x2 = line_p2.x, y2 = line_p2.y;
+	double x = (y - y1) * (x2 - x1) / (y2 - y1) + x1;
+	return x;
+}
+
+double get_line_y(cv::Point2f line_p1, cv::Point2f line_p2, double x) {
+	double x1 = line_p1.x, y1 = line_p1.y, x2 = line_p2.x, y2 = line_p2.y;
+	double y = (x-x1)*(y2-y1)/(x2-x1)+y1;
+	return y;
+}
+
+//圆与直线的交点
+void get_point_1(cv::Point2f p1,cv::Point2f p2,cv::Point2f& t1,cv::Point2f& t2 ) {
+
+    //直线斜率
+    double k = (p2.y - p1.y) / (p2.x -p1.x);
+    k = -1 / k;
+    //截距
+    double b = p1.y - k * p1.x;
+
+    //圆心
+    cv::Point2f center = p1;
+    double r = 10;
+
+
+    double A = 1 + k * k;
+    double B = -2 * center.x + 2 * k * (b-center.y);
+    double C = center.x * center.x + (b - center.y) * (b - center.y) - r * r;
+    double delta = B * B - 4 * A * C;
+
+    t1.x = (-B -std::sqrt(delta))/(2*A);
+    t1.y = k * t1.x + b;
+
+    t2.x = (-B + std::sqrt(delta)) / (2*A);
+    t2.y = k * t2.x + b;
+
+}
+
+//线段的迭代
+ cv::LineIterator it(src, cross_pt[0], cross_pt[1]);
+ std::vector<cv::Point2f>dst;
+
+ for (int i = 0; i < it.count; i++, it++) {
+     cv::Point2f pt(it.pos());
+     if (std::abs(cv::pointPolygonTest(circle_point,pt,true))<=3) {
+         //cv::circle(src, pt, 2, CV_RGB(255, 0, 0),1);
+         dst.emplace_back(pt);
+     }
+ }
+
+```
+### 轮廓面积
 
 ```c++
 
@@ -31,14 +182,14 @@ double s3 = 0.5 * std::abs(cv::determinant(m3));
 double s4 = 0.5 * std::abs(cv::determinant(m4));
 
 ```
-## 矩阵运算
 
+## 矩阵运算
 ### 特征值与特征向量
 A为n阶矩阵，若数λ和n维非0列向量x满足Ax=λx，那么数λ称为A的特征值，x称为A的对应于特征值λ的特征向量。式Ax=λx也可写成( A-λE)x=0，并且|λE-A|叫做A 的特征多项式。当特征多项式等于0的时候，称为A的特征方程，特征方程是一个齐次线性方程组，求解特征值的过程其实就是求解特征方程的解。
 
-<p align="center">
+<div align=center>
   <img src="../images/mat_1.png" style="max-width: 800px; width: 100%">
-</p>
+</div>
 
 <p align="center">
   <img src="../images/mat_2.png" style="max-width: 800px; width: 100%">
@@ -51,10 +202,6 @@ A为n阶矩阵，若数λ和n维非0列向量x满足Ax=λx，那么数λ称为A�
 </p>
 
 计算A的特征值与特征向量
-
-
-
-
 ```c++
 //https://blog.csdn.net/weixin_46537710/article/details/106337476
 Mat src;
@@ -234,7 +381,9 @@ void test_data() {
 ```
 
 ## eigen
-### eigen基本类型
+### eigen基础
+参考链接： https://zhuanlan.zhihu.com/p/111727894
+### eigen示例
 ```c++
 #include <iostream>
 using namespace std;
@@ -732,3 +881,8 @@ void cv::transform(
 
 
 ```
+
+## pcl点云
+
+## slam
+
