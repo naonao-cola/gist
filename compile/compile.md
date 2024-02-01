@@ -5,7 +5,9 @@
 
 非官方的xmake教程
 
-参考链接  https://www.zhihu.com/column/c_1537535487199281152?utm_source=wechat_session&utm_medium=social&utm_oi=953224858981593088
+参考链接
+
+https://www.zhihu.com/column/c_1537535487199281152?utm_source=wechat_session&utm_medium=social&utm_oi=953224858981593088
 
 xmake 远程包管理入门
 
@@ -270,6 +272,184 @@ for _, v in pairs(tutorial_list) do
         add_headerfiles("src/CGraph.h")
         add_files("src/**.cpp", string.format("tutorial/%s.cpp", v))
 end
+```
+
+第四个参考文件
+```lua
+set_project("tvt")
+
+set_version("1.0.1")
+
+add_rules("mode.debug", "mode.release")
+--add_requires("openmp")
+set_languages("c++17")
+
+if is_plat("windows") then
+	add_syslinks("opengl32")
+	add_syslinks("gdi32")
+	add_syslinks("advapi32")
+	add_syslinks("glu32")
+	add_syslinks("ws2_32")
+	add_syslinks("user32")
+	add_syslinks("comdlg32")
+
+
+end
+
+if is_os("windows") then
+	set_toolchains("msvc",{vs="2019"})
+end
+
+if is_mode "debug" then
+    add_defines("DEBUG")
+    set_symbols "debug"
+    set_optimize "none"
+    set_runtimes("MT")
+end
+
+if is_mode "release" then
+    --set_symbols "hidden"
+    --set_optimize "fastest"
+	set_runtimes("MT")
+	--调试时打开下面两个
+	set_optimize "none"
+    set_symbols("debug")
+	add_cxxflags("/openmp")
+    add_ldflags("-lopenmp")
+end
+
+
+add_includedirs("./3rdparty/binn")
+
+add_includedirs("./3rdparty/fmt/include")
+add_linkdirs("./3rdparty/fmt/lib")
+add_links("fmt","fmtd")
+
+add_includedirs("./3rdparty/nlohmann_json/include")
+
+
+add_includedirs("./3rdparty/opencv4.5.3/include")
+add_linkdirs("./3rdparty/opencv4.5.3/x64/vc16/staticlib")
+add_links("ade",
+"libjpeg-turbo",
+"libpng",
+"libprotobuf",
+"libtiff",
+"libwebp",
+"opencv_aruco453",
+"opencv_barcode453",
+"opencv_bgsegm453",
+"opencv_bioinspired453",
+"opencv_calib3d453",
+"opencv_ccalib453",
+"opencv_core453",
+"opencv_datasets453",
+"opencv_dnn453",
+"opencv_dnn_objdetect453",
+"opencv_dnn_superres453",
+"opencv_dpm453",
+"opencv_face453",
+"opencv_features2d453",
+"opencv_flann453",
+"opencv_fuzzy453",
+"opencv_gapi453",
+"opencv_hfs453",
+"opencv_highgui453",
+"opencv_imgcodecs453",
+"opencv_imgproc453",
+"opencv_img_hash453",
+"opencv_intensity_transform453",
+"opencv_line_descriptor453",
+"opencv_mcc453",
+"opencv_ml453",
+"opencv_objdetect453",
+"opencv_optflow453",
+"opencv_phase_unwrapping453",
+"opencv_photo453",
+"opencv_plot453",
+"opencv_quality453",
+"opencv_rapid453",
+"opencv_reg453",
+"opencv_rgbd453",
+"opencv_saliency453",
+"opencv_shape453",
+"opencv_stereo453",
+"opencv_stitching453",
+"opencv_structured_light453",
+"opencv_superres453",
+"opencv_surface_matching453",
+"opencv_text453",
+"opencv_tracking453",
+"opencv_video453",
+"opencv_videoio453",
+"opencv_videostab453",
+"opencv_wechat_qrcode453",
+"opencv_xfeatures2d453",
+"opencv_ximgproc453",
+"opencv_xobjdetect453",
+"opencv_xphoto453",
+"quirc",
+"zlib")
+
+add_includedirs("./3rdparty/tvcore/include")
+add_linkdirs("./3rdparty/tvcore/lib")
+add_links("libzbar","license","tvcore")
+
+--自动更新vs解决方案结构
+add_rules("plugin.vsxmake.autoupdate")
+set_encodings("source:utf-8")
+
+add_linkdirs("src/custom/sub_3rdparty/tival/lib")
+add_links("tival_advanced")
+
+
+target("tv_algorithm")
+	set_kind("shared")
+	--add_packages("openmp")
+    add_headerfiles("src/framework/*h")
+	add_files("src/framework/*cpp")
+    add_headerfiles("src/custom/*h")
+	add_headerfiles("src/custom/*hpp")
+	add_files("src/custom/*cpp")
+	add_headerfiles("src/example/*h")
+	add_files("src/example/*cpp")
+    add_headerfiles("src/utils/*h")
+	add_files("src/utils/*cpp")
+    add_headerfiles("src/*.h")
+	add_files("src/*.cpp")
+	--add_defines("DEBUG_ON")
+    add_defines("EXPORT_API")
+	add_headerfiles("src/custom/sub_3rdparty/tival/include/**h")
+
+target("test_dll")
+    set_kind("binary")
+	add_deps("tv_algorithm")
+    add_defines("EXPORT_API")
+    add_headerfiles("test/fs.h")
+	add_files("test/main.cpp")
+	add_files("test/fs.cpp")
+	--add_files("src/utils/easylogging++.cpp")
+
+
+target("test_exe")
+	set_kind("binary")
+    add_headerfiles("src/framework/*h")
+	add_files("src/framework/*cpp")
+    add_headerfiles("src/example/*h")
+	add_files("src/example/*cpp")
+    add_headerfiles("src/utils/*h")
+	add_files("src/utils/*cpp")
+    add_headerfiles("src/*.h")
+	add_files("src/*.cpp")
+
+	add_includedirs("./3rdparty/co/include")
+	add_linkdirs("./3rdparty/co/lib")
+	add_links("co")
+
+    add_headerfiles("test/**.h")
+    add_files("test/*.cpp|main.cpp")
+
+
 ```
 
 ```lua

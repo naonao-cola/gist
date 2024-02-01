@@ -432,7 +432,7 @@ for filename in os.listdir(img_path):
 ```
 ## Python三剑客
 
-[filename](./numpy.html ':include')
+[filename](./numpy.html ':include width=100% height=1000px' )
 
 ##  PPQ量化
 参考链接： https://www.cnblogs.com/ruidongwu/p/16180991.html
