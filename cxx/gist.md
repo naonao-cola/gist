@@ -214,7 +214,22 @@ int main()
     std::cout<<"max: "<<max<<std::endl;
     return 0;
 }
-
+/*
+parallel sections里面的内容要并行执行，具体分工上，每个线程执行其中的一个section，如果section数大于线程数，
+那么就等某线程执行完它的section后，再继续执行剩下的section。在时间上，这种方式与人为用vector构造for循环的方式差不多，
+但无疑该种方式更方便，而且在单核机器上或没有开启openMP的编译器上，该种方式不需任何改动即可正确编译，并按照单核串行方式执行。
+*/
+#pragma omp parallel sections
+{
+    #pragma omp section
+    {
+        function1();
+    }
+    #pragma omp section
+    {
+        function2();
+    }
+}
 ```
 ### 自旋锁
 ```c++
