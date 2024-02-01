@@ -10,7 +10,7 @@
 
 - [**docker**](./linux/docker.md)
 
-- [**compile**]()
+- [**compile**](./cxx/)
   - [**示例**](./cxx/compile.md)
   - [**xmake手册**](./cxx/xmake.md)
 
