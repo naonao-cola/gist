@@ -1,7 +1,5 @@
 ﻿## xmake
-
-[filename](./xmake入门.md ':include')
-xmake  常见问题解答
+### xmake  常见问题解答
 
 参考链接  https://zhuanlan.zhihu.com/p/611388172
 
