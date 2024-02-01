@@ -1,7 +1,9 @@
 ## 现代c++ 教程
 高速上手C++ 11/14/17/20
 参考链接：
- https://zhuanlan.zhihu.com/p/266554398
+
+https://zhuanlan.zhihu.com/p/266554398
+
 https://github.com/changkun/modern-cpp-tutorial
 ## 编码
 
@@ -51,7 +53,9 @@ Visual Studio Code 配置 C/C++ 开发环境的最佳实践(VSCode + Clangd + XM
 
 普通的导入导出C++类的方式都是使用_declspec(dllexport) /_declspec(dllimport)来导入导出类，但是在公司的开发中我们没有导入导出，而是定义了一些只有纯虚函数的抽象类，然后定义了一个工厂类，将这个工厂类注册到框架的服务中心中，使用时从服务中心拿到这个工厂类，就可以创建Dll中的其它类。
 
-参考链接  https://www.cnblogs.com/lidabo/p/7121745.html
+参考链接
+
+https://www.cnblogs.com/lidabo/p/7121745.html
 
 ```c++
 //2011.10.6//cswuyg//dll导出类//dll跟其使用者共用的头文件
@@ -135,11 +139,15 @@ github链接： https://github.com/parallel101/course
 ## 设计模式
 
 22种设计模式的C++实现
+参考链接：
 
-参考链接： https://zhuanlan.zhihu.com/p/476220724
+https://zhuanlan.zhihu.com/p/476220724
+
 另外的比较简洁的代码实现。
+参考链接：
 
-参考链接：https://gitee.com/naoano/design_pattern
+https://gitee.com/naoano/design_pattern
+
 常用的设计模式：工厂模式，桥接模式，观察者模式，状态模式。
 
 ---
