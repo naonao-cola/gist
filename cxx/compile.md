@@ -1,10 +1,11 @@
 ﻿## xmake
 
+[filename](./xmake入门.md ':include')
 xmake  常见问题解答
 
 参考链接  https://zhuanlan.zhihu.com/p/611388172
 
-非官方的xmake教程 
+非官方的xmake教程
 
 参考链接  https://www.zhihu.com/column/c_1537535487199281152?utm_source=wechat_session&utm_medium=social&utm_oi=953224858981593088
 
@@ -331,9 +332,9 @@ xmake l find_package conan::OpenSSL/1.0.2g
 #下载安装好Cuda SDK后，在macosx上会默认安装到/Developer/NVIDIA/CUDA-x.x目录下，Windows上可以通过CUDA_PATH的环境
 #变量找到对应的SDK目录，而 Linux下默认会安装到/usr/local/cuda目录下
 #手动指定Cuda SDK环境目录：
-xmake f --cuda=/usr/local/cuda-9.1/  
+xmake f --cuda=/usr/local/cuda-9.1/
 #或者通过xmake g/global命令切到全局设置，避免每次切换编译模式都要重新配置一遍。
-xmake g --cuda=/usr/local/cuda-9.1/  
+xmake g --cuda=/usr/local/cuda-9.1/
 #如果想要测试xmake对当前cuda环境的探测支持，可以直接运行
 xmake l detect.sdks.find_cuda
 ```
@@ -370,7 +371,7 @@ target_link_libraries(main.out PRIVATE PkgConfig::SDL2)
 add_subdirectory(3rdparty/SDL)
 target_link_libraries(main.out PRIVATE SDL2:SDL2)
 
-#4 第三方库的头文件 
+#4 第三方库的头文件
 # 另外写一个 findsdl2.cmake
 #主文件添加
 include(cmake/findsdl2.cmake)
@@ -440,9 +441,9 @@ add_library(div SHARED ${SRC_DIV})
 target_link_libraries(div base_calc)
 
 
-#execute 
+#execute
 SET(SRC_MAIN main.cpp calc_service.cpp)
-set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})    
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION})
 add_executable( ${PROJECT_NAME} ${SRC_MAIN})
 target_link_libraries(${PROJECT_NAME} add sub multi div pthread)
 ```
@@ -534,7 +535,7 @@ install(TARGETS ${XXXX} PUBLIC_HEADER DESTINATION include)
 set(CMAKE_INSTALL_PREFIX ./dist)  # 自定义安装目录，打包使用
 install(TARGETS ${PROJECT_NAME} RUNTIME DESTINATION bin) # 打包二进制文件,安装在 /usr/local/bin目录
 
-set(CONFIGS ${PROJECT_SOURCE_DIR}/hello.cf) 
+set(CONFIGS ${PROJECT_SOURCE_DIR}/hello.cf)
 install(FILES ${CONFIGS} DESTINATION config) # # 安装其他文件，比如配置文件
 
 
@@ -706,7 +707,7 @@ aux_source_directory(./src/ DIR_SRC)
 include_directories(./include/)
 
 # 6,查找并添加OpenCV的头文件目录
-find_package(OpenCV REQUIRED)  
+find_package(OpenCV REQUIRED)
 # message( STATUS "    version: ${OpenCV_VERSION}" )  # 我电脑上装的是opencv3.3.1
 # message( STATUS "    include path: ${OpenCV_INCLUDE_DIRS}" )
 include_directories(${OpenCV_INCLUDE_DIRS})
@@ -737,8 +738,8 @@ ADD_SUBDIRECTORY(${PROJECT_SOURCE_DIR}/src)                        # 在生成�
 aux_source_directory(${PROJECT_SOURCE_DIR}/src SRC_LIST)  # 设置./src为源文件路径
 
 add_executable (test5 ${SRC_LIST})                        # 寻找源文件来编译可执行文件
-target_link_libraries(test5 
-        ${PROJECT_SOURCE_DIR}/lib/libadd.a 
+target_link_libraries(test5
+        ${PROJECT_SOURCE_DIR}/lib/libadd.a
         ${PROJECT_SOURCE_DIR}/lib/libmul.a)                # 编译时需要链接的静态库
 ```
 
