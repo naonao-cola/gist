@@ -154,6 +154,103 @@ https://gitee.com/naoano/design_pattern
 
 ## 多线程
 
+### openmp
+```c++
+ void main()
+{
+    int beginClock = clock();//记录开始时间
+#pragma omp parallel for
+    for (int testtime = 0; testtime<8; testtime++)
+    {
+        test();//运行计算
+    }
+    printf("运行时间为：%dms\n", clock() - beginClock);//输出图像处理花费时间信息
+    system("pause");
+}
+
+#pragma omp parallel for num_threads(12)
+    for (int i = 0; i < basis_info_vec.size(); i++) {
+        // 循环检测每个小基座
+        basis_find_line(src, algo_result, basis_info_vec[i], i);
+    }
+
+
+//归约
+void blog4::Test2(int argc, char* argv[])
+{
+    int thread_count = strtol(argv[1], NULL, 10);
+
+    double global_result = 0.0;
+
+#pragma omp parallel num_threads(thread_count) reduction(+: global_result)
+    {
+        global_result += Trap(0, 3, 1024);
+    }
+
+
+    printf("%f\n", global_result);
+}
+
+/*
+for循环还是被自动分成N份来并行执行，但我们用#pragma omp critical将 if (temp > max) max = temp 括了起来，
+它的意思是：各个线程还是并行执行for里面的语句，但当你们执行到critical里面时，要注意有没有其他线程正在里面执行，
+如果有的话，要等其他线程执行完再进去执行。这样就避免了race condition问题，但显而易见，它的执行速度会变低，因为可能存在线程等待的情况。
+*/
+#include <iostream>
+int main()
+{
+    int max = 0;
+    int a[10] = {11,2,33,49,113,20,321,250,689,16};
+#pragma omp parallel for
+    for (int i=0;i<10;i++)
+    {
+        int temp = a[i];
+#pragma omp critical10
+        {
+        if (temp > max)
+        max = temp;
+        }
+    }
+    std::cout<<"max: "<<max<<std::endl;
+    return 0;
+}
+
+```
+### 自旋锁
+```c++
+#include <atomic>
+class USpinLock
+{
+public:
+    /**
+     * 加锁
+     */
+    void lock()
+    {
+        // memory_order_acquire 后面访存指令勿重排至此条指令之前
+        while (flag_.test_and_set(std::memory_order_acquire)) {
+        }
+    }
+    /**
+     * 解锁
+     */
+    void unlock()
+    {
+        // memory_order_release 前面访存指令勿重排到此条指令之后
+        flag_.clear(std::memory_order_release);
+    }
+    /**
+     * 尝试加锁。若未加锁，会上锁
+     * @return
+     */
+    bool tryLock()
+    {
+        return !flag_.test_and_set();
+    }
+private:
+    std::atomic_flag flag_ = ATOMIC_FLAG_INIT;  // 标志位
+};
+```
 ---
 
 ## 线程池
