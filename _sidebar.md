@@ -11,8 +11,8 @@
 - [**docker**](./linux/docker.md)
 
 - [**compile**](./cxx/)
-  - [**示例**](cxx/compile.md)
-  - [**xmake手册**](cxx/xmake.md)
+  - [**示例**](./cxx/compile.md)
+  - [**xmake手册**](./cxx/xmake.md)
 
 - [**github**](./github/github.md)
 
