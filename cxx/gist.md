@@ -1,35 +1,32 @@
 ## 现代c++ 教程
-高速上手C++ 11/14/17/20
-参考链接：
+高速上手C++ 11/14/17/20参考链接：
+
+https://changkun.de/modern-cpp/pdf/modern-cpp-tutorial-zh-cn.pdf
 
 https://zhuanlan.zhihu.com/p/266554398
 
 https://github.com/changkun/modern-cpp-tutorial
+
 ## 编码
-
-跨win/linux项目的编码选择和编译选项设置，首选： UTF-8 With BOOM，以下是对编码造成问题的说明
-
-参考链接
+跨win/linux项目的编码选择和编译选项设置，首选： UTF-8 With BOOM，以下是对编码造成问题的说明,参考链接
 
  https://github.com/lovepika/thinking_file_encoding_cpp
 
-Visual Studio Code 配置 C/C++ 开发环境的最佳实践(VSCode + Clangd + XMake)
+Visual Studio Code 配置 C/C++ 开发环境的最佳实践(VSCode + Clangd + XMake),参考链接
 
-参考链接
-
- https://zhuanlan.zhihu.com/p/398790625
+https://zhuanlan.zhihu.com/p/398790625
 
 ---
 
 ## c++代码调试的艺术
 
-微信读书，讲解了VS2022的调试，以及linux下c++的调试技巧
+微信读书，讲解了VS2022的调试，以及linux下c++的调试技巧,参考链接:
 
-参考链接: https://weread.qq.com/web/reader/423320c07228f7b6423975a
+https://weread.qq.com/web/reader/423320c07228f7b6423975a
 
-在VS studio中调试dll的方法(软件调用dll)，可以附加到进程，也可以开启本地调试
+在VS studio中调试dll的方法(软件调用dll)，可以附加到进程，也可以开启本地调试,参考链接：
 
-参考链接：https://blog.csdn.net/daidi1989/article/details/79916399
+https://blog.csdn.net/daidi1989/article/details/79916399
 
 在VS studio查看内存的办法
 

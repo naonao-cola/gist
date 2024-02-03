@@ -1,10 +1,6 @@
-[toc]
 
-
-# 一 xmake入门 
+# 一 xmake入门
 ## 1 xmake基本使用
-
-
 
 在本节实验中，将会学习如何安装使用 xmake，如何快速创建 C++ 工程，并且编译和运行。以及如何利用 gdb 去加载调试编译后的程序，还有程序的安装和卸载操作。
 
@@ -24,11 +20,10 @@ xmake 是一个基于 Lua 的轻量级跨平台 C/C++ 构建工具，使用 xmak
 
   目前，xmake 已经在 Github 收获 2.9K star，300+ fork，30+ 贡献者，并且处理了 900+ issues，5400+ Commits，star 数已经赶超大部分同类构建工具，逐渐逼近 cmake，现在已经有越来越多的用户开始使用 xmake。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/5f4ffd9db0a77ccf680b2ab08f281365-0)
-
+![](../images/xmake/xmake_1.png)
 关于 xmake 的具体介绍，可以到 [xmake 官网](https://xmake.io/#/zh-cn/) 进一步了解，我们也提供了完善的中文文档支持，也可以直接访问 xmake 的 [GitHub 仓库](https://github.com/xmake-io/xmake)。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/0b3d882f66054f9f00f844f41cadeb9b-0)
+![](../images/xmake/xmake_2.png)
 
 #### xmake 安装
 
@@ -48,7 +43,7 @@ source ~/.xmake/profile
 
 我们可以执行 `xmake --version` 来验证下 xmake 是否安装成功，如果看到下面的输出结果，说明我们已经成功安装，可以正常使用了。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/cd23d297f9d2786d438ebe0ba5bd34fb-0)
+![](../images/xmake/xmake_3.png)
 
 注：我们所有的实验都是使用 xmake v2.3.7 版本，这是为了确保所有实验操作和结果完全一致，不会受到 xmake 版本更新导致的一些细小差异。
 
@@ -63,15 +58,15 @@ xmake create hello
 
 如果看到下面的输出内容，则说明已经成功创建了一个最简单的 C++ 空项目。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/f0a56581cd33f7335920a4372723bf8c-0)
+![](../images/xmake/xmake_4.png)
 
 我们可以在项目根目录执行 `tree` 简单看下这个空项目里面有哪些文件。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/da7f8f41727fb73119bfda927578cee4-0)
+![](../images/xmake/xmake_5.png)
 
 可以看到，除了 src 目录下的 C++ 源文件外，xmake 会在根目录生成一个 xmake.lua 文件，执行 `gvim xmake.lua` 使用 gvim 打开看下 xmake.lua 这个文件里面的内容。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/6d85656ca0d9217f867c550f694d3d3b-0)
+![](../images/xmake/xmake_6.png)
 
 可以看到，仅仅只需要简单几行配置，就可以完整描述整个 C++ 项目的构建，而其中的蓝色文本部分仅仅只是自动生成的注释内容，用户不需要的话，完全可以自己删掉它们，实际描述构建的配置，可以精简为：
 
@@ -99,11 +94,11 @@ target("hello")
 
   如果编译正常通过，会显示下面的结果，编译过程中默认会显示编译进度信息，以及正在编译哪些文件。
 
-  ![图片描述](https://doc.shiyanlou.com/courses/2764/600404/169441cd01e4be47dabd83509529433e-0)
+  ![](../images/xmake/xmake_7.png)
 
   编译完成后，再执行 `tree` 命令，查看 xmake 生成了哪些文件。
 
-  ![8](https://doc.shiyanlou.com/courses/2764/27526/1123fb57eac78058f34b801f9686a35d-0)
+  ![](../images/xmake/xmake_8.png)
 
 可以看到默认情况下，xmake 会自动在 build 目录生成可执行文件，其中还会自动创建 `linux/x86_64/release` 子目录，这是为了方便处理跨平台编译，如果一个项目同时需要编译各种平台、架构、编译模式下的目标文件，那么分别存储到不同的目录，可以互不影响。
 
@@ -119,7 +114,7 @@ xmake 会自动执行 build 目录下实际对应的可执行程序，然后加�
 
 如果运行成功，就会在终端显示 `hello world!` 字符串，如下图所示。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/cf4de13f3dd865b06c7619bcf7a33b03-0)
+![](../images/xmake/xmake_9.png)
 
 xmake 也支持直接加载 gdb 调试器运行编译好的可执行程序来实现断点调试，在开始调试前，我们需要先在当前环境安装下 gdb，在 Xfce 终端输入下面的命令。
 
@@ -138,7 +133,7 @@ xmake
 
 上面的 `xmake f -m debug` 就是切换的 debug 调试编译模式，保存配置后，重新执行 `xmake` 就可以编译生成带符号信息的 debug 程序，编译成功后的结果如下。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/b7cb39dd258c1e94e2b1a1232f625614-0)
+![](../images/xmake/xmake_10.png)
 
 编译好后，我们就可以加载调试器运行了，还是之前的 `xmake run` 命令，只不过追加了 `-d` 参数，告诉 xmake 当前我们需要调试运行程序，xmake 会自动检测当前环境存在的调试器，然后运行它去加载我们的程序。
 
@@ -156,7 +151,7 @@ gdb> q   # 退出
 
 断点正常触发后，我们就会看到实际断下的源码位置，这个时候可以继续使用 gdb 的其它调试命令来调试我们的程序了，关于 gdb 的使用细节，这里就不多讲了，这里主要是演示如何使用 xmake 去加载使用 gdb 调试器。
 
-![11](https://doc.shiyanlou.com/courses/2764/27526/bc06c54957db62362898dfbd0313a8b2-0)
+![](../images/xmake/xmake_11.png)
 
 **注意：gdb 调试程序需要在一台单独的主机上才能正确执行，由于这里使用的是容器环境，环境限制不能正确运行。**
 
@@ -170,7 +165,7 @@ xmake install -y
 
 由于系统默认会将 xmake 安装到 `/usr/local` 目录下，需要系统权限，所以安装命令中带上了 -y 参数。整个安装过程如下图。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/3e6b48d193fce00ec89b47e11ea81838-0)
+![](../images/xmake/xmake_12.png)
 
 安装完成后，尝试直接执行 hello 程序，来确认是否真的已经安装成功。
 
@@ -180,11 +175,11 @@ hello
 
 如果看到下面的结果，说明程序可以正常运行，确实已经安装成功。
 
-![13](https://doc.shiyanlou.com/courses/2764/27526/8a0520c88a0f6407cc06af7ddb8e2fed-0)
+![](../images/xmake/xmake_13.png)
 
 执行 `which hello` 查看安装好的程序存放在系统的哪个路径下。
 
-![14](https://doc.shiyanlou.com/courses/2764/27526/587c0cf70b40b6bbc0f0bc66ad382787-0)
+![](../images/xmake/xmake_14.png)
 
 可以看到，xmake 是把 hello 程序给安装到了系统 `/usr/local/bin/hello` 位置。
 
@@ -192,11 +187,11 @@ hello
 
 如果我们要卸载之前安装的程序，也是可以的，只需要在之前的项目根目录继续执行 `xmake uninstall -y` 完成卸载，-y 参数表示使用管理员权限。执行成功后，会显示下面的结果。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/06b1c04823803fbbaa86b03e115bb06c-0)
+![](../images/xmake/xmake_15.png)
 
 我们也可以继续使用 `which hello` 来继续确认是否卸载成功，如果看到 `Not Found` 字样，说明程序已经成功被卸载掉了。
 
-![16](https://doc.shiyanlou.com/courses/2764/27526/48317cead52cfad7c342e4c4b634dd7d-0)
+![](../images/xmake/xmake_16.png)
 
 在本节实验中，我们学习了如何使用 xmake 创建 C++ 工程，并编译运行，以及如何进行断点调试。另外，我们也学习了程序的安装和卸载操作流程。
 
@@ -231,7 +226,7 @@ xmake [task] [options] [target]
 
 主要由 `[task]`、`[options]` 还有 `[target]` 组成，其中 `[]` 部分表示可选输入，里面的 task 就是子命令任务名，xmake 提供了很多的内置子命令以及插件任务子命令，可以通过执行 `xmake --help` 在主菜单里面查看具体有哪些子命令，整个主菜单的列表内容如下。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/b6f381f56119c1430a0f2d7cc8393e3c-0)
+![](../images/xmake/xmake_17.png)
 
 而 `options` 就是指的上图中的参数选项，除了主菜单的参数选项，每个子命令也有对应的参数选项，比如 `xmake build --help` 就是 build 子命令的帮助菜单。
 
@@ -264,7 +259,7 @@ xmake build --help
 
 输出内容如下。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/9639360f239e19335e571f4c76e88777-0)
+![](../images/xmake/xmake_18.png)
 
 我们可以看到，它主要分了两大类，上半段 `Common options` 部分是通用选项，所有子命令都会存在这些选项，下半段 `Command options (build)` 就是 build 子命令特有的选项列表。
 
@@ -285,7 +280,7 @@ xmake -rv
 
 这里我们还同时追加 `-r` 选项，`-r` 和 `-v` 可以组合在一起变成 `-rv` 同时生效（这是由于 xmake 采用的是 unix 的命令参数风格），也就是重新编译并且显示详细命令输出，具体效果如图。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/d80872b76f245cce8f96f66f7d1c1162-0)
+![](../images/xmake/xmake_19.png)
 
 config 子命令主要用于在编译前，对项目进行一些参数配置，比如切换平台、架构以及编译模式等，可用于修改编译过程中的各种行为，当然里面很多配置是可以直接在 xmake.lua 中配置来永久生效的，不过这里通过配置命令，也可以针对当前编译临时生效，配置结果也会被缓存。
 
@@ -305,11 +300,11 @@ xmake f -m debug
 
 默认编译 xmake 会在当前项目根目录下生成 build 子目录作为编译输出目录，如果不想生成到当前目录下，我们可以通过下面的配置命令切换到其它输出目录下。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/1e7e7c7534cb9ab50d40a98b97f94428-0)
+![](../images/xmake/xmake_20.png)
 
 如果配置成功，通过下面的命令查看当前的配置信息，确认是否生效。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/d46f9748e7e05d94207e8480fb83b94a-0)
+![](../images/xmake/xmake_21.png)
 
 #### 添加 C/C++ 编译选项
 
@@ -328,7 +323,7 @@ xmake -rv
 
 我们通过执行 `xmake -rv` 强制重新编译并且显示详细输出，来确认是否添加生效，下图红框部分中的 `-DTEST` 说明我们添加的 TEST 宏定义确实传入了 gcc 编译器。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/114cd8e58f1a67790f25cd9e89d4762e-0)
+![](../images/xmake/xmake_22.png)
 
 #### 添加链接库和搜索路径
 
@@ -341,7 +336,7 @@ xmake -rv
 
 我们通过添加额外的 pthread 链接库，同时新增了 `/tmp` 的库搜索目录，最后生效的效果如下。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/8647383fe6b0a23ea56d6cdc96754f18-0)
+![](../images/xmake/xmake_23.png)
 
 另外，我们也可以通过 `--links` 和 `--linkdirs` 达到同样的效果。
 
@@ -361,7 +356,7 @@ sudo apt install -y clang
 
 安装完成后，执行 `clang --version` 命令来确认 clang 是否安装成功。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/1588453fe00f11e14241770599428df7-0)
+![](../images/xmake/xmake_24.png)
 
 如果安装成功，执行下面的命令切换到 clang 编译工具链，然后执行编译。
 
@@ -372,11 +367,11 @@ xmake -rv
 
 我们可以看下执行的详细输出，红框部分显示的 `/usr/bin/clang` 说明当前的编译确实使用了 clang 编译器而不是 gcc 了。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/8f95dc074b6c7f1b31619ceb403e580d-0)
+![](../images/xmake/xmake_25.png)
 
 我们再通过 `xmake run` 运行下编译好的目标程序。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/0731de94c117d2d3e9ba186d8369a46a-0)
+![](../images/xmake/xmake_26.png)
 
 正常显示 `hello world!`，一切运行正常。
 
@@ -391,7 +386,7 @@ xmake -rv
 
 重置配置后，我们重新编译当前工程，可以看下里面的详细编译选项，已经完全还原回去了，刚刚设置的 clang 编译器重新变成了 gcc 编译器。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/8b6ec57c1136119e03e00d287f6095fa-0)
+![](../images/xmake/xmake_27.png)
 
 我们可以使用此命令，查看当前工程的基本信息，以及 xmake 自身的一些基本信息，这通常是非常有用的，比如可以知道当前项目有哪些目标程序，当前的编译架构和模式是什么，以及 xmake 的临时目录、缓存目录和安装路径在哪里等等。
 
@@ -401,7 +396,7 @@ xmake show
 
 显示的一些信息如下图。
 
-![11](https://doc.shiyanlou.com/courses/2764/27526/492aa8ceff3c260dfa2c601e09b314b9-0)
+![](../images/xmake/xmake_28.png)
 
 除了项目和 xmake 自身基本信息，show 命令还可以显示指定 target 目标的基本信息，比如我们执行下面的命令查看下在 xmake.lua 文件中定义的 `target("hello")` 目标程序的基本信息。
 
@@ -409,7 +404,7 @@ xmake show
 xmake show -t hello
 ```
 
-![12](https://doc.shiyanlou.com/courses/2764/27526/1ec9403b3508fc08a553b8960a806833-0)
+![](../images/xmake/xmake_29.png)
 
 通过上图，我们能大致了解这个 hello 程序的可执行文件的实际生成路径在哪里，编译过程中的 `.o` 文件在哪里，以及是在 `xmake.lua` 哪个位置定义的。
 
@@ -421,11 +416,11 @@ xmake update -f
 
 这里我们额外加上了 `-f/--force` 参数，这是因为我们当前环境的 xmake 已经是最新版本，通常不需要更新，为了演示这个更新操作，我们通过这个参数来强制重新更新一遍当前的最新版本。
 
-![13](https://doc.shiyanlou.com/courses/2764/27526/8db7976f3471413699e58716b4cd2be4-0)
+![](../images/xmake/xmake_30.png)
 
 更新完成后，我们可以继续执行 `xmake --version` 确认下版本是否为最新版本，实际的版本号由于时间关系，会有所变动，毕竟 xmake 的版本迭代还是挺频繁的。
 
-![14](https://doc.shiyanlou.com/courses/2764/27526/9d0a23946bd58efd83931f78335d309b-0)
+![](../images/xmake/xmake_31.png)
 
 在本节实验中，我们进一步熟悉了 xmake 的各种基本命令的使用和参数介绍，熟悉了如何去定制化配置编译，切换使用 clang 编译器，如何查看各种项目信息以及更新升级 xmake 自身。
 
@@ -455,7 +450,7 @@ wget https://labfile.oss.aliyuncs.com/courses/2764/code2.zip
 
 大致的编译链接流程可以参考下图。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/6795acf26e4f15326f1d9970f80db3bd-1)
+![](../images/xmake/xmake_32.svg)
 
 从图中，我们可以看到链接器除了会去链接所有 `.o` 对象文件外，如果提供了 `.a` 静态库和 `.so` 动态库，那么链接器也会对它们进行链接。
 
@@ -470,7 +465,7 @@ wget https://labfile.oss.aliyuncs.com/courses/2764/code2.zip
 
 目前市面上常用的编译器有：gcc，clang，msvc 等，而这里主要使用 gcc 作为我们的编译器，可以在之前的 hello 工程下执行 `xmake -rv` 查看当前使用的编译器和链接器。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/f6f5131977f1e9118e9b0d28bbff65e1-0)
+![](../images/xmake/xmake_33.png)
 
 从上图可以看出，gcc 就是我们当前使用的编译器，它可以直接编译 `.cpp` 源文件到 `.o` 文件，而 `g++` 就是我们使用的链接器，用来将所有生成的 `.o` 文件链接成可执行文件。
 
@@ -512,23 +507,23 @@ xmake create -t static hello_static
 
 `-t static` 参数用于指定当前工程类型为静态库，后面是工程项目名，生成后的项目结构如下。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/26ce1f0bc2d4ab2c3e64991386dfb579-0)
+![](../images/xmake/xmake_34.png)
 
 其中，项目根目录下还是会自动生成一个 xmake.lua 用于维护整个项目构建，而 src 源码目录下 `interface.cpp` 就是用来参与静态库编译，`main.cpp` 用来生成可执行程序，在里面调用静态库的接口。
 
 我们可以进入 hello_static 项目根目录后，执行 `gvim ./xmake.lua` 查看下里面的内容，大致如下。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/50281287c151a7b38d0d7ecf585a28d2-0)
+![](../images/xmake/xmake_35.png)
 
 里面有两个编译目标，通过 `target()` 定义维护，一个是 static 静态库类型，一个是 binary 可执行程序类型，它们之间通过 `add_deps("hello_static")` 进行依赖关联，这样 xmake 在编译的时候，会优先编译依赖的静态库，并且把静态库自动集成到对应的可执行程序上去。
 
 执行 `xmake` 对这个工程进行编译，如果输出结果跟下图基本一致，说明我们成功生成了一个链接静态库的目标程序。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/4de8234eedd78b4da1331687d4b5a336-0)
+![](../images/xmake/xmake_36.png)
 
 然后我们执行 `xmake run` 运行下这个程序。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/3af8597a38cce093c496ea1084e04e5a-0)
+![](../images/xmake/xmake_37.png)
 
 #### 动态库程序类型
 
@@ -564,7 +559,7 @@ xmake run
 
 编译运行结果也跟静态库基本一致。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/5e07dc323beadec5332bff84c2dc2584-0)
+![](../images/xmake/xmake_38.png)
 
 #### Phony 目标类型
 
@@ -587,7 +582,7 @@ target("foo")
 
 可以看到，这边我们没有添加任何源文件，这个 foo 目标仅仅只是个空目标程序，执行编译也是空执行，不会有任何源文件参与编译。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/6eb55fd3da9f7044dcb1ca8cf2c4593a-0)
+![](../images/xmake/xmake_39.png)
 
 而关于使用 phony 目标跟其它目标程序的关联编译，我们会在实验 6 《xmake 基础之目标依赖》中详细讲解。
 
@@ -606,7 +601,7 @@ target("hello")
 
 通过 `add_cxflags("-DTEST1")` 设置就能对所有的 C/C++ 代码定义上 `TEST1` 宏开关，然后通过执行 `xmake -v` 查看完整编译命令中，是否真的生效了。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/e8cce8f2cdf89db44a61e712fbd9d9db-0)
+![](../images/xmake/xmake_40.png)
 
 上图中，我们确实可以看到 `-DTEST1` 被传递到了 gcc 编译器进行宏定义。
 
@@ -630,7 +625,7 @@ target("hello")
 
 然后，我们重新执行 `xmake -v` 去编译查看新增的宏定义是否生效，如图。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/7c5bb8721171913ac459409760248b40-0)
+![](../images/xmake/xmake_41.png)
 
 从图中，我们可以看出，相比之前的输出，新增加了一个 `-DTEST2` 宏定义参数选项传入了 gcc，说明我们的配置确实生效了。
 
@@ -669,7 +664,7 @@ target("hello")
 - `-L/tmp`：添加链接库搜索路径。
 - `-lz -lpthread`：添加的链接库，由于我们是通过 `add_links` 添加的 zlib 库，而 pthread 库是作为系统库添加的，所以被放置在 pthread 的左边优先链接。
 
-![11](https://doc.shiyanlou.com/courses/2764/27526/e39af17e83f3a839cf7aadc012ad0f70-0)
+![](../images/xmake/xmake_42.png)
 
 #### 设置语言标准
 
@@ -704,7 +699,7 @@ set_languages("c99", "c++11")
 
 将这个配置添加到刚刚修改的 xmake.lua 文件中去，就跟上一节的配置方式一样，放置到 `target("hello")` 配置域下面，然后执行 `xmake -v` 看下编译输出结果。
 
-![12](https://doc.shiyanlou.com/courses/2764/27526/35f4b7d3a34c05ccc62c7c86159b000a-0)
+![](../images/xmake/xmake_43.png)
 
 由于当前没 C 代码，所以实际只有 C++11 的标准设置生效了，也就是上图红框位置的编译选项 `-std=c++11`。
 
@@ -712,7 +707,7 @@ set_languages("c99", "c++11")
 
 其实，xmake 默认创建的工程 xmake.lua 文件中，已经设置了 `add_rules("mode.debug", "mode.release")` 这两个编译规则，而默认 xmake 编译就是 release 模式编译，它会开启所有内置的编译优化选项，并不需要用户设置什么。
 
-![13](https://doc.shiyanlou.com/courses/2764/27526/9ce81350b7740ae9abd6509ee2d8da3c-0)
+![](../images/xmake/xmake_44.png)
 
 上图红框的部分都是编译优化相关的一些选项，比如最直接的 `-O3` 优化，还有 `-fvisibility=hidden -fvisibility-inlines-hidden` 用于去重一些符号字符串数据，使得编译后的程序更小。
 
@@ -776,7 +771,7 @@ touch src/test/stub.cpp
 
 创建好后执行 `xmake` 编译工程，如果顺利就可以看到新添加的 stub.cpp 文件也参与了编译，如下图。
 
-![14](https://doc.shiyanlou.com/courses/2764/27526/7826a1a02f632ddfc65a68cb5012b57c-0)
+![](../images/xmake/xmake_45.png)
 
 #### 过滤源文件
 
@@ -794,7 +789,7 @@ target("hello")
 
 我们再来执行下 `xmake -r` 重新编译验证下结果，如下图。
 
-![15](https://doc.shiyanlou.com/courses/2764/27526/1fffc429e83c688a883f3512419d9666-0)
+![](../images/xmake/xmake_46.png)
 
 上图中，可以看到我们成功过滤掉了 `src/test/stub.cpp` 仅仅编译 `src/main.cpp`。
 
@@ -845,7 +840,7 @@ C/C++ 库不像其它新的高级语言那样官方提供好用的依赖包管�
 
   `-l c` 参数指定当前创建的 crc32 工程是基于 C 语言的，其目录结构如下，跟之前的 hello 项目很相似，仅仅只是 `main.cpp` 源文件变成了 `main.c`。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/a05183d1a967b3542ce02f42dde97ec9-0)
+![](../images/xmake/xmake_47.png)
 
 进入 `crc32` 目录中，执行 `vim src/main.c` 编辑源文件，编写一个简单实用、使用 zlib 库中 `crc32()` 接口去计算 crc32 的例子，代码如下。
 
@@ -862,7 +857,7 @@ int main(int argc, char** argv)
 
 上述代码通过计算输入字符串内容的 crc32 值，然后回显输出到终端上，我们先尝试下直接执行 `xmake` 命令去编译它。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/c54ce38d76f600527b21fc69b7aa6b7f-0)
+![](../images/xmake/xmake_48.png)
 
 通过上图，我们看到编译链接阶段报错了，缺少 `crc32` 符号，这是因为我们还没集成链接 zlib 库，继续修改 xmake.lua 文件手动加上 zlib 库以及它系统库搜索路径。
 
@@ -876,13 +871,13 @@ target("crc32")
 
 然后重新执行 `xmake` 编译这个工程，这回看到编译通过了。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/753ae6438fecb35e2aa6790b3d760361-0)
+![](../images/xmake/xmake_49.png)
 
 如果我们执行 `xmake -rv` 命令，是可以看到详细编译输出里面已经带上了 `-L/usr/lib/x86_64-linux-gnu -lz` 的库链接选项。
 
 注：这里没有额外添加头文件搜索路径，是因为 `zlib.h` 是在 `/usr/include` 目录下，这个目录 xmake 会内置自动添加对应的 `-I` 选项到 gcc。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/d601e96ec7b350b3940f5cb360188c87-0)
+![](../images/xmake/xmake_50.png)
 
 接下来，我们尝试执行下面的命令运行这个程序。
 
@@ -892,7 +887,7 @@ xmake run crc32 somedata
 
 如果运行正常，会看到类似下面的运行结果，说明我们已经正常集成使用了系统自带的 zlib 库。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/99590274624424105b8c30b3b438028f-0)
+![](../images/xmake/xmake_51.png)
 
 #### 自动查找系统库
 
@@ -906,7 +901,7 @@ xmake l find_packages zlib
 
 如果我们成功找到系统路径下安装的 zlib 库，那么会看到类似下图的结果。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/37ae4573514eff6a84187455f8bcc018-0)
+![](../images/xmake/xmake_52.png)
 
 里面有链接库名、链接库的搜索路径，有可能还会有头文件的搜索路径等信息，因此我们只需要把这些信息自动探测到后设置到对应的目标程序中，就可以实现自动集成安装在系统环境的依赖库了。
 
@@ -927,7 +922,7 @@ target("crc32")
 
 不过需要注意的一点是：xmake 默认会缓存依赖包的检测结果，并不是每次编译都会重新检测，如果之前检测失败，那么结果也会缓存，这个时候我们可以执行 `xmake f -c` 在配置时候，忽略之前的缓存内容，就会自动重新触发各种检测。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/d601e96ec7b350b3940f5cb360188c87-0)
+![](../images/xmake/xmake_53.png)
 
 我们现在虽然能够自动检测和集成系统环境的 C/C++ 库，但是如果需要的库在当前环境中还没有安装，那么还是需要手动的去安装它们，如果有些库安装非常复杂容易出错，那么整个过程也是很折腾的。
 
@@ -935,7 +930,7 @@ target("crc32")
 
 其大致流程可以通过下面这个图来直观的了解。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/308009fc6eea85743abe41e97cc60d73-0)
+![](../images/xmake/xmake_54.png)
 
 如果暂时看不懂上图的流程，没有关系，我们先来个简单的例子体验下如何远程下载依赖包并把它集成到项目中去，还是拿之前的 zlib 为例，我们先假设当前系统环境中没有这个库存在，想要从网上拉取对应版本进行集成。
 
@@ -956,7 +951,7 @@ target("crc32")
 
 如果安装完成并且编译成功会显示下面的信息。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/c6d3c0fbcc9427ea787c82c686bccb98-0)
+![](../images/xmake/xmake_55.png)
 
 需要注意的一点是，上面的配置中我们额外加上了 `{system = false}` 是因为当前的实验环境中已经存在了 zlib 库，所以 `add_requires("zlib")` 默认会优先自动检测系统环境中的 zlib 库，如果存在就直接使用，也就是内置了 `find_packages("zlib")` 的逻辑。
 
@@ -966,7 +961,7 @@ target("crc32")
 
 所以再次执行 `xmake -rv` 重新编译看看，这次并不会再去安装 zlib 库了，同样可以正常集成 zlib 来重新编译项目，效果如图。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/5a098d59fc91cbee44f0a0f04a5f7d0a-0)
+![](../images/xmake/xmake_56.png)
 
 上图中红线部分就是我们从远程仓库集成的 zlib 库头文件和链接信息。
 
@@ -980,7 +975,7 @@ xmake require --uninstall zlib
 
 如果看到下图，说明已经成功卸载了安装包。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/a3bb42bbecb4b8c0eb5c5828d0ab184a-0)
+![](../images/xmake/xmake_57.png)
 
 不过需要注意的是，虽然卸载了包，但是当前项目的配置缓存还在，如果继续执行 `xmake` 命令，还是会使用缓存的 zlib 包信息。
 
@@ -988,7 +983,7 @@ xmake require --uninstall zlib
 
 由于 xmake.lua 中还是配置了 zlib 包依赖，因此这次会触发重新安装逻辑（不过不会再重新下载了，而是直接解压安装之前缓存的 zlib 包），效果如图。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/4d691d5278b4ed5ecf4d1432894e7702-0)
+![](../images/xmake/xmake_58.png)
 
 #### 语义版本设置
 
@@ -1008,11 +1003,11 @@ target("crc32")
 
 其中 [tbox 库](https://github.com/tboox/tbox) 我们会集成匹配 `1.6` 下面的所有可用子版本，而 pcre2 正则库我们会集成匹配 `>10.0` 的可用版本。配置好后，继续执行 `xmake` 安装依赖库编译，如果一切顺利，会看到类似下面的结果输出。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/ec17829315411b65bdf2620a0bc74a2d-0)
+![图片描述](../images/xmake/xmake_59.png)
 
 再来执行 `xmake -rv` 查看完整命令输出，看看是否真的集成上了这两个库。
 
-![13](https://doc.shiyanlou.com/courses/2764/27526/180a63868e4e68ec8eab0c57d700e5d5-0)
+![](../images/xmake/xmake_60.png)
 
 上图红框部分，就是我们新下载集成的两个依赖库的路径和编译链接选项，说明我们已经顺利集成上了，至于 C 代码里面如何去使用它们，这里就不再过多介绍了，大家在实验后可以自行研究。
 
@@ -1037,7 +1032,7 @@ xmake require --info zlib
 
 相关的包信息说明可以参考下面的图片。
 
-![14](https://doc.shiyanlou.com/courses/2764/27526/854df30bf6d0b501080cae667db8dcdb-0)
+![](../images/xmake/xmake_61.png)
 
 虽然 xmake 内置的包仓库功能已经很完善，但毕竟生态还没完全建立起来，收录的包还不是很多，如果用户需要的 C/C++ 依赖包在我们的包仓库中找不到，那么还可以直接集成使用第三方仓库中提供的包，例如：Conan、Vcpkg、Homebrew 等仓库，xmake 都是支持的。
 
@@ -1053,7 +1048,7 @@ source ~/.profile
 
 然后我们可以通过执行 `conan --version` 确认下是否安装成功，如果成功，我们会看到对应的版本信息，如图。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/cb007cef65df38649f5f2d6a368e664d-0)
+![](../images/xmake/xmake_62.png)
 
 接下来，使用 vim 编辑之前的 crc32/xmake.lua 文件，改成如下配置。
 
@@ -1072,11 +1067,11 @@ target("crc32")
 
 配置完成后，执行 `xmake` 去编译这个集成了 conan 依赖包的项目，整个依赖包的下载安装流程，跟之前完全一致，如图。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/7bf090db28cbba13a5dd35c7fb0117f8-0)
+![](../images/xmake/xmake_63.png)
 
 如果安装成功，可以继续执行 `xmake -rv` 来查看 xmake 实际链接的 conan 包路径信息。
 
-![17](https://doc.shiyanlou.com/courses/2764/27526/cf6f6b2d7930d3782459425fff3bf90c-0)
+![](../images/xmake/xmake_64.png)
 
 通过上图可以看到，xmake 直接引用了安装在 conan 自身仓库目录下的 zlib 库，说明整个集成流程已经通过。
 
@@ -1126,7 +1121,7 @@ xmake.lua 采用二八原则实现了描述域、脚本域两层分离式配置�
 
 我们可以通过下图大致了解哪些配置区域是描述域配置，哪些是脚本域。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/cfb304cccd2edbf5960863d64c53297a-0)
+![](../images/xmake/xmake_65.png)
 
 也可以通过下面描述的特征来快速区分：
 
@@ -1186,7 +1181,7 @@ xmake
 xmake run
 ```
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/12fc637dcdfbec4ebfb24a78ce15ddc4-0)
+![](../images/xmake/xmake_66.png)
 
 如果正常看到 `hello foo` 的输出，说明添加的宏定义配置确实正常生效了。
 
@@ -1212,7 +1207,7 @@ target("hello")
 
 执行 `xmake` 编译结束，会在编译最后面输出配置信息，例如下图的红框部分。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/f070438befbb55a3b4d93237f88ef252-0)
+![](../images/xmake/xmake_67.png)
 
 xmake 还对每个 target 提供了 `on_load` 阶段，每个目标程序的配置都会加载这里面的脚本，因此我们可以在这个脚本域中，实现更加灵活复杂的基础配置脚本。
 
@@ -1231,7 +1226,7 @@ target("hello")
 
 我们可以再执行 `xmake -rv` 进行编译，查看编译输出，`-DWORD=\"foo\"` 也被传入的 gcc 编译器，说明动态的在脚本域设置宏定义也生效了。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/5f64ef63423379dd9c5e02856bacd522-0)
+![](../images/xmake/xmake_68.png)
 
 #### 分离脚本域配置脚本
 
@@ -1277,7 +1272,7 @@ xmake run
 
 编译和运行是否通过可以对照下面的图片结果。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/12fc637dcdfbec4ebfb24a78ce15ddc4-0)
+![](../images/xmake/xmake_69.png)
 
 在之前的实验中，我们的工程都只有一个目标程序，也就是仅仅定义了一个 `target()`，但实际的项目，可能需要同时编译多个目标程序。
 
@@ -1338,11 +1333,11 @@ target_end()
 
 执行 `xmake` 来尝试编译这两个目标程序，可以看到，我们实际编译链接生成了两个可执行程序：test1 和 test2。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/4235de0100dd314fbaeb3ab3addcf61e-0)
+![](../images/xmake/xmake_70.png)
 
 再执行 `xmake -rv` 查看详细输出，这两个宏定义已经分别传入了对应的 target 中去。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/1828ef47b7de679af600383f4a08f335-0)
+![](../images/xmake/xmake_71.png)
 
 分别运行这两个可执行程序查看输出。
 
@@ -1353,7 +1348,7 @@ xmake run test2
 
 如果看到下面的输出，说明我们确实已经将不同的 WORD 宏定义分别传入了 test1 和 test2 这两个程序中去。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/295a108a80e1e6af563217b32f6cfd95-0)
+![](../images/xmake/xmake_72.png)
 
 #### 全局配置和子配置
 
@@ -1382,7 +1377,7 @@ target("test2")
 
 执行 `xmake -rv` 进行编译，从输出中看到红框里面的部分，可以确认在全局根域的这些设置对每个 target 都生效了，而 `-DWORD=` 的宏定义设置在不同的 target 中还是不相同的，因为它们是在特定 target 域中分别设置的。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/85fba208313c73bb363be47390413fd0-0)
+![](../images/xmake/xmake_73.png)
 
 至于为什么要抽离通用设置到全局根域，在前面也解释了原因，就是为了简化 xmake.lua 的配置，这也是 xmake 的初衷，让工程项目的构建配置能够尽可能的简洁可读，这样方便维护也更加友好。
 
@@ -1468,7 +1463,7 @@ target("test3")
 
 执行 `xmake` 查看实际的编译顺序。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/d01da0f61640537034cad5524feda663-0)
+![](../images/xmake/xmake_74.png)
 
 通过上图，我们可以看到最后三个程序的实际链接顺序确实已经按照刚刚设置的依赖顺序进行执行了，不过其 C++ 源文件还是在最开始就执行编译了。
 
@@ -1502,7 +1497,7 @@ target("test3")
 
 由于实际源码和配置没有发生改变，默认的 `xmake` 编译命令不会触发重新编译，所以我们通过执行 `xmake -r` 强制重新编译，来直观感受下禁用这个策略后的效果。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/610a3718d986cc13ab5211e9e5375771-0)
+![](../images/xmake/xmake_75.png)
 
 可以对比下上图的编译顺序跟之前的编译顺序，还是有明显区别的，这次我们不仅链接顺序，甚至连源码也都严格按照 test3，test2，test1 的顺序来编译了，test1 的源码必须要等待 test2 实际完成链接后才会去编译。
 
@@ -1514,7 +1509,7 @@ target("test3")
 
 整个简化流程大概如下图所示，通过配置 `add_deps` 可以集成依赖的静态库目标程序中的大部分链接信息，因此仅仅只需要通过关联依赖，就能够自动集成和使用静态库。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/1c4b3662abde868d0f949f6b9ef5c88b-1)
+![](../images/xmake/xmake_76.png)
 
 我们可以通过 xmake 提供的模板工程创建一个带有静态库的空工程，里面默认就提供了两个 target 目标程序，一个静态库和一个可执行程序。
 
@@ -1565,15 +1560,15 @@ target("foo_demo")
 
 关于可见性，xmake 主要提供下面三种，默认情况下的配置都是私有的，不对外可见的。
 
-| 属性      | 描述                                                         |
-| --------- | ------------------------------------------------------------ |
+| 属性      | 描述                                                                 |
+| --------- | -------------------------------------------------------------------- |
 | private   | 默认设置，作为当前 target 的私有配置，不会被依赖的其它 target 所继承 |
-| public    | 公有配置，当前 target 依赖的子 target 都会被设置             |
-| interface | 接口设置，仅被依赖的子 target 所继承设置，当前 target 不参与 |
+| public    | 公有配置，当前 target 依赖的子 target 都会被设置                     |
+| interface | 接口设置，仅被依赖的子 target 所继承设置，当前 target 不参与         |
 
 执行 `xmake -rv` 命令编译输出查看实际的继承效果，其中 `-DTEST` 应该会同时设置到 foo 和 foo_demo 的所有源文件编译，而 `-Isrc` 会仅仅被设置到 foo_demo 的源文件编译。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/35735f7ad1810d9067e09f8d0f713893-0)
+![](../images/xmake/xmake_77.png)
 
 #### 级联依赖继承
 
@@ -1599,7 +1594,7 @@ target("foo_demo")
 
 这个时候，xmake 在编译最终的 foo_demo 时候，也会自动继承 foo 和 bar 里面的静态库信息，并且继承上 public 和 interface 的导出配置，也就是说 `add_deps` 的继承是完全支持级联依赖的，实际效果见下图。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/8bb4441271a7f99963998a8e89a62998-0)
+![](../images/xmake/xmake_78.png)
 
 除了静态库，我们也可以通过依赖继承的方式将动态库和可执行程序进行关联，只需要把之前的 xmake.lua 里面的 foo 目标类型改成 shared，就能编译生成动态库，并且自动关联上可执行程序。
 
@@ -1627,13 +1622,13 @@ xmake run
 
 xmake 会生成一个 `libfoo.so` 动态库程序，然后 foo_demo 会自动链接上这个 so 库，然后运行的时候，也能够自动加载上它。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/234bf0cc0700b601ccf2685bb8419ad0-0)
+![](../images/xmake/xmake_79.png)
 
 至于为什么能够自动加载上编译生成的 so 库，那是因为通过 `add_deps("foo")` 配置的依赖继承关系，在 foo_demo 链接的时候，除了自动加了 `-Lxx -lfoo` 等链接信息外，还额外追加了 rpath 信息用来设置动态库的加载路径信息，也就是下图红框中的 `-Wl,-rpath=$ORIGIN`。
 
 这个链接选项的意思就是配置可执行程序运行时，可以搜索当前运行目录下的所有依赖的 so 库，如果存在就可以正常加载这些 so 库。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/239d3c4a8936481721bb43d10ace6866-0)
+![](../images/xmake/xmake_80.png)
 
 另外，从上图中我们看到 `-DTEST -Isrc` 等 public 导出配置也同样被继承了进来。
 
@@ -1667,7 +1662,7 @@ target("group")
 
 编译后的实际结果如下图。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/4babddd19a31a71d62197db8c64f967f-0)
+![](../images/xmake/xmake_81.png)
 
 在本节实验中，我们主要学习了如何去设置依赖编译来控制多个目标程序的编译顺序，也学会了如何去继承其它目标程序导出的配置以及如何去编译使用动态库、静态库程序。
 
@@ -1751,11 +1746,11 @@ target("test")
 
 由于实验环境就是 Linux 系统，并且编译的目标程序也是针对 Linux 平台的，因此我们可以执行 `xmake` 命令编译确认 `src/linux/*.cpp` 源文件是否真的参与了编译。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/490b5e4b0069b06b8563c7b81d63d181-0)
+![](../images/xmake/xmake_82.png)
 
 上图红线位置的源文件就是我们刚刚配置的仅对 Linux 平台才会参与编译的代码文件，我们再来执行 `xmake -rv` 查看详细的编译输出，`-DLINUX` 也被正常传递进了 gcc 编译器。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/483a67e20edc03c376c62eb013df0ce9-0)
+![](../images/xmake/xmake_83.png)
 
 另外需要说明的是，目标编译平台是可以通过 `xmake f -p linux` 显式设置的，它会跟 `is_plat("linux")` 保持一致，如果编译前没有配置过平台，那么默认会使用当前主机平台来作为目标编译平台。
 
@@ -1815,7 +1810,7 @@ touch src/x86_64/stub.S
 
 我们再来强制执行下编译，看下编译输出，由于当前的实验环境就是 Linux 系统的 x86_64 架构，所以会触发新加的条件配置，结果如下图红线位置所示。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/c44ce0fd4ecb52b181039666242c6630-0)
+![](../images/xmake/xmake_84.png)
 
 #### 判断宿主平台架构
 
@@ -1834,7 +1829,7 @@ xmake l os.arch
 
 运行结果如下图。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/864e44f60e9578096c32b02240de2b50-0)
+![](../images/xmake/xmake_85.png)
 
 至于刚刚所说的交叉编译，也就是在当前主机环境下使用交叉编译工具链生成只能在其它设备才能运行的目标程序，如果在 Linux 上编译 Android 程序或者编译其它 arm，mips 等架构的嵌入式目标程序，这些编译后的目标程序在当前的宿主环境是没办法执行的，只能在对应的设备上才能运行。
 
@@ -1851,7 +1846,7 @@ xmake -r
 
 由于这个时候我们的配置还是判断的目标平台，但已经通过命令切换到了 cross 编译平台下，所以不再是 Linux 和 x86_64 了，实际的编译就会变成下图所示。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/76fd2c2e9950888adaf5019af42265b7-0)
+![](../images/xmake/xmake_86.png)
 
 Linux 和 x86_64 相关的代码文件就不再参与编译了，接下来我们将之前的配置改成判断宿主平台和架构。
 
@@ -1877,7 +1872,7 @@ xmake -r
 
 这回我们看到，Linux 和 x86_64 的代码重新参与了编译，这是因为虽然编译平台切换到了 cross 交叉编译，但是实际 xmake 运行的宿主平台还是我们的 Linux 实验环境，永远不会改变。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/bb8f31171ecd0c4dbd1f36b07605fc6a-0)
+![](../images/xmake/xmake_87.png)
 
 
 
@@ -1913,7 +1908,7 @@ xmake f -m release
 xmake -rv
 ```
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/0daec8b26687a964b2aa5c0b737c7554-0)
+![](../images/xmake/xmake_88.png)
 
 而如果启用了 debug 编译模式，那么我们会开启调试符号信息，并且禁用所有优化编译，也就是相对于 gcc 中的 `-g -O0` 编译选项。
 
@@ -1924,7 +1919,7 @@ xmake f -m debug
 xmake -rv
 ```
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/6ee6be2634a7427296d471cda8cf7173-0)
+![](../images/xmake/xmake_89.png)
 
 #### 判断自定义配置选项
 
@@ -1955,7 +1950,7 @@ option_end()
 xmake f --help | grep myopt
 ```
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/8a4bb3f4540554032a5f263c6d1c87d5-0)
+![](../images/xmake/xmake_90.png)
 
 现在能够在帮助菜单中看到自定义选项了，接下来我们就可以在 xmake.lua 中去判断定义的配置选项来控制编译了。例如我们判断 myopt 的配置值如果是 hello，那么就添加 `-DHELLO` 的宏定义参与编译。
 
@@ -1984,7 +1979,7 @@ xmake -rv
 
 如果一切顺利，那么就会看到红线位置的 `-DHELLO` 已经被传入了 gcc 编译器。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/852221719fc35be79e174d609e8e002b-0)
+![](../images/xmake/xmake_91.png)
 
 而如果我们清除 myopt 配置，那么 `-DHELLO` 宏定义也就不会被设置上。
 
@@ -1995,7 +1990,7 @@ xmake -rv
 
 可以看到下图中已经没有 `-DHELLO` 了。
 
-![11](https://doc.shiyanlou.com/courses/2764/27526/4e820bef3eadc2bb6a17c4641bd9d3e7-0)
+![](../images/xmake/xmake_92.png)
 
 在本节实验中，我们学习了如何去判断条件语句控制编译逻辑，也了解了一些 xmake 内置的平台、架构判断接口，另外还学会了如何判断自定义的选项开关。
 
@@ -2041,7 +2036,7 @@ xmake l print '$(projectdir)'
 
 上面的命令，相当于直接调用了 xmake 内置接口 print 去打印输出当前项目对应的 `$(projectdir)` 内置变量的值，也就是项目的根目录路径。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/e16509e99340989ffdac9bf6d743ebce-0)
+![](../images/xmake/xmake_93.png)
 
 这个变量会随着不同的项目自动适配对应的项目路径，因此我们可以在描述域配置中直接嵌入这个变量来使用。
 
@@ -2071,7 +2066,7 @@ xmake -rv
 
 如果能够看到下图红线部分编译选项，则说明内置变量确实配置成功了。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/6dc051e6d59d558885e47ee5b2e65986-0)
+![](../images/xmake/xmake_94.png)
 
 除了获取项目根路径外，xmake 还提供了一些其它的内置变量，用于快速获取各种基本路径字符串，例如下面几个也是比较常用的路径。
 
@@ -2096,7 +2091,7 @@ target("hello")
 
 执行 `xmake -rv` 查看传入 gcc 的头文件搜索目录是否带上了 `$HOME` 路径。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/336d5f24e7c8aed996a56dc26a47762a-0)
+![](../images/xmake/xmake_95.png)
 
 上图红线位置的 `-I/home/shiyanlou` 就是我们通过获取 `$HOME` 环境变量得到的字符串，至于如何获取当前终端下的所有环境变量，xmake 也提供了接口可以直接快速查看，执行如下命令即可，这个命令会打印所有的环境变量。
 
@@ -2104,7 +2099,7 @@ target("hello")
 xmake l os.getenvs
 ```
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/9bf90277ea39a431dd264fedd8276cb5-0)
+![](../images/xmake/xmake_96.png)
 
 也可以指定查看特定环境变量的内容。
 
@@ -2114,7 +2109,7 @@ xmake l os.getenv HOME
 
 其效果跟 `echo $HOME` 是一样的，但这个命令更加通用，其内部实际就是调用了 xmake 的内置接口 `os.getenv("HOME")`，关于 os 相关内置接口，我们会在后面的实验中详细讲解。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/7acc1a329cba29b410f2437667085aed-0)
+![](../images/xmake/xmake_97.png)
 
 #### 执行获取 shell 输出内容
 
@@ -2140,7 +2135,7 @@ sudo apt install -y libsqlite3-dev
 
 执行 `xmake -rv` 命令编译就可以看到效果了，如图。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/366d0ef11fde13d05a4b28f42a005a66-0)
+![](../images/xmake/xmake_98.png)
 
 上图红线部分就是执行了我们配置中传入的 shell 命令获取的输出结果。
 
@@ -2165,7 +2160,7 @@ target("hello")
 
 执行命令 `xmake -rv` 进行编译，然后执行 `tree bin` 查看实际生成的路径接口，如下图所示。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/351341bca81ebfcffaa3f7fc22e49643-0)
+![](../images/xmake/xmake_99.png)
 
 注：这里只修改了可执行目标程序的存储路径，而 build 目录还是没有被修改，因为 build 目录下还会存储构建过程中的其它的一些中间对象文件。
 
@@ -2198,7 +2193,7 @@ xmake -rv
 
 下图红线标注位置的编译参数就是我们通过 myopt 动态传入的宏定义。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/14fa63ba9fc966e507ca9312fd131c46-0)
+![](../images/xmake/xmake_100.png)
 
 继续执行如下命令，传入 TEST2 到 myopt 选项参数，将宏定义修改为 `-DTEST2`。
 

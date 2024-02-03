@@ -1,21 +1,59 @@
 ﻿## xmake
-### xmake  常见问题解答
+### xmake常见问题
 
-参考链接  https://zhuanlan.zhihu.com/p/611388172
+常见问题解答，参考链接：
 
-非官方的xmake教程
+https://zhuanlan.zhihu.com/p/611388172
 
-参考链接
+
+非官方的xmake教程,参考链接:
 
 https://www.zhihu.com/column/c_1537535487199281152?utm_source=wechat_session&utm_medium=social&utm_oi=953224858981593088
 
-xmake 远程包管理入门
+xmake 远程包管理入门,参考链接:
 
-参考链接  https://zhuanlan.zhihu.com/p/412503965
+https://zhuanlan.zhihu.com/p/412503965
 
-### lua
+### 命令行
 
-第一个参考文件
+```bash
+xmake create -l C++ -P ./hello
+
+xmake f -c
+xmake f -v
+# 确认安装包
+xmake f -y
+xmake -rv
+# 输出调用各种工具操作，编译的详细参数，如果出错还会打印 xmake 的栈回溯
+xmake -vD
+xmake show
+#显示指定 target 配置信息，可以看到各种配置来源于哪个配置文件和具体的行数
+xmake show -t <target>
+# 检查工程配置和代码
+xmake check
+xmake project -k vsxmake2022 -m "release,debug" v2022
+
+# 快速检测系统上指定的包信息,请切换到非工程目录下执行上面的命令
+xmake l find_package x264
+# 追加第三方包管理器前缀来测试
+xmake l find_package conan::OpenSSL/1.0.2g
+
+
+#下载安装好Cuda SDK后，在macosx上会默认安装到/Developer/NVIDIA/CUDA-x.x目录下，Windows上可以通过CUDA_PATH的环境
+#变量找到对应的SDK目录，而 Linux下默认会安装到/usr/local/cuda目录下
+#手动指定Cuda SDK环境目录：
+xmake f --cuda=/usr/local/cuda-9.1/
+#或者通过xmake g/global命令切到全局设置，避免每次切换编译模式都要重新配置一遍。
+xmake g --cuda=/usr/local/cuda-9.1/
+#如果想要测试xmake对当前cuda环境的探测支持，可以直接运行
+xmake l detect.sdks.find_cuda
+```
+### xrepo
+
+
+### 模板
+
+第一个项目
 
 ```lua
 set_project("AIRuntime")
@@ -192,8 +230,6 @@ includes(
 )
 ```
 
-第二个参考文件
-
 ```lua
 target("AIFramework")
     set_kind("shared")
@@ -219,7 +255,7 @@ target("AIFramework")
 target_end()
 ```
 
-第三个参考文件
+第二个项目
 
 ```lua
 -- project
@@ -274,7 +310,7 @@ for _, v in pairs(tutorial_list) do
 end
 ```
 
-第四个参考文件
+第三个项目
 ```lua
 set_project("tvt")
 
@@ -482,50 +518,243 @@ target("test")
     end)
 ```
 
-### 命令行
+第四个项目,参考链接：
 
-```bash
-xmake create -l C++ -P ./hello
+https://github.com/star-hengxing/clipboard-url-clear/tree/main
 
-xmake f -c
-xmake f -v
-# 确认安装包
-xmake f -y
-xmake -rv
-# 输出调用各种工具操作，编译的详细参数，如果出错还会打印 xmake 的栈回溯
-xmake -vD
-xmake show
-#显示指定 target 配置信息，可以看到各种配置来源于哪个配置文件和具体的行数
-xmake show -t <target>
-# 检查工程配置和代码
-xmake check
-xmake project -k vsxmake2022 -m "release,debug" v2022
+外层 .xmake.lua
+```lua
+set_project("clipboard-url-clear")
 
-# 快速检测系统上指定的包信息,请切换到非工程目录下执行上面的命令
-xmake l find_package x264
-# 追加第三方包管理器前缀来测试
-xmake l find_package conan::OpenSSL/1.0.2g
+set_version("0.0.3")
 
+set_xmakever("2.8.5")
 
-#下载安装好Cuda SDK后，在macosx上会默认安装到/Developer/NVIDIA/CUDA-x.x目录下，Windows上可以通过CUDA_PATH的环境
-#变量找到对应的SDK目录，而 Linux下默认会安装到/usr/local/cuda目录下
-#手动指定Cuda SDK环境目录：
-xmake f --cuda=/usr/local/cuda-9.1/
-#或者通过xmake g/global命令切到全局设置，避免每次切换编译模式都要重新配置一遍。
-xmake g --cuda=/usr/local/cuda-9.1/
-#如果想要测试xmake对当前cuda环境的探测支持，可以直接运行
-xmake l detect.sdks.find_cuda
+set_allowedplats("windows")
+set_allowedmodes("debug", "release")
+
+set_languages("c++20")
+
+set_warnings("all")
+add_rules("mode.debug", "mode.release")
+
+if is_mode("debug") then
+    set_policy("build.warning", true)
+elseif is_mode("release") then
+    set_optimize("smallest")
+end
+
+if is_plat("windows") then
+    set_runtimes(is_mode("debug") and "MDd" or "MT")
+    add_defines("UNICODE", "_UNICODE")
+    add_cxflags("/permissive-", {tools = "cl"})
+end
+
+set_encodings("utf-8")
+
+includes("src", "xmake", "test")
 ```
+内层./xmake/xmake.lua
 
+```lua
+-- third party libraries
+includes("package.lua")
+-- project option
+-- includes("option.lua")
+-- project module config
+includes("rule/module.lua")
+-- project debug tool
+includes("rule/debug.lua")
+```
+内层./xmake/package.lua
+```lua
+-- dev
+
+if is_mode("debug") then
+    add_requireconfs("*", {configs = {shared = true}})
+end
+
+package("fast_io")
+    set_kind("library", {headeronly = true})
+    set_homepage("https://github.com/cppfastio/fast_io")
+    set_description("Significantly faster input/output for C++20")
+    set_license("MIT")
+
+    add_urls("https://github.com/cppfastio/fast_io.git")
+    add_versions("2023.11.06", "804d943e30df0da782538d508da6ea6e427fc2cf")
+
+    on_install("windows", "linux", "macosx", "msys", "mingw", function (package)
+        os.cp("include", package:installdir())
+    end)
+
+    on_test(function (package)
+        assert(package:check_cxxsnippets({test = [[
+            #include <fast_io.h>
+            void test() {
+                fast_io::io::print("Hello, fast_io world!\n");
+            }
+        ]]}, {configs = {languages = "c++20"}}))
+    end)
+package_end()
+
+-- cross-platform clipboard api
+add_requires("clip 1.5")
+-- https
+add_requires("cpr 1.10.3", {configs = {ssl = true}})
+-- url
+add_requires("ada v2.6.7")
+-- debug/concat
+add_requires("fast_io")
+
+add_requires("cppitertools")
+
+if is_plat("windows") and is_mode("release") then
+    add_requires("vc-ltl5 5.0.7")
+end
+
+-- test
+
+add_requires("boost_ut v1.1.9", {optional = true})
+```
+目录 ./xmake/rule/debug.lua
+```lua
+rule("debug.asan")
+    on_load(function (target)
+        if not is_mode("debug") then
+            return
+        end
+
+        import("lib.detect.find_tool")
+        import("core.base.semver")
+
+        target:add("cxflags", "-fsanitize=address")
+        target:add("mxflags", "-fsanitize=address")
+        target:add("ldflags", "-fsanitize=address")
+        target:add("shflags", "-fsanitize=address")
+
+        if not target:get("symbols") then
+            target:set("symbols", "debug")
+        end
+
+        if target:is_plat("windows") and target:is_binary() then
+            local msvc = target:toolchain("msvc")
+            if msvc then
+                local envs = msvc:runenvs()
+                local vscmd_ver = envs and envs.VSCMD_VER
+                if vscmd_ver and semver.match(vscmd_ver):ge("17.7") then
+                    local cl = assert(find_tool("cl", {envs = envs}), "cl not found!")
+                    target:add("runenvs", "Path", path.directory(cl.program))
+                end
+            end
+        end
+    end)
+```
+./xmake/rule/module.lua
+```lua
+rule("module.program")
+    on_load(function (target)
+        target:set("kind", "binary")
+        target:set("rundir", "$(projectdir)")
+        if target:is_plat("windows") and target:get("runtimes") == "MT" then
+            target:add("packages", "vc-ltl5")
+        end
+    end)
+
+    after_link(function (target)
+        local enabled = target:extraconf("rules", "module.program", "upx")
+        if (not enabled) or (not is_mode("release")) then
+            return
+        end
+
+        import("core.project.depend")
+        import("lib.detect.find_tool")
+
+        local targetfile = target:targetfile()
+        depend.on_changed(function ()
+            local file = path.join("build", path.filename(targetfile))
+            local upx = assert(find_tool("upx"), "upx not found!")
+
+            os.tryrm(file)
+
+            local argv = table.wrap(target:values("upx.flags"))
+            table.insert(argv, targetfile)
+            table.insert(argv, "-o")
+            table.insert(argv, file)
+            os.vrunv(upx.program, argv)
+        end, {files = targetfile})
+    end)
+
+rule("module.component")
+    on_load(function (target)
+        if is_mode("debug") then
+            target:set("kind", "shared")
+            if target:is_plat("windows") then
+                import("core.project.rule")
+                local rule = rule.rule("utils.symbols.export_all")
+                target:rule_add(rule)
+                target:extraconf_set("rules", "utils.symbols.export_all", {export_classes = true})
+            end
+        elseif is_mode("release") then
+            target:set("kind", "static")
+        end
+    end)
+
+rule("module.test")
+    on_load(function (target)
+        target:set("default", false)
+        target:set("policy", "build.warning", true)
+        target:set("rundir", os.projectdir())
+        target:set("group", "test")
+        target:add("packages", "boost_ut")
+    end)
+```
+./test/xmake.lua
+```lua
+add_rules("module.test")
+
+target("test")
+    set_kind("binary")
+    add_tests("default")
+
+    add_files("test.cpp")
+    add_includedirs(path.join("$(projectdir)", "src"))
+
+    add_cxxflags("cl::-wd4003")
+
+    add_deps("component")
+```
+./src/xmake.lua
+```lua
+if is_plat("windows") then
+    add_defines("WIN32_LEAN_AND_MEAN")
+end
+
+target("component")
+    set_kind("$(kind)")
+    add_rules("module.component")
+    add_files("*.cpp|main.cpp")
+    add_headerfiles("*.hpp")
+
+    add_cxxflags("cl::-wd4003")
+
+    add_packages("clip", "cpr", "ada", "fast_io", "cppitertools")
+
+target("clear")
+    add_rules("module.program", {upx = true})
+    set_values("upx.flags", "--best")
+
+    add_files("main.cpp")
+
+    if is_plat("windows") then
+        add_syslinks("user32")
+    end
+
+    add_deps("component")
+
+```
 ## cmake
 
-### cmakelist
-
-#### 调用三方库
-
-现代cmake
-
-https://modern-cmake-cn.github.io/Modern-CMake-zh_CN/README_GitBook.html
+### 调用三方库
 
 cmake模板
 
@@ -569,7 +798,7 @@ set_target_properties(
 )
 ```
 
-#### 模板
+### 模板
 
 ```cmake
 cmake_minimum_required( VERSION 3.8 FATAL_ERROR)

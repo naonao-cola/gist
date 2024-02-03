@@ -13,6 +13,7 @@
 - **compile**
   - [**示例**](./compile/compile.md)
   - [**xmake手册**](./compile/xmake.md)
+  - [**cmake手册**](./compile/cmake.md)
 
 - [**github**](./github/github.md)
 

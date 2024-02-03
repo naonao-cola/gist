@@ -1,5 +1,6 @@
 ﻿
 ## 平面几何
+### 直线与线段
 ```c++
 //两点距离
 double dist_p2p(const cv::Point2f& a, const cv::Point2f& b)
@@ -75,7 +76,6 @@ cv::Point2f root_pt(0, 0);
     double a1 = -(line_pt2.y -line_pt1.y);
     double b1 = (line_pt2.x - line_pt1.x);
     double c1 = (line_pt2.y - line_pt1.y) * line_pt1.x - (line_pt2.x - line_pt1.x) * line_pt1.y;
-
     root_pt.x = (b1 * b1 * src_pt.x - a1 * b1 * src_pt.y - a1 * c1) / (a1 * a1 + b1 * b1);
     root_pt.y = (a1 * a1 * src_pt.y - a1 * b1 * src_pt.x - b1 * c1) / (a1 * a1 + b1 * b1);
   }
@@ -113,35 +113,27 @@ double get_line_y(cv::Point2f line_p1, cv::Point2f line_p2, double x) {
 
 //圆与直线的交点
 void get_point_1(cv::Point2f p1,cv::Point2f p2,cv::Point2f& t1,cv::Point2f& t2 ) {
-
     //直线斜率
     double k = (p2.y - p1.y) / (p2.x -p1.x);
     k = -1 / k;
     //截距
     double b = p1.y - k * p1.x;
-
     //圆心
     cv::Point2f center = p1;
     double r = 10;
-
-
     double A = 1 + k * k;
     double B = -2 * center.x + 2 * k * (b-center.y);
     double C = center.x * center.x + (b - center.y) * (b - center.y) - r * r;
     double delta = B * B - 4 * A * C;
-
     t1.x = (-B -std::sqrt(delta))/(2*A);
     t1.y = k * t1.x + b;
-
     t2.x = (-B + std::sqrt(delta)) / (2*A);
     t2.y = k * t2.x + b;
-
 }
 
 //线段的迭代
  cv::LineIterator it(src, cross_pt[0], cross_pt[1]);
  std::vector<cv::Point2f>dst;
-
  for (int i = 0; i < it.count; i++, it++) {
      cv::Point2f pt(it.pos());
      if (std::abs(cv::pointPolygonTest(circle_point,pt,true))<=3) {
@@ -154,7 +146,6 @@ void get_point_1(cv::Point2f p1,cv::Point2f p2,cv::Point2f& t1,cv::Point2f& t2 )
 ### 轮廓面积
 
 ```c++
-
 void area(cv::Point2d p1, cv::Point2d p2, cv::Point2d p3) {
 	double s = std::abs((p1.x * p2.y + p2.x * p3.y + p3.x * p1.y -p1.x*p3.y   - p2.x*p1.y  -p3.x*p2.y) / 2);
 	printf_s("A = %.6f\n", s);
@@ -181,6 +172,81 @@ double s2 = 0.5 * std::abs(cv::determinant(m2));
 double s3 = 0.5 * std::abs(cv::determinant(m3));
 double s4 = 0.5 * std::abs(cv::determinant(m4));
 
+```
+### 极坐标
+```c++
+//极坐标的头文件(线特征的类)
+#include <opencv2/line_descriptor/descriptor.hpp>
+#include <opencv2/imgproc/types_c.h>
+
+typedef  cv::line_descriptor::KeyLine KeyLine;
+template <typename PointT>
+class CLineParams{																									//线参数(极坐标参数)
+public:
+    CLineParams() {};
+    CLineParams(float r, float theta, PointT p1, PointT p2){
+        this->pr = r;
+        this->ptheta = theta;
+        this->start_vertex = p1;
+        this->end_vertex = p2;
+    }
+public:
+    float pr;																										// polar coordinates radius
+    float ptheta;																									// polar coordinates angle
+    PointT start_vertex, end_vertex;																				// line start point & end point in  Cartesian coordinates
+};
+
+typedef CLineParams<cv::Point2f> CLineParams2f;
+class LineAllData {																									//线数据：笛卡尔坐标点、极坐标点、簇idx,线检测的类别，是已经排序过后的
+public:
+    LineAllData() {}
+    LineAllData(int index, cv::Vec2d polar_line, KeyLine line){
+        this->index = index;
+        this->polar_line = polar_line;
+        this->kline = line;
+    }
+    ~LineAllData() {}
+    bool operator<(const LineAllData & t) const{
+        return index < t.index;
+    }
+
+public:
+    int index;
+    cv::Vec2d polar_line;
+    KeyLine kline;
+};
+//转为极坐标形式
+cv::Vec2d polarline = getPolarLine(cv::Vec4d(x1 - width / 2.0, height / 2.0 - y1, x2 - width / 2.0, height / 2.0 - y2));
+
+cv::Vec2d getPolarLine(cv::Vec4d p) {
+    if (fabs(p[0] - p[2]) < 1e-5){																				//垂直直线
+        if (p[0] > 0)
+            return cv::Vec2d(fabs(p[0]), 0);
+        else
+            return cv::Vec2d(fabs(p[0]), CV_PI);
+    }
+    if (fabs(p[1] - p[3]) < 1e-5) {																				//水平直线
+        if (p[1] > 1e-5)
+            return cv::Vec2d(fabs(p[1]), CV_PI / 2);
+        else
+            return cv::Vec2d(fabs(p[1]), 3 * CV_PI / 2);
+    }
+    float k = (p[1] - p[3]) / (p[0] - p[2]);
+    float y_intercept = p[1] - k*p[0];
+    float theta;																								/*atan 值域范围[-pi/2,pi/2]; atan2 值域范围[-pi,pi],根据直线斜率与截距 判断角度所在象限*/
+    if (k < 0 && y_intercept > 0)																				// 第一象限
+        theta = atan(-1 / k);
+    else if (k > 0 && y_intercept > 0)																			// 第二象限，
+        theta = CV_PI + atan(-1 / k);
+    else if (k < 0 && y_intercept < 0)																			// 第三象限
+        theta = CV_PI + atan(-1 / k);
+    else if (k > 0 && y_intercept < 0)																			// 第四象限
+        theta = 2 * CV_PI + atan(-1 / k);
+    float _cos = cos(theta);
+    float _sin = sin(theta);
+    float r = fabs(p[0] * _cos + p[1] * _sin);
+    return cv::Vec2d(r, theta);
+}
 ```
 
 ## 矩阵运算
@@ -844,6 +910,6 @@ void cv::transform(
 );
 ```
 
-## PCL点云
+## PCL
 
 ## SLAM
