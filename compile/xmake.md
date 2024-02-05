@@ -2204,7 +2204,7 @@ xmake -rv
 
 结果如下，宏定义又被改成了 `-DTEST2`。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/84176b8a34d5fa61c5402a5ba16828f1-0)
+![](../images/xmake/xmake_101.png)
 
 在本节实验中，我们了解了什么是内置变量，并且学习了如何去使用内置变量获取 shell 输出、环境变量和自定义选项值来配置项目。
 
@@ -2259,7 +2259,7 @@ tree .
 
 通过上面的项目接口，我们大概可以看出来，这里面有两个模块，一个是 src 目录下的主程序，一个是 tests 目录下的测试程序，它们分别有自己的 xmake.lua 来维护构建，然后通过项目根目录的 xmake.lua 将这两个模块关联起来，构成一个项目树，大概的结构如下图。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/ca435d943a281fae38078d6065bc2dd6-0)
+![](../images/xmake/xmake_102.png)
 
 参照上图的结构，我们开始编写对应的 xmake.lua 配置内容，首先是根目录下的 xmake.lua。
 
@@ -2289,7 +2289,7 @@ target("test")
 
 最后执行 `xmake` 编译这个工程，看看能否正常编译引入的 hello 和 test 这两个子目标程序，如果一切顺利，会看到下图的输出结果。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/5617560a92e8846c19f3b2f308288ba1-0)
+![](../images/xmake/xmake_103.png)
 
 通过 includes 关联子工程的好处就是，我们不需要再手动进入每个子工程目录下执行 xmake 编译，所有的 xmake 命令操作还是可以在项目根目录下统一完成，因为通过 includes 引入后，整个项目不管结构多复杂，都是一个整体，因此即使用户进入子目录执行 xmake 命令，实际的操作对象还是针对当前的整个项目而言的。
 
@@ -2336,7 +2336,7 @@ includes("*/xmake.lua")
 
 执行 `xmake -v` 查看当前的编译输出效果，如下图。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/80f3b4d2a7fbda9e2772bc124490dd96-0)
+![](../images/xmake/xmake_104.png)
 
 这回，我们看到 src 和 tests 目录下的两个目标程序的 C++ 源文件在编译的时候，都被加上了 `-DROOT -std=c++` 和 `-Wall -Werror` 等编译选项，说明根目录下的配置对所有子 target 目标程序都生效了。
 
@@ -2348,7 +2348,7 @@ includes("*/xmake.lua")
 
 整个继承结构可以参考下图所示。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/0371ee1ae8a578b86f608a0591bb9a43-0)
+![](../images/xmake/xmake_105.png)
 
 为了完成上图的子工程结构，能够更加直观的感受如何去配置子工程，我们需要再对之前的配置文件做一些调整，在 src 目录下额外新增两个子工程：foo 和 bar 目标程序。
 
@@ -2426,17 +2426,17 @@ target("test")
 
 整个配置继承效果，我们可以重新看下之前的图。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/90300f801111f390a97b279abe82afb4-0)
+![](../images/xmake/xmake_106.png)
 
 执行 `xmake -rv` 来验证刚刚的配置结果。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/81086db108775488d9b3f47383dc7f4a-0)
+![](../images/xmake/xmake_107.png)
 
 从上图的实际编译输出看到，foo 程序继承了根文件配置的 `-DROOT`，父文件配置中的 `-DHELLO`，以及自身配置文件中的全局设置 `-DFOO`，因此最终结果是 `-DROOT -DHELLO -DFOO`，而 bar 也就是 `-DROOT -DHELLO -DBAR`，另外 test 目标跟它们完全不在一个继承路径上，因此互不干扰，只有 `-DROOT -DTEST`。
 
 然后，我们再执行 `xmake run` 命令看看运行效果。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/5ef851f3fdabfd3e5e44268f1d65577b-0)
+![](../images/xmake/xmake_108.png)
 
 默认情况下，xmake 会运行当前项目里面定义的所有可执行目标程序。
 
@@ -2458,7 +2458,7 @@ target("test")
 
 然后执行 `xmake -r` 去重新编译，如果依赖已经生效，那么在链接 test 程序之前，foo 和 bar 会优先编译和完成链接，如下图。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/242d96c9b1721a5f2b937ceeaf5cf7bd-0)
+![](../images/xmake/xmake_109.png)
 
 在本节实验中，我们学习了如何使用 includes 接口去组织编译带有多级子工程的 C/C++ 项目工程，并学习了 includes 的基本用法，也了解 xmake 在多级 xmake.lua 中的配置继承关系。
 
@@ -2491,7 +2491,7 @@ wget https://labfile.oss.aliyuncs.com/courses/2764/code9.zip
 
 关于预编译头文件处理的大概机制可以参考下图。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/bfe9439264336bfe456c57080718a6de-0)
+![](../images/xmake/xmake_110.png)
 
 #### 配置使用 C++ 预编译头文件
 
@@ -2571,7 +2571,7 @@ time xmake -r -j1
 
 下图是正常编译时候的耗时情况，从红框中可以看出，大概编译耗时 4.672s。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/be03ae4308e625557c8829492be2bb7c-0)
+![2](../images/xmake/xmake_111.png)
 
 然后我们编辑 `xmake.lua` 文件，添加 `set_pcxxheader("src/stdafx.h")` 的预编译设置，告诉编译器将 stdafx.h 作为预编译头文件，开启预编译模式。
 
@@ -2590,13 +2590,13 @@ time xmake -r -j1
 
 这次的编译，我们会明显感觉变快了很多，从下图的红框中看到，整体编译耗时降到了 1.593s，编译速度快了将近 3 倍，如果参与编译的源文件更多的话，效果会更加明显。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/b854a1e212b974f68a1baead2052aee4-0)
+![](../images/xmake/xmake_112.png)
 
 从刚刚的对比实验中，我们发现采用预编译模式，整个项目确实会快不少。现在我们从编译器层面简单了解下，gcc 等编译器到底是怎么处理预编译文件的。
 
 我们可以通过 `xmake -rv` 命令，查看完整的编译输出来分析传入编译器的参数选项，输出内容如下图。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/a66f2c9fb2f0e20591684d0ab8fbd73e-0)
+![](../images/xmake/xmake_113.png)
 
 从上图可知，xmake 会优先调用 gcc 去编译 stdafx.h 头文件，生成 stdafx.pch 命名的预编译头文件。然后，后续的其它源文件编译通过 `-include stdafx.h` 将其引入进来。
 
@@ -2676,7 +2676,7 @@ cp src/test1.c src/test16.c
 
 继续执行 `time xmake -r -j1` 查看编译耗时，从下图红框中可以看到总耗时 1.211s，说明即使没开预编译，编译速度也已经很快了。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/eb698b8f06226e0557a9c6120f9944cb-0)
+![](../images/xmake/xmake_114.png)
 
 然后，我们通过 `set_pcheader` 配置接口加上头文件预编译设置，修改 xmake.lua 内容如下。
 
@@ -2689,7 +2689,7 @@ target("pcheader")
 
 我们再重新执行 `time xmake -r -j1` 查看编译耗时：0.819s，说明还是快了一点的，但是优势不是非常明显。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/12b562a723913d1f6f8a1d6d61f14a2a-0)
+![](../images/xmake/xmake_115.png)
 
 在本节实验中，我们了解了什么是预编译头文件，学习了如何配置编译头文件来优化 C++ 代码的编译速度，并且知道了 C 代码也是可以支持预编译头文件的，但是整体编译速度不会像 C++ 那样提升这么明显，因此针对 C++ 项目来说，我们使用预编译头文件还是可以改善不少项目的编译效率。
 
@@ -2795,11 +2795,11 @@ int main(int argc, char** argv)
 
 一切准备就绪后，执行 `xmake` 去编译这个工程，xmake 会在编译的前期自动检测 `pthread.h` 是否存在，如果存在，就会看到下图红线位置的检测结果，并且正常通过编译。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/066c69d7e77884a8d6afea2fff22f0e0-0)
+![](../images/xmake/xmake_116.png)
 
 只要编译没报错，就说明检测通过并且 `HAS_PTHREAD_H` 已经被定义上了，我们也可以再执行 `xmake -rv` 重新编译查看完整的编译输出，继续确认下 `-DHAS_PTHREAD_H` 是否真的被传递到了 gcc 编译器，如图所示。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/7e93c1b0ddee79d82822177ffeb2a34c-0)
+![](../images/xmake/xmake_117.png)
 
 #### 配置自动生成 config.h
 
@@ -2866,15 +2866,15 @@ int main(int argc, char** argv)
 
 编译结果如下图。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/7188588f22b0266c32400e7e8b4eb477-0)
+![](../images/xmake/xmake_118.png)
 
 上面红线部分提示检测正常通过，并且还自动生成了 config.h 文件，至于它的输出位置，就是之前 xmake.lua 配置中指定的 build 目录，如下图所示。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/0db8d8c0a2616978363b1e1f2b3c3203-0)
+![](../images/xmake/xmake_119.png)
 
 执行 `cat ./build/config.h` 命令，查看实际生成到 config.h 文件里面的内容，说明 `HAS_PTHREAD_H` 确实被定义进去了。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/a1ccf23930a7c68b8df97101ce2dab6e-0)
+![](../images/xmake/xmake_120.png)
 
 注：xmake 会严格按照配置在 config.h.in 里面的内容格式生成和替换模板变量，不会自己额外添加不存在的配置，关于这个配置模板，我们还可以参考下 tbox 库里面的 [tbox.config.h.in](https://github.com/tboox/tbox/blob/master/src/tbox/tbox.config.h.in) 文件，来更直观地了解。
 
@@ -2943,11 +2943,11 @@ int main(int argc, char** argv)
 
 然后执行 `xmake` 命令编译，查看是否能够检测通过、完成编译，因为在 Linux 下通常都是存在这个 setjmp 接口的，因此通常是可以编译通过的，如下图。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/d530f9ac5f1324b2ea099ceeb9797afd-0)
+![](../images/xmake/xmake_121.png)
 
 编译通过后，我们再来看下 `build/config.h` 里面的内容，这时 `${define HAS_SETJMP}` 模板变量已经自动变成了 `#define HAS_SETJMP 1`，说明检测顺利通过。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/b4088d819d6c7a3a5d4007a66e705d80-0)
+![](../images/xmake/xmake_122.png)
 
 由于不同的编译器对 C++ 标准的支持力度都是不同的，有些编译器可能并不支持 C++ 的一些高版本标准中的特性，这时我们就可以通过 xmake 提供的编译器特性检测接口去检测它们。
 
@@ -2984,7 +2984,7 @@ int main(int argc, char** argv)
 
 这个时候，如果我们执行 `xmake` 编译后，会发现 constexpr 的特性并没有检测通过，编译也是失败的，如下图。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/6a7103828e959f4360c585ac3943ca1a-0)
+![](../images/xmake/xmake_123.png)
 
 那是因为这个关键字仅仅只在 c++11 标准之后才生效，因此需要对 target 启用 c++11 标准，并且对于 `check_features` 检测接口，也需要传递 c++11 的语言标准给它才能通过检测。
 
@@ -3002,7 +3002,7 @@ target("check")
 
 设置上 c++11 语言标准后，再来执行 `xmake` 命令就能顺利通过检测和编译了。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/735bed4af388bfcab65b23b24c2f446a-0)
+![](../images/xmake/xmake_124.png)
 
 #### 配置自定义 C/C++ 代码片段检测
 
@@ -3050,7 +3050,7 @@ int main(int argc, char** argv)
 
 然后执行 `xmake` 编译，如果一切顺利，就会看到下图编译通过的输出信息。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/da380ae16193c8b0fe07f94c0517a002-0)
+![](../images/xmake/xmake_125.png)
 
 在本节实验中，我们了解了怎样才能实现跨平台开发和编译，并且主要学习了如何去使用 xmake 提供的辅助接口来配置检测 C/C++ 的头文件、库接口是否存在，以及检测指定的编译器特性和 C/C++ 代码片段是否能够支持并使用。
 
@@ -3126,7 +3126,7 @@ target("test")
 
 执行 `xmake` 编译信息，会看到下图的结果，红线位置部分就是我们在脚本中自定义显示的输出信息。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/266bbc62c52bb9359e6662dcd8ebb337-0)
+![](../images/xmake/xmake_126.png)
 
 这里，出于演示目的，我们仅仅只是简单的显示了目标程序的实际生成路径，而在真正的项目中，大家可以在里面做更加复杂的事情。
 
@@ -3166,7 +3166,7 @@ target("test")
 
 接下来，继续执行一遍 `xmake` 查看实际的编译输出。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/f5e59d7b0560becb6b12c86401cb4081-0)
+![](../images/xmake/xmake_127.png)
 
 由于我们通过 `on_build` 重写了内部构建逻辑，并且仅仅只是显示一行输出，因此这回的编译其实除了那一行打印输出外没有做任何事情。
 
@@ -3191,11 +3191,11 @@ target("test")
 
 由于我们是通过 `xmake create` 创建的空工程，默认生成的 `src/main.cpp` 里面会打印 `hello world` 字符串，可以执行 `cat ./src/main.cpp` 确认下。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/92c7b9424872566180f022f262c3aeba-0)
+![](../images/xmake/xmake_128.png)
 
 而当我们执行完 `xmake` 编译任务后，再执行 `xmake run` 命令查看实际的运行结果，会发现里面的输出字符串已经了变成 `hello xmake`，如下图所示。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/383b716ffcefb86eef29beee1159e995-0)
+![](../images/xmake/xmake_129.png)
 
 除了上面配置中的 `before_build_file`，其实跟 `on_build` 类似，我们还有对应的 `on_build_file` 配置来重写对单个源文件的编译逻辑，以及在编译后执行 `after_build_file` 中配置的自定义脚本，用法完全相同，因此这里就不重复讲解了。
 
@@ -3259,13 +3259,13 @@ target("test")
 
 这里我们主要是通过配置，拦截整个构建流程中会执行到的一些步骤，比如文件编译、链接阶段等等，配置完成后，执行 `xmake` 查看整个编译输出。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/e60b699cd1632efe269640747e1e75a8-0)
+![](../images/xmake/xmake_130.png)
 
 通过上图的输出，我们可以大概看出整个构建的执行流程。这里会优先执行 `before_build`，然后会执行每个源文件的编译，接着执行链接过程，最后是 `after_build`。这里我们没有设置 `on_build`，是因为如果设置了这个接口，就会重写内部的所有构建过程，也就不会执行 `on_build_file` 和 `on_link` 了，一切构建操作都需要大家自己去完成。
 
 下图描述了整个构建过程中每个阶段的执行时机。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/6d21c9b63e00679ed04110c2d4931c92-0)
+![](../images/xmake/xmake_131.png)
 
 虽然我们可以在 target 中通过 `on_build_file` 等自定义脚本来定制化处理编译逻辑，但是如果每个 target 都要配置相同的处理逻辑，或者要处理多个不同种类的逻辑，并且全在 target 中去定义实现它们，那么整个配置会非常臃肿并且难以维护。
 
@@ -3315,7 +3315,7 @@ target("test")
 
 执行 `xmake -r` 重新编译看看，能输出哪些信息。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/8e98a13fe9250ae8f59c2a47282181b7-0)
+![](../images/xmake/xmake_132.png)
 
 我们看到 `before_build` 还有 `on_link` 等相关的阶段都正常输出了，跟之前完全一样，但是 `on_build_file` 等阶段，还是没有输出。这是因为通过 `add_rules()` 的方式应用的规则，默认是不会去覆盖内部的 `rule("c++")` 规则中的 cpp 文件编译，只是额外附加了一些自定义脚本。
 
@@ -3370,7 +3370,7 @@ target("test")
 
 接着执行 `xmake -r` 查看输出，如果一切顺利，这回我们会看到 `on_build_file` 也被执行到了，用于 `.md` 文件的定制化处理，而 c++ 文件不受任何影响。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/02a0db9845f32816142b8e7bfcf4bc18-0)
+![](../images/xmake/xmake_133.png)
 
 这里，我们仅仅只是简单的调用了 `print` 接口，实际的项目配置过程中，可以通过自定义的 `rule()` 规则配置，实现除了 c++ 代码外的其它任何未知文件的处理和编译，甚至可以扩展编译其它的编译语言的代码文件。
 
@@ -3403,7 +3403,7 @@ target("test")
 
 执行 `xmake -rv` 编译，可以看到输出结果中，已经加上了在 `on_load` 中新加的一些额外编译选项。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/414c11bb460769cce0b17bc0e9418b2b-0)
+![](../images/xmake/xmake_134.png)
 
 在本节实验中，我们学习了如何配置自定义脚本在拦截目标程序的整个构建过程，实现一些定制化的处理逻辑，并且大概了解了构建的几个基本执行阶段，也学会了如何通过自定义编译规则去处理其它未知文件。
 
@@ -3462,7 +3462,7 @@ target("ostest")
 
 执行 `xmake` 命令，并通过 `tree` 命令看下实际生成的目标路径。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/1007ed2bb6b5e9f8a83606cdf92c087c-0)
+![](../images/xmake/xmake_135.png)
 
 从图中，我们看到 `release` 目录已经变成了空目录，因为 `test` 程序已经被移动到了 `build` 目录下。
 
@@ -3502,7 +3502,7 @@ target("ostest")
 
 执行 `xmake` 编译查看输出内容，如下图。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/0dbd01ee0aa214ba31771018d2272942-0)
+![](../images/xmake/xmake_136.png)
 
 图中所遍历出来的 `build/.deps` 路径是用来存储自动生成的头文件依赖文件信息，而 `build/.objs` 主要用于存储自动生成的 `.o` 对象文件。
 
@@ -3565,7 +3565,7 @@ target("ostest")
 
 执行 `xmake` 命令，查看编译后的输出信息，如果运行正常，应该会像下图所示，显示两行 `hello xmake` 字符串。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/efeeb105904ddf59f802ff037a893fef-0)
+![](../images/xmake/xmake_137.png)
 
 #### 静默运行程序
 
@@ -3608,7 +3608,7 @@ target("ostest")
 
 执行 `xmake` 编译后的输出内容如下图，stdout 用于返回标准输出，stderr 用于返回错误输出。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/aae6a1bffd930572fdec287c28189a78-0)
+![](../images/xmake/xmake_138.png)
 
 再来个更加实际点的例子，通常的子命令输出是多行的，我们可以获取输出后，按行分隔然后遍历每行内容文本，并且显示对应的行号信息，例如。
 
@@ -3628,7 +3628,7 @@ target("ostest")
 
 具体运行 xmake 命令编译后的运行输出效果，如下图所示。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/f3ea9b89265e82e5fb683c33d115b8c3-0)
+![](../images/xmake/xmake_139.png)
 
 在本节实验中，我们主要学习了一些 os 模块的常用接口，比如如何在自定义脚本域中调用 os 模块接口去执行一些文件操作，也学习了如何在 xmake.lua 中执行外部命令。
 
@@ -3682,11 +3682,11 @@ target("iotest")
 
 通过执行 `xmake` 编译，我们会看到下图的数据内容，另外 `main.cpp` 中的 `world` 字符串也确实被替换成了 `xmake` 字符串。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/69fcddbe02f7f6300f6f61558c207790-0)
+![](../images/xmake/xmake_140.png)
 
 运行 `xmake run` 继续确认下输出结果是否真的被改写为 `hello xmake!`，如下图。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/0d6c3d53141068671e6699b09620db54-0)
+![](../images/xmake/xmake_141.png)
 
 当然除了快速读写，还可以使用原生的 `io.open` 接口来读写文件，虽然这样使用起来稍微繁琐些，但也是有一些不可替代的优势，比如对大文件的读写性能会非常的好，毕竟 `io.readfile` 需要一次性加载到内存，而通过 open 后返回的文件对象去读写可以按行读以及分批写入，极大地减少内存使用。
 
@@ -3717,7 +3717,7 @@ target("iotest")
 
 由于刚刚我们把 `main.cpp` 中的 `world` 字符串替换成了 `xmake`，这里又重新替换回了 `world`。首先执行 xmake 编译通过，然后运行 `xmake run` 确认下最终的替换结果。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/7b7cac17d674708101149453a15ead12-0)
+![](../images/xmake/xmake_142.png)
 
 #### 序列化和反序列化
 
@@ -3748,7 +3748,7 @@ target("iotest")
 
 我们把序列化的数据保存在 `build/sourcefiles` 文件中，执行完 `xmake` 编译后，我们就通过 `print` 将 `io.load` 加载的数据对象整个 dump 了出来，并保留了原始的数据结构，如下所示。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/d74d3b529b3e0c3cdee8af631946bcbc-0)
+![](../images/xmake/xmake_143.png)
 
 关于 io 操作，除了对于文件的读写，我们有时候还需要读写标准输入输出，也就是 stdout、stdin 这些，其中 stdout 就是我们通常使用 print 接口在终端下的输出，其实也就是内部对 `io.print` 的封装调用，而如果我们要接受用户在终端下输入，就需要通过 `io.read` 去读取 stdin 了。
 
@@ -3783,11 +3783,11 @@ $ please input: y to continue building project (y/n)
 
 如果执行 `xmake -r` 命令，等到接受输入后，输入 `y`，可以看到整个编译继续正常完成了。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/babbf18bdae09c74b27e82e0f46c43e6-0)
+![](../images/xmake/xmake_144.png)
 
 而如果输入 `n`，编译过程就被中断了。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/2b35524b4413f34271f4519301e27a4d-0)
+![](../images/xmake/xmake_145.png)
 
 #### 打印标准输出
 
@@ -3817,7 +3817,7 @@ target("iotest")
 
 然后执行 `xmake` 查看 target 加载完成后，实际打印输出了哪些信息。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/32c0de6ad699d889d0b668b518901a8d-0)
+![](../images/xmake/xmake_146.png)
 
 从上图中，我们看到 `defines` 信息被正常输出显示了，但是 `syslinks` 的配置信息仅仅显示了 `table: 0x405578f0` 字样，看不出具体有哪些配置。
 
@@ -3841,7 +3841,7 @@ target("iotest")
 
 执行 `xmake` 查看结果。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/f1faa18200b2d4ca6e390b7598752c5e-0)
+![](../images/xmake/xmake_147.png)
 
 注：虽然在描述域也可以调用 print，但是通常不建议这么做，如果要调试打印 target 的配置信息，请尽量在 `on_load` 里面完成。
 
@@ -3859,7 +3859,7 @@ xmake l cprint '${red}hello ${green}xmake!'
 
 执行后的效果如下图所示。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/45db1a7b36905532c83a9d038c904aab-0)
+![](../images/xmake/xmake_148.png)
 
 xmake 不仅支持常用的 16 色输出，还支持 24 位色高彩输出以及 emoji 符号输出，关于这块详情，可以看下相关的文章 [色彩高亮显示](https://tboox.org/cn/2016/07/14/plugin-print-colors/)。
 
@@ -3938,7 +3938,7 @@ target("import_test")
 
 执行 `xmake` 查看能否输出打印的配置信息，如果运行正常，那么会显示下图的结果。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/a1350cc10ddb32f32a986a24b628f46c-0)
+![](../images/xmake/xmake_149.png)
 
 下面，我们再来尝试一个例子，这回导入 `core.project.project` 模块来使用，通过这个模块，我们可以获取到所有在 xmake.lua 中定义的 target 目标列表，然后通过这些 target 对象，获取到每个目标程序名和实际输出路径。
 
@@ -3962,7 +3962,7 @@ target("import_test")
 
 执行 `xmake -r` 重新编译程序，在构建完成后的阶段遍历所有 targets 目标程序，如下图。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/e5e801279f14ab5c1fb95e4c911cff53-0)
+![](../images/xmake/xmake_150.png)
 
 关于 xmake 的更多模块介绍和使用，可以查看 xmake 的 [扩展模块官方文档](https://xmake.io/#/zh-cn/manual/extension_modules)，也可以直接到 [xmake 扩展模块源码目录](https://github.com/xmake-io/xmake/tree/master/xmake/modules) 中去翻阅查找。
 
@@ -4009,7 +4009,7 @@ target("import_test")
 
 执行 `xmake -r` 运行后的效果如下图红线部分的输出。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/6ccaf307d6b7e2c793e27ef149cf0466-0)
+![](../images/xmake/xmake_151.png)
 
 #### import 的模块查找顺序
 
@@ -4018,7 +4018,7 @@ target("import_test")
 1. 优先从用户在 xmake.lua 中通过 `add_moduledirs` 接口指定的模块根目录下查找指定模块。
 2. 从 `$XMAKE_MODULES_DIR` 环境变量指定的模块目录中查找模块。
 3. 从 `~/.xmake/modules` 全局模块目录中查找模块。
-4. 从 xmake 的安装目录里面的模块目录中查找模块。
+4. 从 xmake 的安装目录里面的模块目录中查找模块
 5. 从当前 import 被调用的脚本文件所在目录下查找模块。
 
 从上面的流程中可以知道，刚刚我们从当前目录下加载模块，就是上面最低的查找优先级，也就是第 5 种方式。而对于项目维护，其实我们更推荐使用第一种方式来加载自己的扩展模块。
@@ -4061,7 +4061,7 @@ target("import_test")
 
 执行 `xmake -r` 命令，可以看到模块的执行效果也跟之前完全一样，也正常输出了对应的信息。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/6ccaf307d6b7e2c793e27ef149cf0466-0)
+![](../images/xmake/xmake_152.png)
 
 #### 在独立模块文件中导入
 
@@ -4082,7 +4082,7 @@ end
 
 由于实验环境已经安装了 gcc，因此如果我们继续执行 `xmake -r` 命令，应该会看到下图的输出信息。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/576b117270381a4c7fcff49b55ac07b9-0)
+![](../images/xmake/xmake_153.png)
 
 #### 导入作为函数接口使用
 
@@ -4125,7 +4125,7 @@ target("import_test")
 
 执行 `xmake -r` 查看结果，如果运行正常，应该跟之前一样的输出结果。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/576b117270381a4c7fcff49b55ac07b9-0)
+![](../images/xmake/xmake_154.png)
 
 #### 导入模块包和别名
 
@@ -4192,7 +4192,7 @@ xmake>
 
 执行后的效果图如下，如果我们正常看到 `xmake>` 提示用户输入的前缀字符串，那么说明现在已经成功进入交互模式了。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/10c6affd787ab358434d4c6030f23a84-0)
+![](../images/xmake/xmake_155.png)
 
 接下来，我们可以尝试做一些基础操作直观感受下，比如进行表达式计算。
 
@@ -4230,7 +4230,7 @@ xmake>> end
 
 对于刚刚的一些输入测试，整个运行效果如下图。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/df3712c28550edbb7799bc931feadf04-0)
+![](../images/xmake/xmake_156.png)
 
 注：如果在多行输入中，我们想取消继续执行，退出多行模式，只需要按 `q` 后回车即可，例如。
 
@@ -4255,7 +4255,7 @@ xmake> find_tool("gcc")
 
 运行效果如下图。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/198ad7c745f4cdf12b2a9ad890e0ad96-0)
+![](../images/xmake/xmake_157.png)
 
 虽然交互模式运行很方便，但是对于我们自己写的扩展模块脚本，基本上都是独立的 lua 文件，如果我们能够直接去运行它们，那会更加的方便，并且绕过了 xmake.lua 和编译过程。
 
@@ -4270,7 +4270,7 @@ xmake lua xmake_modules/mymod.lua
 
 执行效果如下图，可以看到 `find_tool("gcc")` 的执行结果已经正常了，但是 `print("mymod: %s", str)` 的执行由于缺少参数，这里仅仅显示 `%s`。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/4b6bcb8081f459f97958a6ba05448463-0)
+![](../images/xmake/xmake_158.png)
 
 为了传递参数到 mymod.lua 模块文件中的 `main(str)` 入口参数，我们只需要追加参数到 `xmake lua` 命令的最后面，例如。
 
@@ -4280,7 +4280,7 @@ xmake lua xmake_modules/mymod.lua hello
 
 传入参数后，我们就可以看到下图红线部分的参数内容了。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/d219dc4be3df15eb63da34d64c7d4060-0)
+![](../images/xmake/xmake_159.png)
 
 #### 执行指定 lua 字符串脚本
 
@@ -4292,7 +4292,7 @@ xmake lua -c 'for i = 1, 10 do print(i) end'
 
 如果运行成功，我们会看到实际的输出结果，如下图。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/d7b71309c599e5da73298b19e17a657c-0)
+![](../images/xmake/xmake_160.png)
 
 #### 快速调用和测试模块接口
 
@@ -4304,7 +4304,7 @@ xmake lua lib.detect.find_tool gcc
 
 结果如下。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/a6ecf135aa8d6c5516e1f21f4ca659d9-0)
+![](../images/xmake/xmake_161.png)
 
 也可以执行下面的命令，去快速探测安装的 C/C++ 依赖包，例如。
 
@@ -4314,7 +4314,7 @@ xmake lua find_packages zlib
 
 上面的命令，我们通过直接执行 `find_packages` 接口去查找 zlib 包，如果检测成功，就会看到实际的 zlib 库信息。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/100a9fdedb7d73d498de24921090bd7d-0)
+![](../images/xmake/xmake_162.png)
 
 又或者，我们可以直接调用 os 模块里面的接口，比如快速遍历获取 src 目录下 C++ 文件列表。
 
@@ -4325,7 +4325,7 @@ xmake lua os.files 'src/*.cpp'
 
 我们进入之前的 import_test 工程目录，然后获取到 src 的所有源文件，结果如下图。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/03bffcb0fed4c1868cd32804efb2d19d-0)
+![9](../images/xmake/xmake_163.png)
 
 在本节实验中，我们学习了如何使用 `xmake lua` 插件来快速运行指定的 lua 脚本模块，代码片段以及模块接口，方便大家快速进行模块脚本调试，另外我们还学习到了如何进入交互模式来执行一些脚本逻辑。
 
@@ -4383,11 +4383,11 @@ xmake project -k makefile
 
 运行上述命令后，可以看到当前项目根目录下新增了一个 Makefile 文件，如下图。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/057057fd50e9cb5354974d1cc8a6a597-0)
+![](../images/xmake/xmake_164.png)
 
 我们可以执行 `gvim ./makefile` 看下实际生成的 makefile 文件内容。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/b50509d5dba3498c24146ab41cf8ae27-0)
+![](../images/xmake/xmake_165.png)
 
 其中，最开头部分是对编译工具链的配置定义，然后是配置编译链接选项的定义，也就是图中红线部分，我们看到之前在 xmake.lua 配置的 `-DTEST` 宏定义以及 pthread 等链接库信息都成功配置进去了。
 
@@ -4399,11 +4399,11 @@ make
 
 如果编译正常，会看到下图的输出结果。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/056500dc07f539fdf7a5a1cb6ee5ac73-0)
+![](../images/xmake/xmake_166.png)
 
 编译完成后，我们再来执行 `tree` 命令，查看实际通过 `make` 命令编译生成的可执行路径在哪里，从下图中，可以确认实际的输出路径跟通过 xmake 命令编译的结果完全一致。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/88d778f689c5bdd2959e9ab8b7519acb-0)
+![](../images/xmake/xmake_167.png)
 
 既然知道了生成的可执行文件路径，那么我们直接执行下它看看，是否能够正常运行。
 
@@ -4414,7 +4414,7 @@ hello world!
 
 如果一切运行正常，我们会看到下面的运行输出结果。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/61568859da45670a876b96948ba77499-0)
+![](../images/xmake/xmake_168.png)
 
 #### 生成 CMakeLists.txt
 
@@ -4430,7 +4430,7 @@ xmake project -k cmake
 
 如果生成成功，我们会看到项目根目录下的 CMakeLists.txt 文件，然后我们执行 `gvim CMakeLists.txt` 看下里面的内容。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/cd373694590040624d59d306f5d942ef-0)
+![](../images/xmake/xmake_169.png)
 
 从上图可以看出，红框部分就是在 xmake.lua 配置中加入的宏定义和链接选项配置，这些也已经被正常加入到了 CMakeLists.txt 文件中。
 
@@ -4451,7 +4451,7 @@ make
 
 运行结果如下图，也正常完成了编译。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/056ca5da5fd4f72f272ff2c19f0a2bc2-0)
+![](../images/xmake/xmake_170.png)
 
 #### 生成 build.ninja
 
@@ -4480,7 +4480,7 @@ ninja
 
 编译和运行效果如下图。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/24ee2fad14c0db85d0e6b63eea76b2f8-0)
+![](../images/xmake/xmake_171.png)
 
 #### 实战之 tbox 工程编译
 
@@ -4504,7 +4504,7 @@ xmake
 
 如果编译成功，会显示下面的信息。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/282c76960643e9760ff990fb4f5a077b-0)
+![](../images/xmake/xmake_172.png)
 
 注：上图最底下黄色部分的警告信息不用管它，这是由于我们的实验环境中，gcc 编译器版本太低，tbox 项目里面配置的一些编译选项 gcc 不知道导致自动被 xmake 忽略了，但不会影响正常编译。
 
@@ -4517,7 +4517,7 @@ ninja
 
 我们可以看到，ninja 的整个编译输出风格上，还是跟 xmake 有些差异的，xmake 默认是回滚显示编译进度，而 ninja 始终在一行上回显进度信息，如下图。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/1b67ad8d8777eccf44a229a891f024a7-0)
+![](../images/xmake/xmake_173.png)
 
 这个进度显示风格，仅仅只是个人喜好问题，并没有什么其它影响，不过 xmake 也可以通过切换主题风格，实现跟 ninja 一样的进度输出信息。
 
@@ -4529,7 +4529,7 @@ xmake g --theme=ninja
 
 切过去后，我们再尝试执行下 `xmake -r` 编译看看输出效果，应该基本跟 ninja 保持一致了，如下图。
 
-![11](https://doc.shiyanlou.com/courses/2764/27526/0f131f4f3ad4ff0492772be73d6bfe1a-0)
+![](../images/xmake/xmake_174.png)
 
 不过，这里只是临时性测试下，实验完成后，记得执行下面的命令，重置到默认主题风格。
 
@@ -4592,7 +4592,7 @@ target("test")
 
 配置完成后通过运行 `xmake --help` 命令，查看 xmake 帮助菜单，找寻我们定义的 echo 插件，看看是否出现在帮助列表里面。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/d55805b6d966f1c51e81af297b1ac558-0)
+![](../images/xmake/xmake_175.png)
 
 在上图的红框位置，就是我们新定义的插件，不过当前没有被划分到 `Plugins` 里面，而是在 `Tasks` 下面，这个只是 `task()` 的分类问题，默认定义的 `task()` 既不属于 Actions 也不属于 Plugins 分类，而是作为通用的 Tasks 分类。
 
@@ -4617,7 +4617,7 @@ xmake echo
 
 如果运行正常，就能执行到我们定义在 `on_run()` 中的脚本，然后回显 `hello xmake!` 字符串信息，如下图。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/d7e1920f835ba78d7ef0cada483d5abf-0)
+![](../images/xmake/xmake_176.png)
 
 #### 传递外部参数给插件
 
@@ -4651,7 +4651,7 @@ target("test")
 
 配置修改完成后，通过 `xmake echo --help` 查看下 echo 插件的帮助菜单，看下能否看到新增的参数选项，如下图。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/1b3e4418ebfb354ae3833b67fcae46eb-0)
+![](../images/xmake/xmake_177.png)
 
 在图中最下面，我们看到了新增的 `contents` 参数选项，后面显示的 `...` 说明此选项是 `vs` 多值列表类型。
 
@@ -4666,7 +4666,7 @@ xmake echo hello xmake!
 
 但不管哪种参数传递，其最终的输出结果都是相同的，如下图所示。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/103c431229660800f1a3f4af534e9f55-0)
+![](../images/xmake/xmake_178.png)
 
 #### 插件参数选项详解
 
@@ -4725,7 +4725,7 @@ target("test")
 
 执行 `xmake echo --help` 命令再查看 help 帮助菜单里面的参数列表，就会是下面图片中的这个样子。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/6d8c6ec9c7659a657cfead74e8eae031-0)
+![](../images/xmake/xmake_179.png)
 
 接着再来讲解上面 `on_run` 配置块中的脚本，我们通过 `option.get("color")` 和 `option.get("bright")` 判断颜色、高亮是否被设置，来决定是否开启 `cprint("${red bright}hello xmake!")` 等高亮色彩输出。
 
@@ -4735,7 +4735,7 @@ target("test")
 xmake echo -c red 'hello xmake!'
 ```
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/0bbd108687386ba4b1733c0200bb22bb-0)
+![](../images/xmake/xmake_180.png)
 
 这里我们仅仅通过简写的方式传递了 `-c red` 参数，其实也可以写全参数名传递，效果是相同的，例如 `--color=red`。
 
@@ -4751,7 +4751,7 @@ xmake echo -b -c red 'hello xmake!'
 xmake echo --bright --color=red 'hello xmake!'
 ```
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/f2a4f43f2c38a7f972c3291bbc3b344f-0)
+![](../images/xmake/xmake_181.png)
 
 #### 内部任务的定义和使用
 
@@ -4790,7 +4790,7 @@ task.run("echo", {}, "hello xmake!", {color = "red", bright = true})
 
 因此，我们即使不走命令行参数，也可以快速的把参数传递进任务脚本中，这里的配置例子，会在编译完成后，运行 echo 任务去打印红色的字符串信息，如下图。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/524d4cb06469ed622598468927c5a08f-0)
+![](../images/xmake/xmake_182.png)
 
 在本节实验中，我们了解了 xmake 插件的基本概念，并且通过一个完整的 echo 插件例子来学习整个插件的编写过程，同时还学习了如何去编写和调用内部的任务脚本。
 
@@ -4844,11 +4844,11 @@ please input: y (y/n)
 
 看到下图提示后，我们可以按 `y` 或者默认回车，来告诉 xmake 请尝试直接调用 autotools 来编译它。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/01010555512bf567774ce3ebb89b585a-0)
+![](../images/xmake/xmake_183.png)
 
 编译成功完成后，xmake 会把构建生成产物放置在 `build/artifacts` 目录下，实际输出内容，如下图。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/c12927be5b16faae966a47dbb346656d-0)
+![](../images/xmake/xmake_184.png)
 
 #### 自动生成 xmake.lua 移植编译 libjpeg
 
@@ -4876,19 +4876,19 @@ please input: n (y/n)
 
 提示内容如下图所示。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/d0b6284a8c3a1604e0083419bb9201cd-0)
+![](../images/xmake/xmake_185.png)
 
 我们根据提示，按下 `y` 和回车后，xmake 就会开始自动扫描 libjpeg 库下的所有源文件，如图。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/9051da171b874a23d52e39d03e81fe5b-0)
+![](../images/xmake/xmake_186.png)
 
 还会扫描用到 libjpeg 库的一些可执行程序，如下图。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/f814800fc432321e5102f7ec9cb69a7e-0)
+![](../images/xmake/xmake_187.png)
 
 然后继续编译，编译到一半的时候，触发了编译错误，看下图的错误信息，应该是编译 jmemmac.c 文件失败了。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/e78c3854de7716293dba898a220249ad-0)
+![](../images/xmake/xmake_188.png)
 
 毕竟，自动扫描再怎么智能，也不可能完全可靠，这里只是为了提高一些移植效率，如果编译发生错误，只需要分析下错误原因，对 xmake.lua 里面的配置稍作修改就行了。
 
@@ -4896,19 +4896,19 @@ please input: n (y/n)
 
 因此，我们只需要在 xmake.lua 中删除对这个文件的配置就行了。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/4189cab357ac9f99b7071bbe58f8f48b-0)
+![](../images/xmake/xmake_189.png)
 
 删除后，我们继续执行 xmake 编译 libjpeg 项目，这个时候我们又发现了其它类似的编译错误，这回是 jmemdos.c 文件，似乎也是跟 libjpeg 的内存分配相关代码。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/04fccaeef5a71581d4e2469f8da5db61-0)
+![](../images/xmake/xmake_190.png)
 
 连续碰到 jmemmac.c 和 jmemdos.c 的编译失败，我们大体能知道 libjpeg 提供了不同平台对应的 jmemxxx.c 内存分配实现。既然如此，我们再找下其它跟内存相关的平台代码文件，发现还有一个 jmemdosa.asm 也是，那么我们就一并注释掉这两个文件。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/73da6000ba821cb20a3d8c8f310c1c4f-0)
+![](../images/xmake/xmake_191.png)
 
 注释掉这三个不相关的文件后，继续执行 xmake 命令就能顺利通过编译了，如下图。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/b357cbbcff6b7773efb115a1bffa291a-0)
+![](../images/xmake/xmake_192.png)
 
 #### 手动配置 xmake.lua 移植编译
 
@@ -4931,7 +4931,7 @@ target("jpeg")
 
 手动精简后的配置仅仅只有简单的几行，就能做到相同的编译效果，我们重新执行下 `xmake -r` 命令，看看是否能够正常完成整个库的编译，如果一切正常，就会如下图所示。
 
-![11](https://doc.shiyanlou.com/courses/2764/27526/08d90a94e405340ae395c28a497260d5-0)
+![](../images/xmake/xmake_193.png)
 
 通过手动移植的方式，我们虽然能够很好的完成第三方库的编译，但是集成起来还是比较繁琐的，如果把 libjpeg 库代码内置到项目中去，就会非常的臃肿。而如果仅仅提供编译后的库给其它项目链接使用，编译和版本维护又非常的麻烦。
 
@@ -4992,7 +4992,7 @@ target("jpegtest")
 
 最后，执行 xmake 的编译效果如下图，我们完全复用了整个 jpeg 库的移植过程，不用每次都去手动移植一遍，也可以快速集成。
 
-![12](https://doc.shiyanlou.com/courses/2764/27526/f5eb664813f191a62b35156754e1b158-0)
+![](../images/xmake/xmake_194.png)
 
 另外，我们还可以改进下 `package("mytest")` 包定义，内部不使用 autotools 而是直接使用刚刚我们移植的 xmake.lua 来构建它，这样就能在不同平台下集成 jpeg 库了，修改 xmake.lua 如下。
 
@@ -5046,7 +5046,7 @@ xmake -r
 
 整个执行过程如下图，如果一切顺利，则会完成整个工程的编译。
 
-![13](https://doc.shiyanlou.com/courses/2764/27526/84c2225050963e79de5547d6826e0f08-0)
+![](../images/xmake/xmake_195.png)
 
 #### 配置文件的自动生成
 
@@ -5096,7 +5096,7 @@ includes("jpeg-9d")
 
 执行 `xmake -r` 进行编译，如果一切顺利，那么整个项目都会完成编译，结果如下图。
 
-![14](https://doc.shiyanlou.com/courses/2764/27526/dc9a7d51a6727ac8f8d861ae7aa2e2d5-0)
+![](../images/xmake/xmake_196.png)
 
 在本节实验中，我们通过一个完整的例子学习了如何使用 xmake 来移植编译 libjpeg，并且也学习了如何将移植后的 libjpeg 集成到项目工程中去。整个过程中，我们还学习到了 xmake 的自动扫描和生成模式以及 autotools 的基本概念和使用。
 
@@ -5121,7 +5121,7 @@ wget https://labfile.oss.aliyuncs.com/courses/2764/code19.zip
 
 为了方便我们的日常开发，xmake 官方提供了可以快速无缝集成到 Visual Studio Code 编辑器的 [xmake-vscode 插件](https://github.com/xmake-io/xmake-vscode)，使用这个插件我们可以通过 vscode 编辑器环境来一站式进行 C/C++ 程序开发，内置 xmake 编译、断点调试、编译错误分析定位、编译配置的快速切换等各种实用功能。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/03b71834190574523cd4d56449e00f56-0)
+![](../images/xmake/xmake_197.gif)
 
 而 Visual Studio Code 编辑器是微软推出的一款轻量级跨平台的编辑器，具有非常好的跨平台性、可扩展性，我们在实验环境的桌面上，就能找到带有 Visual Studio Code 字样的图标，双击运行就可以打开它。
 
@@ -5140,7 +5140,7 @@ xmake --version
 
 如果看到下图所示内容，说明我们已经成功找到了 xmake-vscode 插件，然后点击旁边的 `Install` 字样按钮就可以完成安装了。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/bf47bedefafe0e442b734033dabf50e3-0)
+![](../images/xmake/xmake_198.png)
 
 #### 创建和打开 C/C++ 工程
 
@@ -5150,33 +5150,33 @@ xmake --version
 
 然后，我们直接在 vscode 里面打开这个空目录，只需要通过点击下图红框位置的按钮。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/c8dd3c0af495231179389909b7e39763-0)
+![](../images/xmake/xmake_199.png)
 
 点击后，我们进入刚刚创建的 vscode_test 目录，选中并打开它。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/2c34503389fad3fff3370e3a37516af5-0)
+![](../images/xmake/xmake_200.png)
 
 打开目录后，我们就可以开始创建工程文件了，继续进入菜单的 view 子菜单打开 vscode 里面的命令面板，如下图。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/c8ccab2904e2e8d7a47af375d1fbedb4-0)
+![](../images/xmake/xmake_201.png)
 
 命令面板打开后，我们输入 xmake 字符串，就会看到一系列跟 xmake 插件相关的命令，然后从其中找到带 `Create Project` 字样的命令，如图。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/ba0d31515a3807ec00519a976939978d-0)
+![](../images/xmake/xmake_202.png)
 
 这个时候，由于当前还没有 xmake.lua 文件，会在底下弹出一个提示框，继续点击里面的蓝色按钮。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/db4ccace608177319f5fd46bb27aa979-0)
+![](../images/xmake/xmake_203.png)
 
 接着就会弹出编程语言的选择列表，这里选择第二项，也就是 C++ 语言。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/40adb147a8dd183a2306a27b045c76b2-0)
+![](../images/xmake/xmake_204.png)
 
 选择完语言后，还会提示选择工程类型，这里选择 console 终端程序类型。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/fd6f5ab2aa96f8288315db7c20671373-0)
+![](../images/xmake/xmake_205.png)
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/88b727ce22ab5e1618747f227b5a05a1-0)
+![](../images/xmake/xmake_206.png)
 
 选择完成后，整个项目就创建好了，下图左边就是新创建的工程文件，根目录下有 xmake.lua，而图最底下的工具栏就是 xmake 插件的操作面板了，我们的大部分操作都可以通过这个面板快速完成，包括：编译、运行、调试以及配置切换等等。
 
@@ -5184,7 +5184,7 @@ xmake --version
 
 创建完成工程后，我们会看到 vscode 底部工具链出现了一排跟 xmake 相关的操作面板，xmake 的大部分操作都可以通过这个面板上的工具按钮来快速完成，如下图。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/2118a2b7d665f65241d0dfddaf9cbbe8-0)
+![](../images/xmake/xmake_207.png)
 
 另外，不仅仅是创建工程，如果安装 xmake-vscode 插件后，使用 vscode 打开一个带有 xmake.lua 文件的 C/C++ 工程根目录，那么 vscode 底部的 xmake 工具栏面板也会被自动激活。
 
@@ -5213,13 +5213,13 @@ target("test")
 
 其实，也就是将程序目标名改成 test，然后点击 vscode 底下的 xmake 工具栏里面的 Build 按钮，来编译我们新创建的 C++ 工程，编译效果如下图。
 
-![11](https://doc.shiyanlou.com/courses/2764/27526/b49ecdc6a7f33dede8479f5a1820d0e0-0)
+![](../images/xmake/xmake_208.png)
 
 #### 运行程序
 
 编译完成后就可以尝试运行程序了，还是使用底下的工具栏按钮，点击运行图标，也就是下图红框中的按钮。
 
-![12](https://doc.shiyanlou.com/courses/2764/27526/7bf746bfb5f96b29a2bd803e4763be02-0)
+![](../images/xmake/xmake_209.png)
 
 如果运行成功，就会看到实际的运行输出信息：`Hello world!`。
 
@@ -5231,21 +5231,21 @@ target("test")
 
 具体如何切换到 debug 模式，可以参考下图的操作，点击底下 `release` 文本所在的按钮，然后在上面列出的列表中，选择 debug 项即可。
 
-![13](https://doc.shiyanlou.com/courses/2764/27526/c90d83e787e8e81e175e4b25855827b1-0)
+![](../images/xmake/xmake_210.png)
 
 完成切换后可以看到底下的 release 按钮已经变成了 debug 字样，然后点击 build 按钮，就可以重新编译带有调试符号的目标程序了。
 
-![14](https://doc.shiyanlou.com/courses/2764/27526/b613c71e1eb30f1b8743db09376ab4b1-0)
+![](../images/xmake/xmake_211.png)
 
 调试版本程序编译完成后，还需要额外做一件事，那就是安装 vscode 的 C/C++ 插件，因为 xmake-vscode 插件的调试功能是基于这个插件的，我们仅仅只需要首次使用时安装它即可。
 
 重新切到插件市场页面，搜索 C/C++，显示出来的第一项就是，点击 Install 安装即可，如下图。
 
-![15](https://doc.shiyanlou.com/courses/2764/27526/9e24b7095f8ec69a722b55b4d827d945-0)
+![](../images/xmake/xmake_212.png)
 
 安装好 C/C++ 插件，就可以开始调试操作了。首先点击 main.cpp 打开源文件，然后在需要下断点的代码行左侧位置点击下断点，如果出现小红点，说明已经成功下好了调试断点，如下图。
 
-![16](https://doc.shiyanlou.com/courses/2764/27526/bfea06b01c9fba21892d946a4863ff42-0)
+![](../images/xmake/xmake_213.png)
 
 断点下好后，就可以点击底下的调试按钮，开启断点调试了，如果一切顺利，程序运行起来后就会命中刚刚设置的断点，如下图。
 
@@ -5254,7 +5254,7 @@ target("test")
 sudo apt install -y gdb
 ```
 
-![17](https://doc.shiyanlou.com/courses/2764/27526/38b60efa035573b205d0c94362b14b29-0)
+![](../images/xmake/xmake_214.png)
 
 接下来再来详细讲解编译，之前我们已经使用过 build 按钮来编译工程，但如果一个项目中存在多个目标程序又不想全部编译，我们就需要指定编译哪个目标程序。
 
@@ -5278,21 +5278,21 @@ target("test2")
 
 如果切换成功，底下的 default 文本就会变成 test2，由于默认编译 xmake 会自动编译所有目标程序，所以最初显示的是 default 文本。
 
-![18](https://doc.shiyanlou.com/courses/2764/27526/be42d714a0eae7edb2970463699f47ef-0)
+![](../images/xmake/xmake_215.png)
 
 这个时候，我们再执行编译，就能看到实际仅仅只编译了我们指定的 test2 目标程序。
 
-![19](https://doc.shiyanlou.com/courses/2764/27526/30afcbd89ad353846eb7e8f325ca9be1-0)
+![](../images/xmake/xmake_216.png)
 
 #### 编译错误信息
 
 如果我们的工程代码没写对导致编译出错，可以直接从编译输出中看到错误信息，例如下图。
 
-![20](https://doc.shiyanlou.com/courses/2764/27526/6e0996f5e932b770037ef54e6b9f0de3-0)
+![](../images/xmake/xmake_217.png)
 
 而 xmake-vscode 插件还会自动解析编译错误输出信息，分类每个编译错误，并可通过双击指定错误，跳转定位到指定的错误代码位置，也就是下图所示位置。
 
-![21](https://doc.shiyanlou.com/courses/2764/27526/f620adcfd5c25239ad8deb81c000c0a4-0)
+![](../images/xmake/xmake_218.png)
 
 #### 查看编译详细信息
 
@@ -5300,13 +5300,13 @@ target("test2")
 
 首先打开菜单，点击 `File` -> `Preferences` -> `Settings` 子菜单，如下图。
 
-![22](https://doc.shiyanlou.com/courses/2764/27526/dc05caf79d6f9f713e5e1bc2c483cad2-0)
+![](../images/xmake/xmake_219.png)
 
 然后在打开的 Setting 配置页面，输入 xmake 找到所有跟 xmake 插件相关的配置项，其中有一项是 BuildLevel，它就是用于设置编译过程中的输出信息级别。
 
 默认是 warnings 级别，仅仅输出编译警告信息以及正常信息，我们把它改为 verbose 级别，就可以输出完整的编译命令行参数了。
 
-![23](https://doc.shiyanlou.com/courses/2764/27526/e29080d4ec31c9cc3eb4e07583664ede-0)
+![](../images/xmake/xmake_220.png)
 
 至于 debug 级别对应的就是 `xmake -vD` 的诊断信息，还会进一步打印出错的栈信息。
 
@@ -5314,15 +5314,15 @@ target("test2")
 
 从下图的红色箭头位置找到对应的命令面板。
 
-![24](https://doc.shiyanlou.com/courses/2764/27526/8cb30e5c61ba43a149e549654aa54fa8-0)
+![](../images/xmake/xmake_221.png)
 
 然后再打开的命令面板中输入 xmake 过滤出所有跟 xmake 相关的命令列表，找到 Rebuild 命令后点击编译即可，如下图。
 
-![25](https://doc.shiyanlou.com/courses/2764/27526/5b3b425dc410962e44e3974096ef1267-0)
+![](../images/xmake/xmake_222.png)
 
 开启 verbose 级别后，我们就能看到编译输出中完整的命令参数了，如下图。
 
-![26](https://doc.shiyanlou.com/courses/2764/27526/c142df9ee8281f93f32f34067eda9595-0)
+![](../images/xmake/xmake_223.png)
 
 #### xmake.lua 编辑和自动补全
 
@@ -5347,11 +5347,11 @@ target("test2")
 
 而我们输入时的补全特性可以通过下面的图片体会到。
 
-![27](https://doc.shiyanlou.com/courses/2764/27526/dd007db9f4534867827d78a57f13e9e1-0)
+![](../images/xmake/xmake_224.png)
 
 完成配置后，我们再来点击底下的 Build 按钮执行编译，看下详细命令输出，应该能够正常看到新加上的 `-DTEST2` 宏定义了。
 
-![28](https://doc.shiyanlou.com/courses/2764/27526/868c1abb025eb7844f99ff304f83d7fc-0)
+![](../images/xmake/xmake_225.png)
 
 在本节实验中，我们学习了如何在 vscode 中使用 xmake-vscode 插件来编译开发 C/C++ 程序，以及如何进行断点调试，并且学习了 xmake 工具栏和命令面板的使用以及如何进行参数配置。
 
@@ -5406,7 +5406,7 @@ xmake create -t qt.widgetapp widgetapp
 
 如果创建成功，就会看到下图的输出，里面除了 xmake.lua 文件，还生成了一些基本的 Qt 代码文件，`*.ui` 是用户描述 ui 界面，这也是 Qt Widget 应用程序所必备的，而 mainwindow.cpp 文件用来定义主窗口类。
 
-![1](https://doc.shiyanlou.com/courses/2764/27526/678bbdd3a05e96bdc7396aa811d685f1-0)
+![](../images/xmake/xmake_226.png)
 
 接着，我们来看下 xmake.lua 里面的配置内容，通过这个配置才能够正常使用 xmake 完成 Qt 项目的编译。
 
@@ -5430,11 +5430,11 @@ target("widgetapp")
 
 另外，xmake 会将这两个类型的文件优先在最开头参与编译，因为它们还会自动生成一些代码文件给其它源码引用，执行 `xmake` 编译这个 Qt 工程，编译通过后会显示下图信息。
 
-![2](https://doc.shiyanlou.com/courses/2764/27526/028da3cd499bbbf7a68aa10fcfe714c7-0)
+![](../images/xmake/xmake_227.png)
 
 然后执行 `xmake run` 命令运行编译生成的目标程序，如下图所示，一个可视化的空白窗口被显示出来，说明我们第一个 Qt Gui 程序已经构建运行完成。
 
-![3](https://doc.shiyanlou.com/courses/2764/27526/92cf3d07067dc0b4d0a2e6bb974ee47b-0)
+![](../images/xmake/xmake_228.png)
 
 我们再来执行下面的命令，开启详细输出编译，看下 xmake 实际传了哪些编译选项、链接选项给 gcc。
 
@@ -5444,7 +5444,7 @@ xmake -rv
 
 从下图的红线部分可以看出，针对 Qt Widget 的应用程序，xmake 会自动将 `QtGui`、`QtWidget`、`QtCore` 等基础库传入进去参与链接，其中 `QtCore` 是所有 Qt 程序必须要用到的，内置一些常用基础类库，而 `QtWidget` 和 `QtGui` 在写一些可视化 ui 程序的时候都是需要的。
 
-![4](https://doc.shiyanlou.com/courses/2764/27526/a0aa45014cfb48f130392534f959c59a-0)
+![](../images/xmake/xmake_229.png)
 
 #### 在 vscode 中开发 Qt 程序
 
@@ -5456,13 +5456,13 @@ xmake -rv
 
 如果看到下图所示内容，说明我们已经成功找到了 xmake-vscode 插件，然后点击旁边的 `Install` 字样按钮就可以完成安装了。
 
-![x](https://doc.shiyanlou.com/courses/2764/27526/bf47bedefafe0e442b734033dabf50e3-0)
+![](../images/xmake/xmake_230.png)
 
 安装完成后这个插件检测到当前打开的目录里面存在 xmake.lua 文件，就会自动激活 xmake 的插件程序，在底下显示一排对应的插件操作按钮。
 
 点击 Build 按钮完成编译，然后点击三角形箭头的按钮运行我们编译好的 Qt 程序，就可以在 vscode 中运行它了，具体操作步骤和运行效果如下图。
 
-![5](https://doc.shiyanlou.com/courses/2764/27526/639d40ea0e24c091f7adcb5229fd0f40-0)
+![](../images/xmake/xmake_231.png)
 
 #### 在 vscode 中调试 Qt 程序
 
@@ -5470,11 +5470,11 @@ xmake -rv
 
 接下来就只需要在我们需要关注的地方下断点。
 
-![6](https://doc.shiyanlou.com/courses/2764/27526/21dbdec1be2674fe991b09f1e630f586-0)
+![](../images/xmake/xmake_232.png)
 
 我们点击调试按钮，如果一切顺利，就会出现下图的界面，说明断点已经被正常触发了，可以单步调试了。
 
-![7](https://doc.shiyanlou.com/courses/2764/27526/fab8f9a1a8cb4dea7af62ac648b1f806-0)
+![](../images/xmake/xmake_233.png)
 
 下面，我们再来讲解 Qt Quick 应用程序的开发，它也是 Qt 提供的一种 Gui 可视化程序框架类型，跟 Qt Widgets 程序的区别在于：
 
@@ -5493,27 +5493,27 @@ mkdir ~/Code/quickapp
 
 然后，在 vscode 中打开这个空目录，如果之前的工程还没关闭，可以先关掉它后再打开，如下图。
 
-![8](https://doc.shiyanlou.com/courses/2764/27526/f43b0c54df1867b81befd7ab9be9ec1b-0)
+![](../images/xmake/xmake_234.png)
 
 接着我们在这个空工程中创建 Qt QuickApp 的工程文件，还是根据上节实验中所讲的方式，从 View 菜单中打开命令面板，输入 xmake 找到并点击 `XMake: Create Project` 菜单项，如下图。
 
-![9](https://doc.shiyanlou.com/courses/2764/27526/11be5c2a3d02d38c891c01b050e55ec1-0)
+![](../images/xmake/xmake_235.png)
 
 这个时候，由于当前还没有 xmake.lua 文件，会在底下弹出一个提示框，继续点击里面的蓝色按钮。
 
-![10](https://doc.shiyanlou.com/courses/2764/27526/db4ccace608177319f5fd46bb27aa979-0)
+![](../images/xmake/xmake_236.png)
 
 然后，我们在显示的项目语言类型列表项中，选择 c++ 项目类型并点击它（因为 Qt 只能是 C++ 工程）。
 
-![11](https://doc.shiyanlou.com/courses/2764/27526/69128c29d0402d0512e626d1e0ed980a-0)
+![](../images/xmake/xmake_237.png)
 
 接着，会看到工程模板类型列表，我们从中选择 `qt.quickapp` 工程模板，并点击它，如下图。
 
-![12](https://doc.shiyanlou.com/courses/2764/27526/4aef1eb31885347349714290316f2fbf-0)
+![](../images/xmake/xmake_238.png)
 
 这个时候，我们整个 Qt Quick 工程就创建好了，其跟直接执行 `xmake create -t qt.quickapp quickapp` 命令是同样的效果，只不过这回我们是在 vscode 中去创建它，创建完成后的效果如下图。
 
-![13](https://doc.shiyanlou.com/courses/2764/27526/bb657a76f1fd8003135edd123ee48d73-0)
+![](../images/xmake/xmake_239.png)
 
 从上图中我们可以看到生成的工程文件其实跟之前的 Qt Widgets 程序还是有很多不同的地方，例如没有了 `.ui` 文件，而是改用 `qml.qrc` 来构建 ui，其最终是在 main.qml 中描述所有的 ui 布局和事件处理。
 
@@ -5558,19 +5558,19 @@ qrc:/main.qml:1 module "QtQuick" version 2.9 is not installed
 
 为了能够让程序正常编译通过，我们需要改下 main.qml 将 2.9 改成 2.5 即可，如下图。
 
-![14](https://doc.shiyanlou.com/courses/2764/27526/330df781a71c3d70fd73b88008ade030-0)
+![](../images/xmake/xmake_240.png)
 
 改完后，我们就可以点击 Build 按钮编译这个 Qt Quick 程序了，如果编译通过，会显示下图的结果。
 
-![15](https://doc.shiyanlou.com/courses/2764/27526/dcccaab4cddee5feb84802bbf1a66e54-0)
+![](../images/xmake/xmake_241.png)
 
 编译通过后，我们再来点击运行按钮运行此程序，如果成功，会看到一个空白的窗口显示出来，就跟 Qt Widgets 的效果差不多。
 
-![16](https://doc.shiyanlou.com/courses/2764/27526/f5c34c92a168fd838eebe35cacbe0710-0)
+![](../images/xmake/xmake_242.png)
 
 另外，至于刚刚说的 main.qml 中 Qt Quick 版本与 Qt 版本如何对应，我们可以参考 Qt 的官方文档 [Qt 和 Qt Quick 历史版本对照表](https://doc.qt.io/qt-5/qtquickcontrols-index.html#versions)，也就是下图所示。
 
-![17](https://doc.shiyanlou.com/courses/2764/27526/36190bedd27310a78a3774e380ce1c91-0)
+![](../images/xmake/xmake_243.png)
 
 虽然，上面没有我们当前 Qt 5.5 的版本，但是依次从上往下推算，Qt 5.5 差不多就是对应 Qt Quick 2.5 版本。
 
@@ -5606,19 +5606,19 @@ Window {
 
 从下图的红色箭头位置找到对应的命令面板。
 
-![图片描述](https://doc.shiyanlou.com/courses/2764/600404/cc869c03320ac1d67f7a7c219e0b105a-0)
+![](../images/xmake/xmake_244.png)
 
 然后再打开的命令面板中输入 xmake 过滤出所有跟 xmake 相关的命令列表，找到 Rebuild 命令后点击编译即可，如下图。
 
-![25](https://doc.shiyanlou.com/courses/2764/27526/5b3b425dc410962e44e3974096ef1267-0)
+![](../images/xmake/xmake_245.png)
 
 最后点击运行，首次运行的效果如下，我们会额外看到一个 Button 按钮在窗口中。
 
-![18](https://doc.shiyanlou.com/courses/2764/27526/2a213ff4ef4755353d02abbfbf35fa13-0)
+![](../images/xmake/xmake_246.png)
 
 点击这个 Button 按钮，就会看到窗口的颜色开始随机变动了，如下图。
 
-![19](https://doc.shiyanlou.com/courses/2764/27526/2bc006990550891659c5aa0d7b8f553f-0)
+![](../images/xmake/xmake_247.png)
 
 所以，我们也能通过此实验确定即使不使用 Qt Creator，仅仅使用 vscode 和 xmake 也是可以正常开发和构建 Qt 应用程序的，并没有太大的区别。
 
@@ -5650,7 +5650,7 @@ xmake -rv
 
 可以看到，虽然我们仅仅只是添加了 `add_frameworks("QtXml")` 配置，但是 xmake 会自动追加与使用 QtXml 库相关的所有编译链接选项，也就是下图的红线位置部分，这比起手动使用 `add_links`、`add_includedirs` 等挨个设置比起来更加的方便，也更加的跨平台。
 
-![20](https://doc.shiyanlou.com/courses/2764/27526/65e8d697b8394a956b68ff76f843e5cf-0)
+![](../images/xmake/xmake_248.png)
 
 
 
