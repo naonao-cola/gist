@@ -47,6 +47,12 @@ xmake f --cuda=/usr/local/cuda-9.1/
 xmake g --cuda=/usr/local/cuda-9.1/
 #如果想要测试xmake对当前cuda环境的探测支持，可以直接运行
 xmake l detect.sdks.find_cuda
+
+add_requires("opencv",{system = true})
+add_packages("opencv")
+# 使用pkg-config
+add_ldflags("$(shell pkg-config --libs --cflags opencv)")
+
 ```
 ### xrepo
 
