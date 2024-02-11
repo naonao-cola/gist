@@ -1,0 +1,3093 @@
+<!DOCTYPE html>
+<!-- saved from url=(0132)file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="于华超">
+
+    <title>C++ Template - 屋顶上的鱼</title>
+
+    <link rel="canonical" href="http://www.yhc201.com/blog/2018/05/10/cpp-template/">
+
+    <!-- Icons -->
+    <link rel="shortcut icon" href="http://www.yhc201.com/blog/2018/05/10/cpp-template/img/favicon.ico">
+
+    <!-- Bootstrap Core CSS -->
+    <style class="anchorjs"></style><link rel="stylesheet" href="./Template_files/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="./Template_files/clean-blog.css">
+
+    <!-- Pygments Github CSS -->
+    <link rel="stylesheet" href="./Template_files/syntax.css">
+
+    <!-- Custom Fonts -->
+    <link href="./Template_files/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="./Template_files/css" rel="stylesheet" type="text/css">
+    <link href="./Template_files/css(1)" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+<link rel="shortcut icon" type="image/png" href="http://www.yhc201.com/blog/2018/05/10/cpp-template/img/favicon.png"><script src="./Template_files/highlight.min.js.下载"></script><script src="./Template_files/anchor.min.js.下载"></script><script type="text/javascript" async="" charset="utf-8" src="./Template_files/core.php"></script><script src="./Template_files/highlight.min(1).js.下载"></script><script src="./Template_files/anchor.min(1).js.下载"></script><script type="text/javascript" async="" src="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC_files/embed.js" charset="UTF-8"></script><script charset="utf-8" src="chrome-extension://nfbikdkjfjcejddbdcpbafnclkfdhijd/js/btype.js"></script><script type="text/javascript" charset="utf-8" src="chrome-extension://nfbikdkjfjcejddbdcpbafnclkfdhijd/js/chrome.js"></script><script type="text/javascript" src="chrome-extension://dbjbempljhcmhlfpfacalomonjpalpko/scripts/inspector.js"></script><div id="BIJIA_HAS_BUILT"></div><script src="file://s11.cnzz.com/z_stat.php?id=1256793290&amp;web_id=1256793290" async="" defer=""></script><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><script type="text/javascript" async="" src="http://static.duoshuo.com/embed.js" charset="UTF-8"></script></head><body ontouchstart="" style=""><div id="MathJax_Message" style="display: none;"></div><input type="hidden" id="________________________________i_____________________"><div id="BIJIA_HAS_BUILT"></div><script src="./Template_files/z_stat.php" async="" defer=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 2px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 2px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: 1em}
+.MathJax_MenuRadioCheck.RTL {right: 1em; left: auto}
+.MathJax_MenuLabel {padding: 2px 2em 4px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #CCCCCC; margin: 4px 1px 0px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: Highlight; color: HighlightText}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style>
+
+
+
+
+
+
+<div id="MathJax_Message" style="display: none;"></div>
+
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top is-fixed">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="http://www.yhc201.com/">屋顶上的鱼</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="http://www.yhc201.com/">Home</a>
+                </li>
+                
+                <li>
+                    <a href="http://www.yhc201.com/about/">About</a>
+                </li>
+                
+                <li>
+                    <a href="http://www.yhc201.com/archive/">Archive</a>
+                </li>
+                
+                <li>
+                    <a href="http://www.yhc201.com/milestone/">milestone</a>
+                </li>
+                
+                <li>
+                    <a href="http://www.yhc201.com/tags/">Tags</a>
+                </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+
+    <!-- Post Header -->
+<style type="text/css">
+    header.intro-header{
+        background-image: url('/img/grey_second.jpeg')
+    }
+    header.intro-header{padding-top: 55px;}
+</style>
+<header class="intro-header">
+  
+
+  <ul>
+  <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#c-template-%E8%BF%9B%E9%98%B6%E6%8C%87%E5%8D%97">C++ Template 进阶指南</a>
+    <ul>
+      <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#0-%E5%89%8D%E8%A8%80">0. 前言</a>
+        <ul>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#01-c%E5%8F%A6%E7%B1%BB%E7%AE%80%E4%BB%8B%E6%AF%94%E4%BD%A0%E7%94%A8%E7%9A%84%E5%A4%8D%E6%9D%82%E4%BD%86%E6%AF%94%E4%BD%A0%E6%83%B3%E7%9A%84%E7%AE%80%E5%8D%95">0.1 C++另类简介：比你用的复杂，但比你想的简单</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#02-%E9%80%82%E5%AE%9C%E8%AF%BB%E8%80%85%E7%BE%A4">0.2 适宜读者群</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#03-%E7%89%88%E6%9D%83">0.3 版权</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#04-%E6%8E%A8%E8%8D%90%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83">0.4 推荐编译环境</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#05-%E4%BD%93%E4%BE%8B">0.5 体例</a>
+            <ul>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#051-%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81">0.5.1 示例代码</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#052-%E5%BC%95%E7%94%A8">0.5.2 引用</a></li>
+            </ul>
+          </li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#06-%E6%84%8F%E8%A7%81%E5%BB%BA%E8%AE%AE%E5%96%B7%E8%A1%A5%E9%81%97%E5%86%99%E4%BD%9C%E8%AE%A1%E5%88%92">0.6 意见、建议、喷、补遗、写作计划</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#1-template%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95">1. Template的基本语法</a>
+        <ul>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#11-template-class%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95">1.1 Template Class基本语法</a>
+            <ul>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#111-template-class%E7%9A%84%E4%B8%8E%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89">1.1.1 Template Class的与成员变量定义</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#112-%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BD%BF%E7%94%A8">1.1.2 模板的使用</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#113-%E6%A8%A1%E6%9D%BF%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89">1.1.3 模板类的成员函数定义</a></li>
+            </ul>
+          </li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#12-template-function%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95">1.2 Template Function的基本语法</a>
+            <ul>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#121-template-function%E7%9A%84%E5%A3%B0%E6%98%8E%E5%92%8C%E5%AE%9A%E4%B9%89">1.2.1 Template Function的声明和定义</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#122-%E6%A8%A1%E6%9D%BF%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%BF%E7%94%A8">1.2.2 模板函数的使用</a></li>
+            </ul>
+          </li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#13-%E6%95%B4%E5%9E%8B%E4%B9%9F%E5%8F%AF%E6%98%AFtemplate%E5%8F%82%E6%95%B0">1.3 整型也可是Template参数</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#14-%E6%A8%A1%E6%9D%BF%E5%BD%A2%E5%BC%8F%E4%B8%8E%E5%8A%9F%E8%83%BD%E6%98%AF%E7%BB%9F%E4%B8%80%E7%9A%84">1.4 模板形式与功能是统一的</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#2--%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80">2.  模板元编程基础</a>
+        <ul>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#21-%E7%BC%96%E7%A8%8B%E5%85%83%E7%BC%96%E7%A8%8B%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B">2.1 编程，元编程，模板元编程</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#22-%E6%A8%A1%E6%9D%BF%E4%B8%96%E7%95%8C%E7%9A%84if-then-else%E7%B1%BB%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%89%B9%E5%8C%96%E4%B8%8E%E5%81%8F%E7%89%B9%E5%8C%96">2.2 模板世界的If-Then-Else：类模板的特化与偏特化</a>
+            <ul>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#221-%E6%A0%B9%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81">2.2.1 根据类型执行代码</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#222-%E7%89%B9%E5%8C%96">2.2.2 特化</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#223-%E7%89%B9%E5%8C%96%E4%B8%80%E4%BA%9B%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98">2.2.3 特化：一些其它问题</a></li>
+            </ul>
+          </li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#23-%E5%8D%B3%E7%94%A8%E5%8D%B3%E6%8E%A8%E5%AF%BC">2.3 即用即推导</a>
+            <ul>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#231-%E8%A7%86%E8%8B%A5%E6%97%A0%E7%9D%B9%E7%9A%84%E8%AF%AD%E6%B3%95%E9%94%99%E8%AF%AF">2.3.1 视若无睹的语法错误</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#232-%E5%90%8D%E7%A7%B0%E6%9F%A5%E6%89%BEi-am-who-i-am">2.3.2 名称查找：I am who I am</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#233-%E5%A4%9A%E4%BD%99%E7%9A%84--typename-%E5%85%B3%E9%94%AE%E5%AD%97">2.3.3 “多余的”  typename 关键字</a></li>
+            </ul>
+          </li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#24-%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93">2.4 本章小结</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#3---%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E7%89%B9%E5%8C%96%E4%B8%8E%E5%81%8F%E7%89%B9%E5%8C%96">3   深入理解特化与偏特化</a>
+        <ul>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#31-%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%90%86%E8%A7%A3%E5%81%8F%E7%89%B9%E5%8C%96">3.1 正确的理解偏特化</a>
+            <ul>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#311-%E5%81%8F%E7%89%B9%E5%8C%96%E4%B8%8E%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E7%9A%84%E6%AF%94%E8%BE%83">3.1.1 偏特化与函数重载的比较</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#312-%E4%B8%8D%E5%AE%9A%E9%95%BF%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0">3.1.2 不定长的模板参数</a></li>
+              <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#313-%E6%A8%A1%E6%9D%BF%E7%9A%84%E9%BB%98%E8%AE%A4%E5%AE%9E%E5%8F%82">3.1.3 模板的默认实参</a></li>
+            </ul>
+          </li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#32-%E5%90%8E%E6%82%94%E8%8D%AFsfinae">3.2 后悔药：SFINAE</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#4-%E5%85%83%E7%BC%96%E7%A8%8B%E4%B8%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95">4 元编程下的数据结构与算法</a>
+        <ul>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#41-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97">4.1 表达式与数值计算</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#41-%E8%8E%B7%E5%BE%97%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%B1%9E%E6%80%A7%E7%B1%BB%E5%9E%8B%E8%90%83%E5%8F%96type-traits">4.1 获得类型的属性——类型萃取（Type Traits）</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#42-%E5%88%97%E8%A1%A8%E4%B8%8E%E6%95%B0%E7%BB%84">4.2 列表与数组</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#43-%E5%AD%97%E5%85%B8%E7%BB%93%E6%9E%84">4.3 字典结构</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#44-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F">4.4 “快速”排序</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#45-%E5%85%B6%E5%AE%83%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BD%AE%E5%AD%90">4.5 其它常用的“轮子”</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#5-%E6%A8%A1%E6%9D%BF%E7%9A%84%E8%BF%9B%E9%98%B6%E6%8A%80%E5%B7%A7">5 模板的进阶技巧</a>
+        <ul>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#51-%E5%B5%8C%E5%85%A5%E7%B1%BB">5.1 嵌入类</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#52-template-template-class">5.2 Template-Template Class</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#53-%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0">5.3 高阶函数</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#54-%E9%97%AD%E5%8C%85%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1">5.4 闭包：模板的“基于对象”</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#55-%E5%8D%A0%E4%BD%8D%E7%AC%A6placeholder%E5%9C%A8c%E4%B8%AD%E5%AE%9E%E7%8E%B0%E6%96%B9%E8%A8%80%E7%9A%84%E5%9F%BA%E7%9F%B3">5.5 占位符(placeholder)：在C++中实现方言的基石</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#56-%E7%BC%96%E8%AF%91%E6%9C%9F%E5%A4%9A%E6%80%81">5.6 编译期“多态”</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#6---%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%A8%81%E5%8A%9B%E4%BB%8Eforeach-transform%E5%88%B0linq">6   模板的威力：从foreach, transform到Linq</a>
+        <ul>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#61-foreach%E4%B8%8Etransform">6.1 Foreach与Transform</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#62-boost%E4%B8%AD%E7%9A%84%E6%A8%A1%E6%9D%BF">6.2 Boost中的模板</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#63-reactorlinq%E4%B8%8Ec%E4%B8%AD%E7%9A%84%E5%AE%9E%E8%B7%B5">6.3 Reactor、Linq与C++中的实践</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#64-%E6%9B%B4%E9%AB%98%E6%9B%B4%E5%BF%AB%E6%9B%B4%E5%BC%BA%E4%BB%8Elinq%E5%88%B0fp">6.4 更高更快更强：从Linq到FP</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#7---%E7%BB%93%E8%AF%AD%E8%AE%A8%E8%AE%BA%E6%9C%89%E7%9B%8A%E4%BA%89%E7%AB%AF%E6%97%A0%E7%94%A8">7   结语：讨论有益，争端无用</a>
+        <ul>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#71-%E6%9B%B4%E5%A5%BD%E7%9A%84%E7%BC%96%E8%AF%91%E5%99%A8%E6%9B%B4%E5%8F%8B%E5%96%84%E7%9A%84%E5%87%BA%E9%94%99%E4%BF%A1%E6%81%AF">7.1 更好的编译器，更友善的出错信息</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#72-%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%97%87%E7%BB%93%E6%98%93%E4%BA%8E%E5%AE%9E%E7%8E%B0%E9%9A%BE%E4%BA%8E%E5%AE%8C%E7%BE%8E">7.2 模板的症结：易于实现，难于完美</a></li>
+          <li><a href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#73-%E4%B8%80%E4%BA%9B%E6%9C%9F%E6%9C%9B">7.3 一些期望</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <div class="Tags">
+                        
+                        <a class="tag" href="http://www.yhc201.com/Tags/#%E6%8A%80%E6%9C%AF%E6%80%BB%E7%BB%93" title="技术总结">技术总结</a>
+                        
+                    </div>
+                    <h1 id="c-template">C++ Template</h1>
+                    
+                    <span class="meta">Posted by Bryan on May 10, 2018</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 post-container">
+
+                <h1 id="c-template-进阶指南">C++ Template 进阶指南<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#c-template-%E8%BF%9B%E9%98%B6%E6%8C%87%E5%8D%97" aria-label="Anchor link for: c template 进阶指南" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#c-template-%E8%BF%9B%E9%98%B6%E6%8C%87%E5%8D%97" aria-label="Anchor link for: c template 进阶指南" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h1>
+
+<p>本文摘自 https://github.com/wuye9036/CppTemplateTutorial</p>
+
+<h2 id="0-前言">0. 前言<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#0-%E5%89%8D%E8%A8%80" aria-label="Anchor link for: 0 前言" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#0-%E5%89%8D%E8%A8%80" aria-label="Anchor link for: 0 前言" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h2>
+
+<h3 id="01-c另类简介比你用的复杂但比你想的简单">0.1 C++另类简介：比你用的复杂，但比你想的简单<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#01-c%E5%8F%A6%E7%B1%BB%E7%AE%80%E4%BB%8B%E6%AF%94%E4%BD%A0%E7%94%A8%E7%9A%84%E5%A4%8D%E6%9D%82%E4%BD%86%E6%AF%94%E4%BD%A0%E6%83%B3%E7%9A%84%E7%AE%80%E5%8D%95" aria-label="Anchor link for: 01 c另类简介比你用的复杂但比你想的简单" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#01-c%E5%8F%A6%E7%B1%BB%E7%AE%80%E4%BB%8B%E6%AF%94%E4%BD%A0%E7%94%A8%E7%9A%84%E5%A4%8D%E6%9D%82%E4%BD%86%E6%AF%94%E4%BD%A0%E6%83%B3%E7%9A%84%E7%AE%80%E5%8D%95" aria-label="Anchor link for: 01 c另类简介比你用的复杂但比你想的简单" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>C++似乎从他为世人所知的那天开始便成为天然的话题性编程语言。在它在周围有着形形色色的赞美与贬低之词。当我在微博上透露欲写此文的意愿时，也收到了很多褒贬不一的评论。作为一门语言，能拥有这么多使用并恨着它、使用并畏惧它的用户，也算是语言丛林里的奇观了。</p>
+
+<p>C++之所以变成一门层次丰富、结构多变、语法繁冗的语言，是有着多层次的原因的。Bjarne在《The Design and Evolution of C++》一书中，详细的解释了C++为什么会变成如今（C++98/03）的模样。这本书也是我和陈梓瀚一直对各位已经入门的新手强烈推荐的一本书。通过它你多少可以明白，C++的诸多语法要素之所以变成如今的模样，实属迫不得已。</p>
+
+<p>模板作为C++中最有特色的语言特性，它堪称玄学的语法和语义，理所应当的成为初学者的梦魇。甚至很多工作多年的人也对C++的模板部分保有充分的敬畏。在多数的编码标准中，Template俨然和多重继承一样，成为了一般程序员（非程序库撰写者）的禁区。甚至运用模板较多的Boost，也成为了“众矢之的”。</p>
+
+<p>但是实际上C++模板远没有想象的那么复杂。我们只需要换一个视角：在C++03的时候，模板本身就可以独立成为一门“语言”。它有“值”，有“函数”，有“表达式”和“语句”。除了语法比较蹩脚外，它既没有指针也没有数组，更没有C++里面复杂的继承和多态。可以说，它要比C语言要简单的多。如果我们把模板当做是一门语言来学习，那只需要花费学习OO零头的时间即可掌握。按照这样的思路，可以说在各种模板书籍中出现的多数技巧，都可以被轻松理解。</p>
+
+<p>简单回顾一下模板的历史。87年的时候，泛型（Generic Programming）便被纳入了C++的考虑范畴，并直接导致了后来模板语法的产生。可以说模板语法一开始就是为了在C++中提供泛型机制。92年的时候，Alexander Stepanov开始研究利用模板语法制作程序库，后来这一程序库发展成STL，并在93年被接纳入标准中。</p>
+
+<p>此时不少人以为STL已经是C++模板的集大成之作，C++模板技止于此。但是在95年的《C++ Report》上，John Barton和Lee Nackman提出了一个矩阵乘法的模板示例。可以说元编程在那个时候开始被很多人所关注。自此篇文章发表之后，很多大牛都开始对模板产生了浓厚的兴趣。其中对元编程技法贡献最大的当属Alexandrescu的《Modern C++ Design》及模板程序库Loki。这一2001年发表的图书间接地导致了模板元编程库的出现。书中所使用的Typelist等泛型组件，和Policy等设计方法令人耳目一新。但是因为全书用的是近乎Geek的手法来构造一切设施，因此使得此书阅读起来略有难度。</p>
+
+<p>2002年出版的另一本书《C++ Templates》，可以说是在Template方面的集大成之作。它详细阐述了模板的语法、提供了和模板有关的语言细节信息，举了很多有代表性例子。但是对于模板新手来说，这本书细节如此丰富，让他们随随便便就打了退堂鼓缴械投降。</p>
+
+<p>本文的写作初衷，就是通过“编程语言”的视角，介绍一个简单、清晰的“模板语言”。我会尽可能的将模板的诸多要素连串起来，用一些简单的例子帮助读者学习这门“语言”，让读者在编写、阅读模板代码的时候，能像 <code class="language-plaintext highlighter-rouge">if(exp) { dosomething(); }</code>一样的信手拈来，让“模板元编程”技术成为读者牢固掌握、可举一反三的有用技能。</p>
+
+<h3 id="02-适宜读者群">0.2 适宜读者群<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#02-%E9%80%82%E5%AE%9C%E8%AF%BB%E8%80%85%E7%BE%A4" aria-label="Anchor link for: 02 适宜读者群" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#02-%E9%80%82%E5%AE%9C%E8%AF%BB%E8%80%85%E7%BE%A4" aria-label="Anchor link for: 02 适宜读者群" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>因为本文并不是用于C++入门，例子中也多少会牵涉一些其它知识，因此如果读者能够具备以下条件，会读起来更加轻松：</p>
+
+<ul>
+  <li>熟悉C++的基本语法；</li>
+  <li>使用过STL；</li>
+  <li>熟悉一些常用的算法，以及递归等程序设计方法。</li>
+</ul>
+
+<p>此外，尽管第一章会介绍一些Template的基本语法，但是还是会略显单薄。因此也希望读者能对C++ Template最基本语法形式有所了解和掌握；如果会编写基本的模板函数和模板类那就更好了。</p>
+
+<p>诚如上节所述，本文并不是《C++ Templates》的简单重复，与《Modern C++ Design》交叠更少。从知识结构上，我建议大家可以先读本文，再阅读《C++ Templates》获取更丰富的语法与实现细节，以更进一步；《Modern C++ Design》除了元编程之外，还有很多的泛型编程示例，原则上泛型编程的部分与我所述的内容交叉不大，读者在读完1-3章了解模板的基本规则之后便可阅读《MCD》的相应章节；元编程部分（如Typelist）建议在阅读完本文之后再行阅读，或许会更易理解。</p>
+
+<h3 id="03-版权">0.3 版权<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#03-%E7%89%88%E6%9D%83" aria-label="Anchor link for: 03 版权" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#03-%E7%89%88%E6%9D%83" aria-label="Anchor link for: 03 版权" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>本文是随写随即同步到Github上，因此在行文中难免会遗漏引用。本文绝大部分内容应是直接承出我笔，但是也不定会有他山之石。所有指涉内容我会尽量以引号框记，或在上下文和边角注记中标示，如有遗漏烦请不吝指出。</p>
+
+<p>全文所有为我所撰写的部分，作者均保留所有版权。如果有需要转帖或引用，还请注明出处并告知于我。</p>
+
+<h3 id="04-推荐编译环境">0.4 推荐编译环境<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#04-%E6%8E%A8%E8%8D%90%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83" aria-label="Anchor link for: 04 推荐编译环境" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#04-%E6%8E%A8%E8%8D%90%E7%BC%96%E8%AF%91%E7%8E%AF%E5%A2%83" aria-label="Anchor link for: 04 推荐编译环境" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>C++编译器众多，且对模板的支持可能存在细微差别。如果没有特别强调，本书行文过程中，使用了下列编译器来测试文中提供的代码和示例：</p>
+
+<ul>
+  <li>Clang 3.7 (x86)</li>
+  <li>Visual Studio 2015 Update 3</li>
+  <li>GCC 7 (x86, snapshot)</li>
+</ul>
+
+<p>此外，部分复杂实例我们还在文中提供了在线的编译器预览以方便大家阅读和测试。在线编译器参见： <a href="https://gcc.godbolt.org/"><code class="language-plaintext highlighter-rouge">gcc.godbolt.org</code></a>。</p>
+
+<p>一些示例中用到的特性所对应的C++标准：</p>
+
+<div class="table-responsive"><div class="table-responsive"><table class="table table-hover">
+  <thead>
+    <tr>
+      <th>特性</th>
+      <th>标准</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>std::decay_t<t></t></td>
+      <td>C++ 14</td>
+    </tr>
+  </tbody>
+</table></div></div>
+
+<h3 id="05-体例">0.5 体例<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#05-%E4%BD%93%E4%BE%8B" aria-label="Anchor link for: 05 体例" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#05-%E4%BD%93%E4%BE%8B" aria-label="Anchor link for: 05 体例" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h4 id="051-示例代码">0.5.1 示例代码<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#051-%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81" aria-label="Anchor link for: 051 示例代码" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#051-%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81" aria-label="Anchor link for: 051 示例代码" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<pre><code class="language-C++">void SampleCode() {
+    // 这是一段示例代码
+}
+</code></pre>
+
+<h4 id="052-引用">0.5.2 引用<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#052-%E5%BC%95%E7%94%A8" aria-label="Anchor link for: 052 引用" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#052-%E5%BC%95%E7%94%A8" aria-label="Anchor link for: 052 引用" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>引用自C++标准：</p>
+
+<blockquote>
+  <p>1.1.2/1 这是一段引用或翻译自标准的文字</p>
+</blockquote>
+
+<p>引用自其他图书：</p>
+
+<blockquote>
+  <p>《书名》
+这是一段引用或翻译自其他图书的文字</p>
+</blockquote>
+
+<h3 id="06-意见建议喷补遗写作计划">0.6 意见、建议、喷、补遗、写作计划<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#06-%E6%84%8F%E8%A7%81%E5%BB%BA%E8%AE%AE%E5%96%B7%E8%A1%A5%E9%81%97%E5%86%99%E4%BD%9C%E8%AE%A1%E5%88%92" aria-label="Anchor link for: 06 意见建议喷补遗写作计划" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#06-%E6%84%8F%E8%A7%81%E5%BB%BA%E8%AE%AE%E5%96%B7%E8%A1%A5%E9%81%97%E5%86%99%E4%BD%9C%E8%AE%A1%E5%88%92" aria-label="Anchor link for: 06 意见建议喷补遗写作计划" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<ul>
+  <li>需增加：
+    <ul>
+      <li>模板的使用动机。</li>
+      <li>增加“如何使用本文”一节。本节将说明全书的体例（强调字体、提示语、例子的组织），所有的描述、举例、引用在重审时将按照体例要求重新组织。</li>
+      <li>除了用于描述语法的例子外，其他例子将尽量赋予实际意义，以方便阐述意图。</li>
+      <li>在合适的章节完整叙述模板的类型推导规则。Parameter-Argument, auto variable, decltype, decltype(auto)</li>
+      <li>在函数模板重载和实例化的部分讲述ADL。</li>
+      <li>变参模板处应当按照标准（Argument Packing/Unpacking）来讲解。</li>
+    </ul>
+  </li>
+  <li>建议：
+    <ul>
+      <li>比较模板和函数的差异性</li>
+      <li>蓝色：C++14 Return type deduction for normal functions 的分析</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="1-template的基本语法">1. Template的基本语法<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#1-template%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95" aria-label="Anchor link for: 1 template的基本语法" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#1-template%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95" aria-label="Anchor link for: 1 template的基本语法" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h2>
+
+<h3 id="11-template-class基本语法">1.1 Template Class基本语法<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#11-template-class%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95" aria-label="Anchor link for: 11 template class基本语法" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#11-template-class%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95" aria-label="Anchor link for: 11 template class基本语法" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h4 id="111-template-class的与成员变量定义">1.1.1 Template Class的与成员变量定义<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#111-template-class%E7%9A%84%E4%B8%8E%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89" aria-label="Anchor link for: 111 template class的与成员变量定义" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#111-template-class%E7%9A%84%E4%B8%8E%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89" aria-label="Anchor link for: 111 template class的与成员变量定义" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+<p>我们来回顾一下最基本的Template Class声明和定义形式：</p>
+
+<p>Template Class声明：</p>
+<pre><code class="language-C++">template &lt;typename T&gt; class ClassA;
+</code></pre>
+
+<p>Template Class定义：</p>
+<pre><code class="language-C++">template &lt;typename T&gt; class ClassA
+{
+	T member;
+};
+</code></pre>
+
+<p><code class="language-plaintext highlighter-rouge">template</code> 是C++关键字，意味着我们接下来将定义一个模板。和函数一样，模板也有一系列参数。这些参数都被囊括在template之后的<code class="language-plaintext highlighter-rouge">&lt; &gt;</code>中。在上文的例子中， <code class="language-plaintext highlighter-rouge">typename T</code>便是模板参数。回顾一下与之相似的函数参数的声明形式：</p>
+
+<pre><code class="language-C++">void foo(int a);
+</code></pre>
+
+<p><code class="language-plaintext highlighter-rouge">T</code>则可以类比为函数形参<code class="language-plaintext highlighter-rouge">a</code>，这里的“模板形参”<code class="language-plaintext highlighter-rouge">T</code>，也同函数形参一样取成任何你想要的名字；<code class="language-plaintext highlighter-rouge">typename</code>则类似于例子中函数参数类型<code class="language-plaintext highlighter-rouge">int</code>，它表示模板参数中的<code class="language-plaintext highlighter-rouge">T</code>将匹配一个类型。除了 <code class="language-plaintext highlighter-rouge">typename</code> 之外，我们再后面还要讲到，整型也可以作为模板的参数。</p>
+
+<p>在定义完模板参数之后，便可以定义你所需要的类。不过在定义类的时候，除了一般类可以使用的类型外，你还可以使用在模板参数中使用的类型 <code class="language-plaintext highlighter-rouge">T</code>。可以说，这个 <code class="language-plaintext highlighter-rouge">T</code>是模板的精髓，因为你可以通过指定模板实参，将T替换成你所需要的类型。</p>
+
+<p>例如我们用<code class="language-plaintext highlighter-rouge">ClassA&lt;int&gt;</code>来实例化模板类ClassA，那么<code class="language-plaintext highlighter-rouge">ClassA&lt;int&gt;</code>可以等同于以下的定义：</p>
+
+<pre><code class="language-C++">// 注意：这并不是有效的C++语法，只是为了说明模板的作用
+typedef class {
+	int member;
+} ClassA&lt;int&gt;;
+</code></pre>
+
+<p>可以看出，通过模板参数替换类型，可以获得很多形式相同的新类型，有效减少了代码量。这种用法，我们称之为“泛型”（Generic Programming），它最常见的应用，即是STL中的容器模板类。</p>
+
+<h4 id="112-模板的使用">1.1.2 模板的使用<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#112-%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BD%BF%E7%94%A8" aria-label="Anchor link for: 112 模板的使用" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#112-%E6%A8%A1%E6%9D%BF%E7%9A%84%E4%BD%BF%E7%94%A8" aria-label="Anchor link for: 112 模板的使用" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>对于C++来说，类型最重要的作用之一就是用它去产生一个变量。例如我们定义了一个动态数组（列表）的模板类<code class="language-plaintext highlighter-rouge">vector</code>，它对于任意的元素类型都具有push_back和clear的操作，我们便可以如下定义这个类：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+class vector
+{
+public:
+	void push_back(T const&amp;);
+	void clear();				
+	
+private:
+	T* elements;
+};
+</code></pre>
+
+<p>此时我们的程序需要一个整型和一个浮点型的列表，那么便可以通过以下代码获得两个变量：</p>
+
+<pre><code class="language-C++">vector&lt;int&gt; intArray;
+vector&lt;float&gt; floatArray;
+</code></pre>
+
+<p>此时我们就可以执行以下的操作，获得我们想要的结果：</p>
+
+<pre><code class="language-C++">intArray.push_back(5);
+floatArray.push_back(3.0f);
+</code></pre>
+
+<p>变量定义的过程可以分成两步来看：第一步，<code class="language-plaintext highlighter-rouge">vector&lt;int&gt;</code>将<code class="language-plaintext highlighter-rouge">int</code>绑定到模板类<code class="language-plaintext highlighter-rouge">vector</code>上，获得了一个“普通的类<code class="language-plaintext highlighter-rouge">vector&lt;int&gt;</code>”；第二步通过“vector<int>”定义了一个变量。
+与“普通的类”不同，模板类是不能直接用来定义变量的。例如</int></p>
+
+<pre><code class="language-C++">vector unknownVector; // 错误示例
+</code></pre>
+
+<p>这样就是错误的。我们把通过类型绑定将模板类变成“普通的类”的过程，称之为模板实例化（Template Instantiate）。实例化的语法是：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs css">模板名 &lt; 模板实参1 <span class="hljs-attr_selector">[，模板实参2，...]</span> &gt;
+</code></pre></div></div>
+
+<p>看几个例子：</p>
+<pre><code class="language-C++">vector&lt;int&gt;
+ClassA&lt;double&gt;
+
+template &lt;typename T0, typename T1&gt; class ClassB
+{
+    // Class body ...
+};
+
+ClassB&lt;int, float&gt;
+</code></pre>
+
+<p>当然，在实例化过程中，被绑定到模板参数上的类型（即模板实参）需要与模板形参正确匹配。
+就如同函数一样，如果没有提供足够并匹配的参数，模板便不能正确的实例化。</p>
+
+<h4 id="113-模板类的成员函数定义">1.1.3 模板类的成员函数定义<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#113-%E6%A8%A1%E6%9D%BF%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89" aria-label="Anchor link for: 113 模板类的成员函数定义" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#113-%E6%A8%A1%E6%9D%BF%E7%B1%BB%E7%9A%84%E6%88%90%E5%91%98%E5%87%BD%E6%95%B0%E5%AE%9A%E4%B9%89" aria-label="Anchor link for: 113 模板类的成员函数定义" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>由于C++11正式废弃“模板导出”这一特性，因此在模板类的变量在调用成员函数的时候，需要看到完整的成员函数定义。因此现在的模板类中的成员函数，通常都是以内联的方式实现。
+例如：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+class vector
+{
+public:
+    void clear()
+    {
+        // Function body
+    }
+	
+private:
+    T* elements;
+};
+</code></pre>
+
+<p>当然，我们也可以将<code class="language-plaintext highlighter-rouge">vector&lt;T&gt;::clear</code>的定义部分放在类型之外，只不过这个时候的语法就显得蹩脚许多：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+class vector
+{
+public:
+    void clear(); // 注意这里只有声明
+private:
+    T* elements;
+};
+
+template &lt;typename T&gt;
+void vector&lt;T&gt;::clear()		// 函数的实现放在这里
+{
+	// Function body
+}
+</code></pre>
+
+<p>可以将</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs java">template &lt;typename T&gt;
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">vector</span></span>{<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">body</span>}</span>;
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">student</span></span>{<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">body</span>}</span>;
+</code></pre></div></div>
+
+<p>看成 vector&lt;&gt;  ==  Student, 模板走到哪里都要带上泛型，带上泛型后就和普通类一样</p>
+
+<p>函数的实现部分看起来略微拗口。我第一次学到的时候，觉得</p>
+
+<pre><code class="language-C++">void vector::clear()
+{
+    // Function body
+}
+</code></pre>
+
+<p>这样不就行了吗？但是简单想就会知道，<code class="language-plaintext highlighter-rouge">clear</code>里面是找不到泛型类型<code class="language-plaintext highlighter-rouge">T</code>的符号的。</p>
+
+<p>因此，在成员函数实现的时候，必须要提供模板参数。此外，为什么类型名不是<code class="language-plaintext highlighter-rouge">vector</code>而是<code class="language-plaintext highlighter-rouge">vector&lt;T&gt;</code>呢？
+如果你了解过模板的偏特化与特化的语法，应该能看出，这里的vector<t>在语法上类似于特化/偏特化。实际上，这里的函数定义也确实是成员函数的偏特化。特化和偏特化的概念，本文会在第二部分详细介绍。</t></p>
+
+<p>综上，正确的成员函数实现如下所示：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; // 模板参数
+void vector&lt;T&gt; /*看起来像偏特化*/ ::clear() // 函数的实现放在这里
+{
+    // Function body
+}
+</code></pre>
+
+<h3 id="12-template-function的基本语法">1.2 Template Function的基本语法<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#12-template-function%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95" aria-label="Anchor link for: 12 template function的基本语法" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#12-template-function%E7%9A%84%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95" aria-label="Anchor link for: 12 template function的基本语法" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h4 id="121-template-function的声明和定义">1.2.1 Template Function的声明和定义<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#121-template-function%E7%9A%84%E5%A3%B0%E6%98%8E%E5%92%8C%E5%AE%9A%E4%B9%89" aria-label="Anchor link for: 121 template function的声明和定义" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#121-template-function%E7%9A%84%E5%A3%B0%E6%98%8E%E5%92%8C%E5%AE%9A%E4%B9%89" aria-label="Anchor link for: 121 template function的声明和定义" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>模板函数的语法与模板类基本相同，也是以关键字<code class="language-plaintext highlighter-rouge">template</code>和模板参数列表作为声明与定义的开始。模板参数列表中的类型，可以出现在参数、返回值以及函数体中。比方说下面几个例子</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; void foo(T const&amp; v);
+
+template &lt;typename T&gt; T foo();
+
+template &lt;typename T, typename U&gt; U foo(T const&amp;);
+
+template &lt;typename T&gt; void foo()
+{
+    T var;
+    // ...
+}
+</code></pre>
+
+<p>无论是函数模板还是类模板，在实际代码中看起来都是“千变万化”的。这些“变化”，主要是因为类型被当做了参数，导致代码中可以变化的部分更多了。</p>
+
+<p>归根结底，模板无外乎两点：</p>
+
+<ol>
+  <li>
+    <p>函数或者类里面，有一些类型我们希望它能变化一下，我们用标识符来代替它，这就是“模板参数”；</p>
+  </li>
+  <li>
+    <p>在需要这些类型的地方，写上相对应的标识符（“模板参数”）。</p>
+  </li>
+</ol>
+
+<p>当然，这里的“可变”实际上在代码编译好后就固定下来了，可以称之为编译期的可变性。</p>
+
+<p>这里多啰嗦一点，主要也是想告诉大家，模板其实是个很简单的东西。</p>
+
+<p>下面这个例子，或许可以帮助大家解决以下两个问题：</p>
+
+<ol>
+  <li>
+    <p>什么样的需求会使用模板来解决？</p>
+  </li>
+  <li>
+    <p>怎样把脑海中的“泛型”变成真正“泛型”的代码？</p>
+  </li>
+</ol>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs bash">举个例子：generic typed <span class="hljs-keyword">function</span> ‘add’
+</code></pre></div></div>
+
+<p>在我遇到的朋友中，即便如此对他解释了模板，即便他了解了模板，也仍然会对模板产生畏难情绪。毕竟从形式上来说，模板类和模板函数都要较非模板的版本更加复杂，阅读代码所需要理解的内容也有所增多。</p>
+
+<p>如何才能克服这一问题，最终视模板如平坦代码呢？</p>
+
+<p>答案只有一个：无他，唯手熟尔。</p>
+
+<p>在学习模板的时候，要反复做以下的思考和练习：</p>
+
+<ol>
+  <li>
+    <p>提出问题：我的需求能不能用模板来解决？</p>
+  </li>
+  <li>
+    <p>怎么解决？</p>
+  </li>
+  <li>
+    <p>把解决方案用代码写出来。</p>
+  </li>
+  <li>
+    <p>如果失败了，找到原因。是知识有盲点（例如不知道怎么将 <code class="language-plaintext highlighter-rouge">T&amp;</code> 转化成 <code class="language-plaintext highlighter-rouge">T</code>），还是不可行（比如试图利用浮点常量特化模板类，但实际上这样做是不可行的）？</p>
+  </li>
+</ol>
+
+<p>通过重复以上的练习，应该可以对模板的语法和含义都有所掌握。如果提出问题本身有困难，或许下面这个经典案例可以作为你思考的开始：</p>
+
+<ol>
+  <li>
+    <p>写一个泛型的数据结构：例如，线性表，数组，链表，二叉树；</p>
+  </li>
+  <li>
+    <p>写一个可以在不同数据结构、不同的元素类型上工作的泛型函数，例如求和；</p>
+  </li>
+</ol>
+
+<p>当然和“设计模式”一样，模板在实际应用中，也会有一些固定的需求和解决方案。比较常见的场景包括：泛型（最基本的用法）、通过类型获得相应的信息（型别萃取）、编译期间的计算、类型间的推导和变换（从一个类型变换成另外一个类型，比如boost::function）。这些本文在以后的章节中会陆续介绍。</p>
+
+<h4 id="122-模板函数的使用">1.2.2 模板函数的使用<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#122-%E6%A8%A1%E6%9D%BF%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%BF%E7%94%A8" aria-label="Anchor link for: 122 模板函数的使用" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#122-%E6%A8%A1%E6%9D%BF%E5%87%BD%E6%95%B0%E7%9A%84%E4%BD%BF%E7%94%A8" aria-label="Anchor link for: 122 模板函数的使用" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>我们先来看一个简单的函数模板，两个数相加：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; T Add(T a, T b)
+{
+    return a + b;
+}
+</code></pre>
+
+<p>函数模板的调用格式是：</p>
+
+<pre><code class="language-C++">函数模板名 &lt; 模板参数列表 &gt; ( 参数 )
+</code></pre>
+
+<p>例如，我们想对两个 <code class="language-plaintext highlighter-rouge">int</code> 求和，那么套用类的模板实例化方法，我们可以这么写：</p>
+
+<pre><code class="language-C++">int a = 5;
+int b = 3;
+int result = Add&lt;int&gt;(a, b);
+</code></pre>
+
+<p>这时我们等于拥有了一个新函数：</p>
+
+<pre><code class="language-C++">int Add&lt;int&gt;(int a, int b) { return a + b; }
+</code></pre>
+
+<p>这时在另外一个偏远的程序角落，你也需要求和。而此时你的参数类型是 <code class="language-plaintext highlighter-rouge">float</code> ，于是你写下：</p>
+
+<pre><code class="language-C++">Add&lt;float&gt;(a, b);
+</code></pre>
+
+<p>一切看起来都很完美。但如果你具备程序员的最佳美德——懒惰——的话，你肯定会这样想，我在调用 <code class="language-plaintext highlighter-rouge">Add&lt;int&gt;(a, b)</code> 的时候， <code class="language-plaintext highlighter-rouge">a</code> 和 <code class="language-plaintext highlighter-rouge">b</code> 匹配的都是那个 <code class="language-plaintext highlighter-rouge">T</code>。编译器就应该知道那个 <code class="language-plaintext highlighter-rouge">T</code> 实际上是 <code class="language-plaintext highlighter-rouge">int</code> 呀？为什么还要我多此一举写 <code class="language-plaintext highlighter-rouge">Add&lt;int&gt;</code> 呢？
+唔，我想说的是，编译器的作者也是这么想的。所以实际上你在编译器里面写下以下片段：</p>
+
+<pre><code class="language-C++">int a = 5;
+int b = 3;
+int result = Add(a, b);
+</code></pre>
+
+<p>编译器会心领神会的将 <code class="language-plaintext highlighter-rouge">Add</code> 变成 <code class="language-plaintext highlighter-rouge">Add&lt;int&gt;</code>。但是编译器不能面对模棱两可的答案。比如你这么写的话呢？</p>
+
+<pre><code class="language-C++">int  a = 5;
+char b = 3;
+int  result = Add(a, b);
+</code></pre>
+
+<p>第一个参数 <code class="language-plaintext highlighter-rouge">a</code> 告诉编译器，这个 <code class="language-plaintext highlighter-rouge">T</code> 是 <code class="language-plaintext highlighter-rouge">int</code>。编译器点点头说，好。但是第二个参数 <code class="language-plaintext highlighter-rouge">b</code> 不高兴了，告诉编译器说，你这个 <code class="language-plaintext highlighter-rouge">T</code>，其实是 <code class="language-plaintext highlighter-rouge">char</code>。
+两个参数各自指导 <code class="language-plaintext highlighter-rouge">T</code> 的类型，编译器就不知道怎么做了。在Visual Studio 2012下，会有这样的提示：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs coffeescript">error <span class="hljs-attribute">C2782</span>: <span class="hljs-string">'T _1_2_2::Add(T,T)'</span> : template parameter <span class="hljs-string">'T'</span> <span class="hljs-keyword">is</span> ambiguous
+</code></pre></div></div>
+
+<p>好吧，”ambigous”，这个提示再明确不过了。</p>
+
+<p>不过，只要你别逼得编译器精神分裂的话，编译器其实是非常聪明的，它可以从很多的蛛丝马迹中，猜测到你真正的意图，有如下面的例子：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; class A {};
+
+template &lt;typename T&gt; T foo( A&lt;T&gt; v );
+
+A&lt;int&gt; v;
+foo(v);	// 它能准确的猜到 T 是 int.
+</code></pre>
+
+<p>咦，编译器居然绕过了A这个外套，猜到了 <code class="language-plaintext highlighter-rouge">T</code> 匹配的是 <code class="language-plaintext highlighter-rouge">int</code>。编译器是怎么完成这一“魔法”的，我们暂且不表，2.2节时再和盘托出。</p>
+
+<p>下面轮到你的练习时间了。你试着写了很多的例子，但是其中一个你还是犯了疑惑：</p>
+
+<pre><code class="language-C++">float data[1024];
+
+template &lt;typename T&gt; T GetValue(int i)
+{
+    return static_cast&lt;T&gt;(data[i]);
+}
+
+float a = GetValue(0);	// 出错了！
+int b = GetValue(1);	// 也出错了！
+</code></pre>
+
+<p>为什么会出错呢？你仔细想了想，原来编译器是没办法去根据返回值推断类型的。函数调用的时候，返回值被谁接受还不知道呢。如下修改后，就一切正常了：</p>
+
+<pre><code class="language-C++">float a = GetValue&lt;float&gt;(0);
+int b = GetValue&lt;int&gt;(1);
+</code></pre>
+
+<p>嗯，是不是so easy啊？嗯，你又信心满满的做了一个练习：</p>
+
+<p>你要写一个模板函数叫 <code class="language-plaintext highlighter-rouge">c_style_cast</code>，顾名思义，执行的是C风格的转换。然后出于方便起见，你希望它能和 <code class="language-plaintext highlighter-rouge">static_cast</code> 这样的内置转换有同样的写法。于是你写了一个use case。</p>
+
+<pre><code class="language-C++">DstT dest = c_style_cast&lt;DstT&gt;(src);
+</code></pre>
+
+<p>根据调用形式你知道了，有 <code class="language-plaintext highlighter-rouge">DstT</code> 和 <code class="language-plaintext highlighter-rouge">SrcT</code> 两个模板参数。参数只有一个， <code class="language-plaintext highlighter-rouge">src</code>，所以函数的形参当然是这么写了： <code class="language-plaintext highlighter-rouge">(SrcT src)</code>。实现也很简单， <code class="language-plaintext highlighter-rouge">(DstT)v</code>。</p>
+
+<p>我们把手上得到的信息来拼一拼，就可以编写自己的函数模板了：</p>
+
+<pre><code class="language-C++">template &lt;typename SrcT, typename DstT&gt; DstT c_style_cast(SrcT v)
+{
+    return (DstT)(v);
+}
+
+int v = 0;
+float i = c_style_cast&lt;float&gt;(v);
+</code></pre>
+
+<p>嗯，很Easy嘛！我们F6一下…咦！这是什么意思！</p>
+
+<pre><code class="language-C++">error C2783: 'DstT _1_2_2::c_style_cast(SrcT)' : could not deduce template argument for 'DstT'
+</code></pre>
+
+<p>然后你仔细的比较了一下，然后发现 … 模板参数有两个，而参数里面能得到的只有 <code class="language-plaintext highlighter-rouge">SrcT</code> 一个。结合出错信息看来关键在那个 <code class="language-plaintext highlighter-rouge">DstT</code> 上。这个时候，你死马当活马医，把模板参数写完整了：</p>
+
+<pre><code class="language-C++">float i = c_style_cast&lt;int, float&gt;(v);
+</code></pre>
+
+<p>嗯，很顺利的通过了。难道C++不能支持让参数推导一部分模板参数吗？</p>
+
+<p>当然是可以的。只不过在部分推导、部分指定的情况下，编译器对模板参数的顺序是有限制的：先写需要指定的模板参数，再把能推导出来的模板参数放在后面。</p>
+
+<p>在这个例子中，能推导出来的是 <code class="language-plaintext highlighter-rouge">SrcT</code>，需要指定的是 <code class="language-plaintext highlighter-rouge">DstT</code>。把函数模板写成下面这样就可以了：</p>
+
+<pre><code class="language-C++">template &lt;typename DstT, typename SrcT&gt; DstT c_style_cast(SrcT v)	// 模板参数 DstT 需要人肉指定，放前面。
+{
+    return (DstT)(v);
+}
+
+int v = 0;
+float i = c_style_cast&lt;float&gt;(v);  // 形象地说，DstT会先把你指定的参数吃掉，剩下的就交给编译器从函数参数列表中推导啦。
+</code></pre>
+
+<h3 id="13-整型也可是template参数">1.3 整型也可是Template参数<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#13-%E6%95%B4%E5%9E%8B%E4%B9%9F%E5%8F%AF%E6%98%AFtemplate%E5%8F%82%E6%95%B0" aria-label="Anchor link for: 13 整型也可是template参数" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#13-%E6%95%B4%E5%9E%8B%E4%B9%9F%E5%8F%AF%E6%98%AFtemplate%E5%8F%82%E6%95%B0" aria-label="Anchor link for: 13 整型也可是template参数" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>模板参数除了类型外（包括基本类型、结构、类类型等），也可以是一个整型数（Integral Number）。这里的整型数比较宽泛，包括布尔、不同位数、有无符号的整型，甚至包括指针。我们将整型的模板参数和类型作为模板参数来做一个对比：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; class TemplateWithType;
+template &lt;int      V&gt; class TemplateWithValue;
+</code></pre>
+
+<p>我想这个时候你也更能理解 <code class="language-plaintext highlighter-rouge">typename</code> 的意思了：它相当于是模板参数的“类型”，告诉你 <code class="language-plaintext highlighter-rouge">T</code> 是一个 <code class="language-plaintext highlighter-rouge">typename</code>。</p>
+
+<p>按照C++ Template最初的想法，模板不就是为了提供一个类型安全、易于调试的宏吗？有类型就够了，为什么要引入整型参数呢？考虑宏，它除了代码替换，还有一个作用是作为常数出现。所以整型模板参数最基本的用途，也是定义一个常数。例如这段代码的作用：</p>
+
+<pre><code class="language-C++">template &lt;typename T, int Size&gt; struct Array
+{
+    T data[Size];
+};
+
+Array&lt;int, 16&gt; arr;
+</code></pre>
+
+<p>便相当于下面这段代码：</p>
+
+<pre><code class="language-C++">class IntArrayWithSize16
+{
+    int data[16]; // int 替换了 T, 16 替换了 Size
+};
+
+IntArrayWithSize16 arr;
+</code></pre>
+
+<p>其中有一点要注意的是，因为模板的匹配是在编译的时候完成的，所以实例化模板的时候所使用的参数，也必须要在编译期就能确定。例如以下的例子编译器就会报错：</p>
+
+<pre><code class="language-C++">template &lt;int i&gt; class A {};
+
+void foo()
+{
+    int x = 3;
+    A&lt;5&gt; a; // 正确！
+    A&lt;x&gt; b; // error C2971: '_1_3::A' : template parameter 'i' : 'x' : a local variable cannot be used as a non-type argument
+}
+</code></pre>
+<p>因为x不是一个编译期常量，所以 <code class="language-plaintext highlighter-rouge">A&lt;x&gt;</code> 就会告诉你，x是一个局部变量，不能作为一个模板参数出现。</p>
+
+<p>嗯，这里我们再来写几个相对复杂的例子：</p>
+
+<pre><code class="language-C++">template &lt;int i&gt; class A 
+{
+public:
+    void foo(int)
+    {
+    }
+};
+template &lt;uint8_t a, typename b, void* c&gt; class B {};
+template &lt;bool, void (*a)()&gt; class C {};
+template &lt;void (A&lt;3&gt;::*a)(int)&gt; class D {};
+
+template &lt;int i&gt; int Add(int a)	// 当然也能用于函数模板
+{
+    return a + i;
+}
+
+void foo()
+{
+    A&lt;5&gt; a;
+    B&lt;7, A&lt;5&gt;, nullptr&gt;	b; // 模板参数可以是一个无符号八位整数，可以是模板生成的类；可以是一个指针。
+    C&lt;false, &amp;foo&gt; c; // 模板参数可以是一个bool类型的常量，甚至可以是一个函数指针。
+    D&lt;&amp;A&lt;3&gt;::foo&gt; d; // 丧心病狂啊！它还能是一个成员函数指针！
+    int x = Add&lt;3&gt;(5); // x == 8。因为整型模板参数无法从函数参数获得，所以只能是手工指定啦。
+}
+
+template &lt;float a&gt; class E {}; // ERROR: 别闹！早说过只能是整数类型的啦！
+</code></pre>
+
+<p>当然，除了单纯的用作常数之外，整型参数还有一些其它的用途。这些“其它”用途最重要的一点是让类型也可以像整数一样运算。《Modern C++ Design》给我们展示了很多这方面的例子。不过你不用急着去阅读那本天书，我们会在做好足够的知识铺垫后，让你轻松学会这些招数。</p>
+
+<h3 id="14-模板形式与功能是统一的">1.4 模板形式与功能是统一的<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#14-%E6%A8%A1%E6%9D%BF%E5%BD%A2%E5%BC%8F%E4%B8%8E%E5%8A%9F%E8%83%BD%E6%98%AF%E7%BB%9F%E4%B8%80%E7%9A%84" aria-label="Anchor link for: 14 模板形式与功能是统一的" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#14-%E6%A8%A1%E6%9D%BF%E5%BD%A2%E5%BC%8F%E4%B8%8E%E5%8A%9F%E8%83%BD%E6%98%AF%E7%BB%9F%E4%B8%80%E7%9A%84" aria-label="Anchor link for: 14 模板形式与功能是统一的" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>第一章走马观花的带着大家复习了一下C++ Template的基本语法形式，也解释了包括 <code class="language-plaintext highlighter-rouge">typename</code> 在内，类/函数模板写法中各个语法元素的含义。形式是功能的外在体现，介绍它们也是为了让大家能理解到，模板之所以写成这种形式是有必要的，而不是语言的垃圾成分。</p>
+
+<p>从下一章开始，我们便进入了更加复杂和丰富的世界：讨论模板的匹配规则。其中有令人望而生畏的特化与偏特化。但是，请相信我们在序言中所提到的：将模板作为一门语言来看待，它会变得有趣而简单。</p>
+
+<h2 id="2--模板元编程基础">2.  模板元编程基础<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#2--%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80" aria-label="Anchor link for: 2  模板元编程基础" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#2--%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B%E5%9F%BA%E7%A1%80" aria-label="Anchor link for: 2  模板元编程基础" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h2>
+<h3 id="21-编程元编程模板元编程">2.1 编程，元编程，模板元编程<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#21-%E7%BC%96%E7%A8%8B%E5%85%83%E7%BC%96%E7%A8%8B%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B" aria-label="Anchor link for: 21 编程元编程模板元编程" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#21-%E7%BC%96%E7%A8%8B%E5%85%83%E7%BC%96%E7%A8%8B%E6%A8%A1%E6%9D%BF%E5%85%83%E7%BC%96%E7%A8%8B" aria-label="Anchor link for: 21 编程元编程模板元编程" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>技术的学习是一个登山的过程。第一章是最为平坦的山脚道路。而从这一章开始，则是正式的爬坡。无论是我写作还是你阅读，都需要付出比第一章更多的代价。那么问题就是，付出更多的精力学习模板是否值得？</p>
+
+<p>这个问题很功利，但是一阵见血。因为技术的根本目的在于解决需求。那C++的模板能做什么？</p>
+
+<p>一个高（树）大（新）上（蜂）的回答是，C++里面的模板，犹如C中的宏、C#和Java中的自省（restropection）和反射（reflection）一样，是一个改变语言内涵，拓展语言外延的存在。</p>
+
+<p>程序最根本的目的是什么？复现真实世界或人所构想的规律，减少重复工作的成本，或通过提升规模完成人所不能及之事。但是世间之事万千，有限的程序如何重现复杂的世界呢？</p>
+
+<p>答案是“抽象”。论及具体手段，无外乎“求同”与“存异”：概括一般规律，处理特殊情况。这也是软件工程所追求的目标。一般规律概括的越好，我们所付出的劳动也就越少。</p>
+
+<p>同样的，作为脑力劳动的产品，程序本身也是有规律性的。《Modern C++ Design》中的前言就抛出了一连串有代表性的问题：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs">如何撰写更高级的C++程式？
+如何应付即使在很干净的设计中仍然像雪崩一样的不相干细节？
+如何构建可复用组件，使得每次在不同程式中应用组件时无需大动干戈？
+</code></pre></div></div>
+
+<p>我们以数据结构举例。在程序里，你需要一些堆栈。这个堆栈的元素可能是整数、浮点或者别的什么类型。一份整型堆栈的代码可能是：</p>
+
+<pre><code class="language-C++">class StackInt
+{
+public:
+    void push(Int v);
+    Int pop();
+    Int Find(Int x)
+    {
+        for(Int i = 1; i &lt;= size; )
+        {
+            if(data[i] == x) { return i; }
+        }
+    }
+    // ... 其他代码 ...
+};
+</code></pre>
+
+<p>如果你要支持浮点了，那么你只能将代码再次拷贝出来，并作如下修改：</p>
+
+<pre><code class="language-C++">class StackFloat
+{
+public:
+    void push(Float v);
+    Float pop();
+    Int Find(Float x)
+    {
+        for(Int i = 1; i &lt;= size; )
+        {
+            if(data[i] == x) { return i; }
+        }
+    }
+    // ... 其他代码 ...
+};
+</code></pre>
+
+<p>当然也许你觉得这样做能充分体会代码行数增长的成就感。但是有一天，你突然发现：呀，<code class="language-plaintext highlighter-rouge">Find</code> 函数实现有问题了。怎么办？这个时候也许你只有两份这样的代码，那好说，一一去修正就好了。如果你有十个呢？二十个？五十个？</p>
+
+<p>时间一长，你就厌倦了这样的生活。你觉得每个堆栈都差不多，但是又有点不一样。为了这一点点不一样，你付出了太多的时间。吃饭的时间，泡妞的时间，睡觉的时间，看岛国小电影顺便练习小臂力量的时间。</p>
+
+<p>于是便诞生了新的技术，来消解我们的烦恼。</p>
+
+<p>这个技术的名字，并不叫“模板”，而是叫“元编程”。</p>
+
+<p>元（meta）无论在中文还是英文里，都是个很“抽象（abstract）”的词。因为它的本意就是“抽象”。元编程，也可以说就是“编程的抽象”。用更好理解的说法，元编程意味着你撰写一段程序A，程序A会运行后生成另外一个程序B，程序B才是真正实现功能的程序。那么这个时候程序A可以称作程序B的元程序，撰写程序A的过程，就称之为“元编程”。</p>
+
+<p>回到我们的堆栈的例子。真正执行功能的，其实仍然是浮点的堆栈、整数的堆栈、各种你所需要的类型的堆栈。但是因为这些堆栈之间太相似了，仅仅有着些微的不同，我们为什么不能有一个将相似之处囊括起来，同时又能分别体现出不同之处的程序呢？很多语言都提供了这样的机会。C中的宏，C++中的模板，Python中的Duck Typing，广义上将都能够实现我们的思路。</p>
+
+<p>我们的目的，是找出程序之间的相似性，进行“元编程”。而在C++中，元编程的手段，可以是宏，也可以是模板。</p>
+
+<p>宏的例子姑且不论，我们来看一看模板：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+class Stack
+{
+public:
+    void push(T v);
+    T pop();
+    Int Find(T x)
+    {
+        for(Int i = 0; i &lt;= size; ++i)
+        {
+            if(data[i] == x) { return i; }
+        }
+    }
+    // ... 其他代码 ...
+};
+
+typedef Stack&lt;int&gt;   StackInt;
+typedef Stack&lt;float&gt; StackFloat;
+</code></pre>
+
+<p>通过模板，我们可以将形形色色的堆栈代码分为两个部分，一个部分是不变的接口，以及近乎相同的实现；另外一部分是元素的类型，它们是需要变化的。因此同函数类似，需要变化的部分，由模板参数来反应；不变的部分，则是模板内的代码。可以看到，使用模板的代码，要比不使用模板的代码简洁许多。</p>
+
+<p>如果元编程中所有的变化的量（或者说元编程的参数），都是类型，那么这样的编程，我们有个特定的称呼，叫“泛型”。</p>
+
+<p>但是你会问，模板的发明，仅仅是为了做和宏几乎一样的替换工作吗？可以说是，也可以说不是。一方面，很多时候模板就是为了替换类型，这个时候作用上其实和宏没什么区别。只是宏是基于文本的替换，被替换的文本本身没有任何语义。只有替换完成，编译器才能进行接下来的处理。而模板会在分析模板时以及实例化模板时时候都会进行检查，而且源代码中也能与调试符号一一对应，所以无论是编译时还是运行时，排错都相对简单。</p>
+
+<p>但是模板也和宏有很大的不同，否则此文也就不能成立了。模板最大的不同在于它是“可以运算”的。我们来举一个例子，不过可能有点牵强。考虑我们要写一个向量逐分量乘法。只不过这个向量，它非常的大。所以为了保证速度，我们需要使用SIMD指令进行加速。假设我们有以下指令可以使用：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs">Int8,16: N/A
+Int32  : VInt32Mul(int32x4, int32x4)
+Int64  : VInt64Mul(int64x4, int64x4)
+Float  : VInt64Mul(floatx2, floatx2)
+</code></pre></div></div>
+<p>所以对于Int8和Int16，我们需要提升到Int32，而Int32和Int64，各自使用自己的指令。所以我们需要实现下的逻辑：</p>
+
+<pre><code class="language-C++">for(v4a, v4b : vectorsA, vectorsB)
+{
+    if type is Int8, Int16
+		VInt32Mul( ConvertToInt32(v4a), ConvertToInt32(v4b) )
+	elif type is Int32
+		VInt32Mul( v4a, v4b )
+	elif type is Float
+		...
+}
+</code></pre>
+
+<p>这里的问题就在于，如何根据 <code class="language-plaintext highlighter-rouge">type</code> 分别提供我们需要的实现？这里有两个难点。首先， <code class="language-plaintext highlighter-rouge">if(type == xxx) {}</code> 是不存在于C++中的。第二，即便存在根据 <code class="language-plaintext highlighter-rouge">type</code> 的分配方法，我们也不希望它在运行时branch，这样会变得很慢。我们希望它能按照类型直接就把代码编译好，就跟直接写的一样。</p>
+
+<p>嗯，聪明你果然想到了，重载也可以解决这个问题。</p>
+
+<pre><code class="language-C++">GenericMul(int8x4,  int8x4);
+GenericMul(int16x4, int16x4);
+GenericMul(int32x4, int32x4);
+GenericMul(int64x4, int64x4);
+// 其它 Generic Mul ...
+
+for(v4a, v4b : vectorsA, vectorsB)
+{
+    GenericMul(v4a, v4b);
+}
+
+</code></pre>
+
+<p>这样不就可以了吗？</p>
+
+<p>唔，你赢了，是这样没错。但是问题是，我这个平台是你可没见过，它叫 <code class="language-plaintext highlighter-rouge">Deep Thought</code>， 特别缺心眼儿，不光有 <code class="language-plaintext highlighter-rouge">int8</code>，还有更奇怪的 <code class="language-plaintext highlighter-rouge">int9</code>, <code class="language-plaintext highlighter-rouge">int11</code>，以及可以代表世间万物的 <code class="language-plaintext highlighter-rouge">int42</code>。你总不能为之提供所有的重载吧？这简直就像你枚举了所有程序的输入，并为之提供了对应的输出一样。</p>
+
+<p>好吧，我承认这个例子还是太牵强了。不过相信我，在你阅读完第二章和第三章之后，你会将这些特性自如地运用到你的程序之中。你的程序将会变成体现模板“可运算”威力的最好例子。</p>
+
+<h3 id="22-模板世界的if-then-else类模板的特化与偏特化">2.2 模板世界的If-Then-Else：类模板的特化与偏特化<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#22-%E6%A8%A1%E6%9D%BF%E4%B8%96%E7%95%8C%E7%9A%84if-then-else%E7%B1%BB%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%89%B9%E5%8C%96%E4%B8%8E%E5%81%8F%E7%89%B9%E5%8C%96" aria-label="Anchor link for: 22 模板世界的if then else类模板的特化与偏特化" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#22-%E6%A8%A1%E6%9D%BF%E4%B8%96%E7%95%8C%E7%9A%84if-then-else%E7%B1%BB%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%89%B9%E5%8C%96%E4%B8%8E%E5%81%8F%E7%89%B9%E5%8C%96" aria-label="Anchor link for: 22 模板世界的if then else类模板的特化与偏特化" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h4 id="221-根据类型执行代码">2.2.1 根据类型执行代码<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#221-%E6%A0%B9%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81" aria-label="Anchor link for: 221 根据类型执行代码" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#221-%E6%A0%B9%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%89%A7%E8%A1%8C%E4%BB%A3%E7%A0%81" aria-label="Anchor link for: 221 根据类型执行代码" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+<p>前一节的示例提出了一个要求：需要做出根据类型执行不同代码。要达成这一目的，模板并不是唯一的途径。比如之前我们所说的重载。如果把眼界放宽一些，虚函数也是根据类型执行代码的例子。此外，在C语言时代，也会有一些技法来达到这个目的，比如下面这个例子，我们需要对两个浮点做加法， 或者对两个整数做乘法：</p>
+
+<pre><code class="language-C">struct Variant
+{
+    union
+    {
+        int x;
+        float y;
+    } data;
+    uint32 typeId;
+};
+
+Variant addFloatOrMulInt(Variant const* a, Variant const* b)
+{
+    Variant ret;
+    assert(a-&gt;typeId == b-&gt;typeId);
+    if (a-&gt;typeId == TYPE_INT)
+    {
+        ret.x = a-&gt;x * b-&gt;x;
+    }
+    else
+    {
+        ret.y = a-&gt;y + b-&gt;y;
+    }
+    return ret;
+}
+
+</code></pre>
+
+<p>更常见的是 <code class="language-plaintext highlighter-rouge">void*</code>:</p>
+
+<pre><code class="language-C++">#define BIN_OP(type, a, op, b, result) (*(type *)(result)) = (*(type const *)(a)) op (*(type const*)(b))
+void doDiv(void* out, void const* data0, void const* data1, DATA_TYPE type)
+{
+    if(type == TYPE_INT)
+    {
+        BIN_OP(int, data0, *, data1, out);
+    }
+    else
+    {
+        BIN_OP(float, data0, +, data1, out);
+    }
+}
+</code></pre>
+
+<p>在C++中比如在 <code class="language-plaintext highlighter-rouge">Boost.Any</code> 的实现中，运用了 <code class="language-plaintext highlighter-rouge">typeid</code> 来查询类型信息。和 <code class="language-plaintext highlighter-rouge">typeid</code> 同属于RTTI机制的 <code class="language-plaintext highlighter-rouge">dynamic_cast</code>，也经常会用来做类型判别的工作。我想你应该写过类似于下面的代码：</p>
+
+<pre><code class="language-C++">IAnimal* animal = GetAnimalFromSystem();
+
+IDog* maybeDog = dynamic_cast&lt;IDog*&gt;(animal);
+if(maybeDog)
+{
+    maybeDog-&gt;Wangwang();
+}
+ICat* maybeCat = dynamic_cast&lt;ICat*&gt;(animal);
+if(maybeCat)
+{
+    maybeCat-&gt;Moemoe();
+}
+</code></pre>
+
+<p>当然，在实际的工作中，我们建议把需要 <code class="language-plaintext highlighter-rouge">dynamic_cast</code> 后执行的代码，尽量变成虚函数。不过这个已经是另外一个问题了。我们看到，不管是哪种方法都很难避免 <code class="language-plaintext highlighter-rouge">if</code> 的存在。而且因为输入数据的类型是模糊的，经常需要强制地、没有任何检查的转换成某个类型，因此很容易出错。</p>
+
+<p>但是模板与这些方法最大的区别并不在这里。模板无论其参数或者是类型，它都是一个编译期分派的办法。编译期就能确定的东西既可以做类型检查，编译器也能进行优化，砍掉任何不必要的代码执行路径。例如在上例中，</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; T addFloatOrMulInt(T a, T b);
+
+// 迷之代码1：用于T是float的情况
+
+// 迷之代码2：用于T是int时的情况
+</code></pre>
+
+<p>如果你运用了模板来实现，那么当传入两个不同类型的变量，或者不是 <code class="language-plaintext highlighter-rouge">int</code> 和 <code class="language-plaintext highlighter-rouge">float</code> 变量，编译器就会提示错误。但是如果使用了我们前述的 <code class="language-plaintext highlighter-rouge">Variant</code> 来实现，编译器可就管不了那么多了。但是，成也编译期，败也编译期。最严重的“缺点”，就是你没办法根据用户输入或者别的什么在运行期间可能发生变化的量来决定它产生、或执行什么代码。比如下面的代码段，它是不成立的。</p>
+
+<pre><code class="language-C++">template &lt;int i, int j&gt;
+int foo() { return i + j; }
+int main()
+{
+    cin &gt;&gt; x &gt;&gt; y;
+    return foo&lt;x, y&gt;();
+}
+</code></pre>
+
+<p>这点限制也粉碎了妄图用模板来包办工厂（Factory）甚至是反射的梦想。尽管在《Modern C++ Design》中（别问我为什么老举这本书，因为《C++ Templates》和《Generic Programming》我只是囫囵吞枣读过，基本不记得了)大量运用模板来简化工厂方法；同时C++11和14中的一些机制如Variadic Template更是让这一问题的解决更加彻底。但无论如何，直到C++11/14，光靠模板你就是写不出依靠类名或者ID变量产生类型实例的代码。</p>
+
+<p>所以说，从能力上来看，模板能做的事情都是编译期完成的。编译期完成的意思就是，当你编译一个程序的时候，所有的量就都已经确定了。比如下面的这个例子：</p>
+
+<pre><code class="language-C++">int a = 3, b = 5;
+Variant aVar, bVar;
+aVar.setInt(a);			// 我们新加上的方法，怎么实现的无所谓，大家明白意思就行了。
+bVar.setInt(b);
+Variant result = addFloatOrMulInt(aVar, bVar);
+</code></pre>
+
+<p>除非世界末日，否则这个例子里不管你怎么蹦跶，单看代码我们就能知道， <code class="language-plaintext highlighter-rouge">aVar</code> 和 <code class="language-plaintext highlighter-rouge">bVar</code> 都一定会是整数。所以如果有合适的机制，编译器就能知道此处的 <code class="language-plaintext highlighter-rouge">addFloatOrMulInt</code> 中只需要执行 <code class="language-plaintext highlighter-rouge">Int</code> 路径上的代码，而且编译器在此处也能单独为 <code class="language-plaintext highlighter-rouge">Int</code> 路径生成代码，从而去掉那个不必要的 <code class="language-plaintext highlighter-rouge">if</code>。</p>
+
+<p>在模板代码中，这个“合适的机制”就是指“特化”和“部分特化（Partial Specialization）”，后者也叫“偏特化”。</p>
+
+<h4 id="222-特化">2.2.2 特化<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#222-%E7%89%B9%E5%8C%96" aria-label="Anchor link for: 222 特化" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#222-%E7%89%B9%E5%8C%96" aria-label="Anchor link for: 222 特化" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>我的高中物理老师对我说过一句令我受用至今的话：把自己能做的事情做好。编写模板程序也是一样。当你试图用模板解决问题之前，先撇开那些复杂的语法要素，用最直观的方式表达你的需求：</p>
+
+<pre><code class="language-C++">// 这里是伪代码，意思一下
+
+int|float addFloatOrMulInt(a, b)
+{
+    if(type is Int)
+    {
+        return a * b;
+    }
+    else if (type is Float)
+    {
+        return a + b;
+    }
+}
+
+void foo()
+{
+    float a, b, c;
+    c = addFloatOrMulInt(a, b);		// c = a + b;
+	
+    int x, y, z;
+    z = addFloatOrMulInt(x, y);		// z = x * y;
+}
+</code></pre>
+
+<p>因为这一节是讲类模板有关的特化和偏特化机制，所以我们不用普通的函数，而是用类的静态成员函数来做这个事情（这就是典型的没事找抽型）：</p>
+
+<pre><code class="language-C++">// 这里仍然是伪代码，意思一下，too。
+class AddFloatOrMulInt
+{
+    static int|float Do(a, b)
+    {
+        if(type is Int)
+        {
+            return a * b;
+        }
+        else if (type is Float)
+	{
+	    return a + b;
+        }
+    }
+};
+
+void foo()
+{
+    float a, b, c;
+    c = AddFloatOrMulInt::Do(a, b); // c = a + b;
+	
+    int x, y, z;
+    z = AddFloatOrMulInt::Do(x, y); // z = x * y;
+}
+</code></pre>
+
+<p>好，意思表达清楚了。我们先从调用方的角度，把这个形式改写一下：</p>
+
+<pre><code class="language-C++">void foo()
+{
+    float a, b, c;
+    c = AddFloatOrMulInt&lt;float&gt;::Do(a, b); // c = a + b;
+	
+    int x, y, z;
+    z = AddFloatOrMulInt&lt;int&gt;::Do(x, y); // z = x * y;
+}
+</code></pre>
+<p>也许你不明白为什么要改写成现在这个样子。看不懂不怪你，怪我讲的不好。但是你别急，先看看这样改写以后能不能跟我们的目标接近一点。如果我们把 <code class="language-plaintext highlighter-rouge">AddFloatOrMulInt&lt;float&gt;::Do</code> 看作一个普通的函数，那么我们可以写两个实现出来：</p>
+
+<pre><code class="language-C++">float AddFloatOrMulInt&lt;float&gt;::Do(float a, float b)
+{
+    return a + b;
+}
+
+int AddFloatOrMulInt&lt;int&gt;::Do(int a, int b)
+{
+    return a * b;
+}
+
+void foo()
+{
+    float a, b, c;
+    c = AddFloatOrMulInt&lt;float&gt;::Do(a, b); // c = a + b;
+	
+    int x, y, z;
+    z = AddFloatOrMulInt&lt;int&gt;::Do(x, y); // z = x * y;
+}
+</code></pre>
+
+<p>这样是不是就很开心了？我们更进一步，把 <code class="language-plaintext highlighter-rouge">AddFloatOrMulInt&lt;int&gt;::Do</code> 换成合法的类模板：</p>
+
+<pre><code class="language-C++">// 这个是给float用的。
+template &lt;typename T&gt; class AddFloatOrMulInt
+{
+    T Do(T a, T b)
+    {
+        return a + b;
+    }
+};
+
+// 这个是给int用的。
+template &lt;typename T&gt; class AddFloatOrMulInt
+{
+    T Do(T a, T b)
+    {
+        return a * b;
+    }
+};
+
+void foo()
+{
+    float a, b, c;
+
+    // 嗯，我们需要 c = a + b;
+    c = AddFloatOrMulInt&lt;float&gt;::Do(a, b);
+    // ... 觉得哪里不对劲 ...
+    // ...
+    // ...
+    // ...
+    // 啊！有两个AddFloatOrMulInt，class看起来一模一样，要怎么区分呢！
+}
+</code></pre>
+<p>好吧，问题来了！如何要让两个内容不同，但是模板参数形式相同的类进行区分呢？特化！特化（specialization）是根据一个或多个特殊的整数或类型，给出模板实例化时的一个指定内容。我们先来看特化是怎么应用到这个问题上的。</p>
+<pre><code class="language-C++">// 首先，要写出模板的一般形式（原型）
+template &lt;typename T&gt; class AddFloatOrMulInt
+{
+    static T Do(T a, T b)
+    {
+        // 在这个例子里面一般形式里面是什么内容不重要，因为用不上
+        // 这里就随便给个0吧。
+        return T(0);
+    }
+};
+
+// 其次，我们要指定T是int时候的代码，这就是特化：
+template &lt;&gt; class AddFloatOrMulInt&lt;int&gt;
+{
+public:
+    static int Do(int a, int b) // 
+    {
+        return a * b;
+    }
+};
+
+// 再次，我们要指定T是float时候的代码：
+template &lt;&gt; class AddFloatOrMulInt&lt;float&gt;
+{
+public:
+    static float Do(float a, float b)
+    {
+        return a + b;
+    }
+};
+
+void foo()
+{
+    // 这里面就不写了
+}
+</code></pre>
+<p>我们再把特化的形式拿出来一瞧：这货有点怪啊： <code class="language-plaintext highlighter-rouge">template &lt;&gt; class AddFloatOrMulInt&lt;int&gt;</code>。别急，我给你解释一下。</p>
+
+<pre><code class="language-C++">// 我们这个模板的基本形式是什么？
+template &lt;typename T&gt; class AddFloatOrMulInt;
+
+// 但是这个类，是给T是Int的时候用的，于是我们写作
+class AddFloatOrMulInt&lt;int&gt;
+// 当然，这里编译是通不过的。
+
+// 但是它又不是个普通类，而是类模板的一个特化（特例）。
+// 所以前面要加模板关键字template，
+// 以及模板参数列表
+template &lt;/* 这里要填什么？ */&gt; class AddFloatOrMulInt&lt;int&gt;;
+
+// 最后，模板参数列表里面填什么？因为原型的T已经被int取代了。所以这里就不能也不需要放任何额外的参数了。
+// 所以这里放空。
+template &lt;&gt; class AddFloatOrMulInt&lt;int&gt;
+{
+    // ... 针对Int的实现 ... 
+}
+
+// Bingo!
+</code></pre>
+
+<p>哈，这样就好了。我们来做一个练习。我们有一些类型，然后你要用模板做一个对照表，让类型对应上一个数字。我先来做一个示范：</p>
+
+<pre><code class="language-C++">
+template &lt;typename T&gt; class TypeToID
+{
+public:
+    static int const ID = -1;
+};
+
+template &lt;&gt; class TypeToID&lt;uint8_t&gt;
+{
+public:
+    static int const ID = 0;
+};
+</code></pre>
+
+<p>然后呢，你的任务就是，要所有无符号的整数类型的特化（其实就是<code class="language-plaintext highlighter-rouge">uint8_t</code>到<code class="language-plaintext highlighter-rouge">uint64_t</code>啦），把所有的基本类型都赋予一个ID（当然是不一样的啦）。当你做完后呢，可以把类型所对应的ID打印出来，我仍然以 <code class="language-plaintext highlighter-rouge">uint8_t</code> 为例：</p>
+
+<pre><code class="language-C++">void PrintID()
+{
+    cout &lt;&lt; "ID of uint8_t: " &lt;&lt; TypeToID&lt;uint8_t&gt;::ID &lt;&lt; endl;
+}
+</code></pre>
+<p>嗯，看起来挺简单的，是吧。但是这里透露出了一个非常重要的信号，我希望你已经能察觉出来了： <code class="language-plaintext highlighter-rouge">TypeToID</code> 如同是一个函数。这个函数只能在编译期间执行。它输入一个类型，输出一个ID。</p>
+
+<p>如果你体味到了这一点，那么恭喜你，你的模板元编程已经开悟了。</p>
+
+<h4 id="223-特化一些其它问题">2.2.3 特化：一些其它问题<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#223-%E7%89%B9%E5%8C%96%E4%B8%80%E4%BA%9B%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98" aria-label="Anchor link for: 223 特化一些其它问题" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#223-%E7%89%B9%E5%8C%96%E4%B8%80%E4%BA%9B%E5%85%B6%E5%AE%83%E9%97%AE%E9%A2%98" aria-label="Anchor link for: 223 特化一些其它问题" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>在上一节结束之后，你一定做了许多的练习。我们再来做三个练习。第一，给<code class="language-plaintext highlighter-rouge">float</code>一个ID；第二，给<code class="language-plaintext highlighter-rouge">void*</code>一个ID；第三，给任意类型的指针一个ID。先来做第一个:</p>
+
+<pre><code class="language-C++">// ...
+// TypeToID 的模板“原型”
+// ...
+
+template &lt;&gt; class TypeToID&lt;float&gt;
+{
+    static int const ID = 0xF10A7;
+};
+</code></pre>
+
+<p>嗯， 这个你已经了然于心了。那么<code class="language-plaintext highlighter-rouge">void*</code>呢？你想了想，这已经是一个复合类型了。不错你还是战战兢兢的写了下来：</p>
+
+<pre><code class="language-C++">template &lt;&gt; class TypeToID&lt;void*&gt;
+{
+    static int const ID = 0x401d;
+};
+
+void PrintID()
+{
+    cout &lt;&lt; "ID of uint8_t: " &lt;&lt; TypeToID&lt;void*&gt;::ID &lt;&lt; endl;
+}
+</code></pre>
+
+<p>遍译运行一下，对了。模板不过如此嘛。然后你觉得自己已经完全掌握了，并试图将所有C++类型都放到模板里面，开始了自我折磨的过程：</p>
+
+<pre><code class="language-C++">class ClassB {};
+
+template &lt;&gt; class TypeToID&lt;void ()&gt;; // 函数的TypeID
+template &lt;&gt; class TypeToID&lt;int[3]&gt;; // 数组的TypeID
+template &lt;&gt; class TypeToID&lt;int (int[3])&gt;; // 这是以数组为参数的函数的TypeID
+template &lt;&gt; class TypeToID&lt;int (ClassB::*[3])(void*, float[2])&gt;; // 我也不知道这是什么了，自己看着办吧。
+</code></pre>
+
+<p>甚至连 <code class="language-plaintext highlighter-rouge">const</code> 和 <code class="language-plaintext highlighter-rouge">volatile</code> 都能装进去</p>
+
+<pre><code class="language-C++">template &lt;&gt; class TypeToID&lt;int const * volatile * const volatile&gt;;
+</code></pre>
+
+<p>此时就很明白了，只要 <code class="language-plaintext highlighter-rouge">&lt;&gt;</code> 内填进去的是一个C++能解析的合法类型，模板都能让你特化。不过这个时候如果你一点都没有写错的话， <code class="language-plaintext highlighter-rouge">PrintID</code> 中只打印了我们提供了特化的类型的ID。那如果我们没有为之提供特化的类型呢？比如说double？OK，实践出真知，我们来尝试着运行一下：</p>
+
+<pre><code class="language-C++">void PrintID()
+{
+    cout &lt;&lt; "ID of double: " &lt;&lt; TypeToID&lt;double&gt;::ID &lt;&lt; endl;
+}
+</code></pre>
+
+<p>嗯，它输出的是-1。我们顺藤摸瓜会看到， <code class="language-plaintext highlighter-rouge">TypeToID</code>的类模板“原型”的ID是值就是-1。通过这个例子可以知道，当模板实例化时提供的模板参数不能匹配到任何的特化形式的时候，它就会去匹配类模板的“原型”形式。</p>
+
+<p>不过这里有一个问题要厘清一下。和继承不同，类模板的“原型”和它的特化类在实现上是没有关系的，并不是在类模板中写了 <code class="language-plaintext highlighter-rouge">ID</code> 这个Member，那所有的特化就必须要加入 <code class="language-plaintext highlighter-rouge">ID</code> 这个Member，或者特化就自动有了这个成员。完全没这回事。我们把类模板改成以下形式，或许能看的更清楚一点：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; class TypeToID
+{
+public:
+    static int const NotID = -2;
+};
+
+template &lt;&gt; class TypeToID&lt;float&gt;
+{
+public:
+    static int const ID = 1;
+};
+
+void PrintID()
+{
+    cout &lt;&lt; "ID of float: " &lt;&lt; TypeToID&lt;float&gt;::ID &lt;&lt; endl; // Print "1"
+    cout &lt;&lt; "NotID of float: " &lt;&lt; TypeToID&lt;float&gt;::NotID &lt;&lt; endl; // Error! TypeToID&lt;float&gt;使用的特化的类，这个类的实现没有NotID这个成员。
+    cout &lt;&lt; "ID of double: " &lt;&lt; TypeToID&lt;double&gt;::ID &lt;&lt; endl; // Error! TypeToID&lt;double&gt;是由模板类实例化出来的，它只有NotID，没有ID这个成员。
+}
+</code></pre>
+
+<p>这样就明白了。类模板和类模板的特化的作用，仅仅是指导编译器选择哪个编译，但是特化之间、特化和它原型的类模板之间，是分别独立实现的。所以如果多个特化、或者特化和对应的类模板有着类似的内容，很不好意思，你得写上若干遍了。</p>
+
+<p>第三个问题，是写一个模板匹配任意类型的指针。对于C语言来说，因为没有泛型的概念，因此它提供了无类型的指针<code class="language-plaintext highlighter-rouge">void*</code>。它的优点是，所有指针都能转换成它。它的缺点是，一旦转换称它后，你就再也不知道这个指针到底是指向<code class="language-plaintext highlighter-rouge">float</code>或者是<code class="language-plaintext highlighter-rouge">int</code>或者是<code class="language-plaintext highlighter-rouge">struct</code>了。</p>
+
+<p>比如说<code class="language-plaintext highlighter-rouge">copy</code>。</p>
+
+<pre><code class="language-C">void copy(void* dst, void const* src, size_t elemSize, size_t elemCount, void (*copyElem)(void* dstElem, void const* srcElem))
+{
+    void const* reader = src;
+    void const* writer = dst;
+    for(size_t i = 0; i &lt; elemCount; ++i)
+    {
+        copyElem(writer, reader);
+        advancePointer(reader, elemSize); // 把Reader指针往后移动一些字节
+        advancePointer(writer, elemSize);
+     }
+}
+</code></pre>
+
+<p>为什么要提供copyElem，是因为可能有些struct需要深拷贝，所以得用特殊的copy函数。这个在C++98/03里面就体现为拷贝构造和赋值函数。</p>
+
+<p>但是不管怎么搞，因为这个函数的参数只是<code class="language-plaintext highlighter-rouge">void*</code>而已，当你使用了错误的elemSize，或者传入了错误的copyElem，就必须要到运行的时候才有可能看出来。注意，这还只是有可能而已。</p>
+
+<p>那么C++有了模板后，能否既能匹配任意类型的指针，同时又保留了类型信息呢？答案是显然的。至于怎么写，那就得充分发挥你的直觉了：</p>
+
+<p>首先，我们需要一个<code class="language-plaintext highlighter-rouge">typename T</code>来指代“任意类型”这四个字：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+</code></pre>
+
+<p>接下来，我们要写函数原型:</p>
+
+<pre><code class="language-C++">void copy(?? dest, ?? src, size_t elemCount);
+</code></pre>
+
+<p>这里的 <code class="language-plaintext highlighter-rouge">？？</code> 要怎么写呢？既然我们有了模板类型参数T，那我们不如就按照经验，写 <code class="language-plaintext highlighter-rouge">T*</code> 看看。</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+void copy(T* dst, T const* src, size_t elemCount);
+</code></pre>
+
+<p>编译一下，咦，居然通过了。看来这里的语法与我们以前学到的知识并没有什么不同。这也是语言设计最重要的一点原则：一致性。它可以让你辛辛苦苦体验到的规律不至于白费。</p>
+
+<p>最后就是实现：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+void copy(T* dst, T const* src, size_t elemCount)
+{
+    for(size_t i = 0; i &lt; elemCount; ++i)
+    {
+        dst[i] = src[i];
+    }
+}
+</code></pre>
+
+<p>是不是简洁了许多？你不需要再传入size；只要你有正确的赋值函数，也不需要提供定制的copy；也不用担心dst和src的类型不匹配了。</p>
+
+<p>最后，我们把函数模板学到的东西，也应用到类模板里面：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; // 嗯，需要一个T
+class TypeToID&lt;T*&gt; // 我要对所有的指针类型特化，所以这里就写T*
+{
+public:
+ static int const ID = 0x80000000;	// 用最高位表示它是一个指针
+};
+</code></pre>
+
+<p>最后写个例子来测试一下，看看我们的 <code class="language-plaintext highlighter-rouge">T*</code> 能不能搞定 <code class="language-plaintext highlighter-rouge">float*</code></p>
+
+<pre><code class="language-C++">void PrintID()
+{
+    cout &lt;&lt; "ID of float*: " &lt;&lt; TypeToID&lt;float*&gt;::ID &lt;&lt; endl;
+}
+</code></pre>
+
+<p>哈哈，大功告成。嗯，别急着高兴。待我问一个问题：你知道 <code class="language-plaintext highlighter-rouge">TypeToID&lt;float*&gt;</code> 后，这里的T是什么吗？换句话说，你知道下面这段代码打印的是什么吗？</p>
+
+<pre><code class="language-C++">// ...
+// TypeToID 的其他代码，略过不表
+// ...
+
+template &lt;typename T&gt; // 嗯，需要一个T
+class TypeToID&lt;T*&gt; // 我要对所有的指针类型特化，所以这里就写T*
+{
+public:
+    typedef T		 SameAsT;
+    static int const ID = 0x80000000; // 用最高位表示它是一个指针
+};
+
+void PrintID()
+{
+	cout &lt;&lt; "ID of float*: " &lt;&lt; TypeToID&lt; TypeToID&lt;float*&gt;::SameAsT &gt;::ID &lt;&lt; endl;
+}
+</code></pre>
+
+<p>别急着运行，你先猜。</p>
+
+<p>————————-  这里是给勤于思考的码猴的分割线  ——————————-</p>
+
+<p>OK，猜出来了吗，T是<code class="language-plaintext highlighter-rouge">float</code>。为什么呢？因为你用 <code class="language-plaintext highlighter-rouge">float *</code> 匹配了 <code class="language-plaintext highlighter-rouge">T *</code>，所以 <code class="language-plaintext highlighter-rouge">T</code> 就对应 <code class="language-plaintext highlighter-rouge">float</code> 了。没想清楚的自己再多体会一下。</p>
+
+<p>嗯，所以实际上，我们可以利用这个特性做一件事情：把指针类型的那个指针给“干掉”：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+class RemovePointer
+{
+    // 啥都不干，你要放一个不是指针的类型进来，我就让你死的难看。
+};
+
+template &lt;typename T&gt;
+class RemovePointer&lt;T*&gt;	// 祖传牛皮藓，专治各类指针
+{
+public:
+    typedef T Result;
+};
+
+void Foo()
+{
+    RemovePointer&lt;float*&gt;::Result x = 5.0f; // 喏，用RemovePointer后，那个Result就是把float*的指针处理掉以后的结果：float啦。
+    std::cout &lt;&lt; x &lt;&lt; std::endl;
+}
+</code></pre>
+
+<p>OK，如果这个时候，我需要给 <code class="language-plaintext highlighter-rouge">int*</code> 提供一个更加特殊的特化，那么我还得都多提供一个：</p>
+
+<pre><code class="language-C++">// ...
+// TypeToID 的其他代码，略过不表
+// ...
+
+template &lt;typename T&gt; // 嗯，需要一个T
+class TypeToID&lt;T*&gt;    // 我要对所有的指针类型特化，所以这里就写T*
+{
+public:
+    typedef T SameAsT;
+    static int const ID = 0x80000000; // 用最高位表示它是一个指针
+};
+
+template &lt;&gt; // 嗯，int* 已经是个具体的不能再具体的类型了，所以模板不需要额外的类型参数了
+class TypeToID&lt;int*&gt; // 嗯，对int*的特化。在这里呢，要把int*整体看作一个类型。
+{
+public:
+    static int const ID = 0x12345678; // 给一个缺心眼的ID
+};
+
+void PrintID()
+{
+    cout &lt;&lt; "ID of int*: " &lt;&lt; TypeToID&lt;int*&gt;::ID &lt;&lt; endl;
+}
+</code></pre>
+
+<p>嗯，这个时候它会输出0x12345678的十进制（大概？）。
+可能会有较真的人说，<code class="language-plaintext highlighter-rouge">int*</code> 去匹配 <code class="language-plaintext highlighter-rouge">T</code> 或者 <code class="language-plaintext highlighter-rouge">T*</code>，也是合法的。就和你说22岁以上能结婚，那24岁当然也能结婚一样。
+那为什么 <code class="language-plaintext highlighter-rouge">int*</code> 就会找 <code class="language-plaintext highlighter-rouge">int*</code>，<code class="language-plaintext highlighter-rouge">float *</code>因为没有合适的特化就去找 <code class="language-plaintext highlighter-rouge">T*</code>，更一般的就去找 <code class="language-plaintext highlighter-rouge">T</code> 呢？废话，有专门为你准备的东西的不用，人干事？这就是直觉。
+但是呢，直觉对付更加复杂的问题还是没用的（也不是没用，主要是你没这个直觉了）。我们要把这个直觉，转换成合理的规则——即模板的匹配规则。
+当然，这个匹配规则是对复杂问题用的，所以我们会到实在一眼看不出来的时候才会动用它。一开始我们只要把握：模板是从最特殊到最一般形式进行匹配就可以了。</p>
+
+<h3 id="23-即用即推导">2.3 即用即推导<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#23-%E5%8D%B3%E7%94%A8%E5%8D%B3%E6%8E%A8%E5%AF%BC" aria-label="Anchor link for: 23 即用即推导" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#23-%E5%8D%B3%E7%94%A8%E5%8D%B3%E6%8E%A8%E5%AF%BC" aria-label="Anchor link for: 23 即用即推导" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h4 id="231-视若无睹的语法错误">2.3.1 视若无睹的语法错误<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#231-%E8%A7%86%E8%8B%A5%E6%97%A0%E7%9D%B9%E7%9A%84%E8%AF%AD%E6%B3%95%E9%94%99%E8%AF%AF" aria-label="Anchor link for: 231 视若无睹的语法错误" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#231-%E8%A7%86%E8%8B%A5%E6%97%A0%E7%9D%B9%E7%9A%84%E8%AF%AD%E6%B3%95%E9%94%99%E8%AF%AF" aria-label="Anchor link for: 231 视若无睹的语法错误" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+<p>这一节我们将讲述模板一个非常重要的行为特点：那就是什么时候编译器会对模板进行推导，推导到什么程度。</p>
+
+<p>这一知识，对于理解模板的编译期行为、以及修正模板编译错误都非常重要。</p>
+
+<p>我们先来看一个例子：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; struct X {};
+	
+template &lt;typename T&gt; struct Y
+{
+    typedef X&lt;T&gt; ReboundType;				// 类型定义1
+    typedef typename X&lt;T&gt;::MemberType MemberType;	// 类型定义2
+    typedef UnknownType MemberType3;			// 类型定义3
+
+    void foo()
+    {
+        X&lt;T&gt; instance0;
+        typename X&lt;T&gt;::MemberType instance1;
+        WTF instance2
+        大王叫我来巡山 - + &amp;
+    }
+};
+</code></pre>
+
+<p>把这段代码编译一下，类型定义3出错，其它的都没问题。不过到这里你应该会有几个问题：</p>
+
+<ol>
+  <li>不是<code class="language-plaintext highlighter-rouge">struct X&lt;T&gt;</code>的定义是空的吗？为什么在<code class="language-plaintext highlighter-rouge">struct Y</code>内的类型定义2使用了 <code class="language-plaintext highlighter-rouge">X&lt;T&gt;::MemberType</code> 编译器没有报错？</li>
+  <li>类型定义2中的<code class="language-plaintext highlighter-rouge">typename</code>是什么鬼？为什么类型定义1就不需要？</li>
+  <li>为什么类型定义3会导致编译错误？</li>
+  <li>为什么<code class="language-plaintext highlighter-rouge">void foo()</code>在MSVC下什么错误都没报？</li>
+</ol>
+
+<p>这时我们就需要请出C++11标准 —— 中的某些概念了。这是我们到目前为止第一次参阅标准。我希望能尽量减少直接参阅标准的次数，因此即便是极为复杂的模板匹配决议我都暂时没有引入标准中的描述。
+然而，Template引入的“双阶段名称查找（Two phase name lookup）”堪称是C++中最黑暗的角落 —— 这是LLVM的团队自己在博客上说的 —— 因此在这里，我们还是有必要去了解标准中是如何规定的。</p>
+
+<h4 id="232-名称查找i-am-who-i-am">2.3.2 名称查找：I am who I am<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#232-%E5%90%8D%E7%A7%B0%E6%9F%A5%E6%89%BEi-am-who-i-am" aria-label="Anchor link for: 232 名称查找i am who i am" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#232-%E5%90%8D%E7%A7%B0%E6%9F%A5%E6%89%BEi-am-who-i-am" aria-label="Anchor link for: 232 名称查找i am who i am" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+<p>在C++标准中对于“名称查找（name lookup）”这个高大上的名词的诠释，主要集中出现在三处。第一处是3.4节，标题名就叫“Name Lookup”；第二处在10.2节，继承关系中的名称查找；第三处在14.6节，名称解析（name resolution）。</p>
+
+<p>名称查找/名称解析，是编译器的基石。对编译原理稍有了解的人，都知道“符号表”的存在即重要意义。考虑一段最基本的C代码：</p>
+<pre><code class="language-C">int a = 0;
+int b;
+b = (a + 1) * 2;
+printf("Result: %d", b);
+</code></pre>
+<p>在这段代码中，所有出现的符号可以分为以下几类：</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">int</code>：类型标识符，代表整型；</li>
+  <li><code class="language-plaintext highlighter-rouge">a</code>,<code class="language-plaintext highlighter-rouge">b</code>,<code class="language-plaintext highlighter-rouge">printf</code>：变量名或函数名；</li>
+  <li><code class="language-plaintext highlighter-rouge">=</code>,<code class="language-plaintext highlighter-rouge">+</code>,<code class="language-plaintext highlighter-rouge">*</code>：运算符；</li>
+  <li><code class="language-plaintext highlighter-rouge">,</code>,<code class="language-plaintext highlighter-rouge">;</code>,<code class="language-plaintext highlighter-rouge">(</code>,<code class="language-plaintext highlighter-rouge">)</code>：分隔符；</li>
+</ul>
+
+<p>那么，编译器怎么知道<code class="language-plaintext highlighter-rouge">int</code>就是整数类型，<code class="language-plaintext highlighter-rouge">b=(a+1)*2</code>中的<code class="language-plaintext highlighter-rouge">a</code>和<code class="language-plaintext highlighter-rouge">b</code>就是整型变量呢？这就是名称查找/名称解析的作用：它告诉编译器，这个标识符（identifer）是在哪里被声明或定义的，它究竟是什么意思。</p>
+
+<p>也正因为这个机制非常基础，所以它才会面临各种可能的情况，编译器也要想尽办法让它在大部分场合都表现的合理。比如我们常见的作用域规则，就是为了对付名称在不同代码块中传播、并且遇到重名要如何处理的问题。下面是一个最简单的、大家在语言入门过程中都会碰到的一个例子：</p>
+<pre><code class="language-C++">int a = 0;
+void f() {
+    int a = 0;
+    a += 2;
+    printf("Inside &lt;a&gt;: %d\n", a);
+}
+void g() {
+    printf("Outside &lt;a&gt;: %d\n", a);
+}
+int main() {
+    f();
+    g();
+}
+
+/* ------------ Console Output -----------------
+Inside &lt;a&gt;: 2
+Outside &lt;a&gt;: 0
+--------------- Console Output -------------- */
+</code></pre>
+
+<p>我想大家尽管不能处理所有名称查找中所遇到的问题，但是对一些常见的名称查找规则也有了充分的经验，可以解决一些常见的问题。
+但是模板的引入，使得名称查找这一本来就不简单的基本问题变得更加复杂了。
+考虑下面这个例子：</p>
+<pre><code class="language-C++">struct A  { int a; };
+struct AB { int a, b; };
+struct C  { int c; };
+
+template &lt;typename T&gt; foo(T&amp; v0, C&amp; v1){
+    v0.a = 1;
+    v1.a = 2;
+    v1.c = 3;
+}
+</code></pre>
+<p>简单分析上述代码很容易得到以下结论：</p>
+
+<ol>
+  <li>函数<code class="language-plaintext highlighter-rouge">foo</code>中的变量<code class="language-plaintext highlighter-rouge">v1</code>已经确定是<code class="language-plaintext highlighter-rouge">struct C</code>的实例，所以，<code class="language-plaintext highlighter-rouge">v1.a = 2;</code>会导致编译错误，<code class="language-plaintext highlighter-rouge">v1.c = 3;</code>是正确的代码；</li>
+  <li>对于变量<code class="language-plaintext highlighter-rouge">v0</code>来说，这个问题就变得很微妙。如果<code class="language-plaintext highlighter-rouge">v0</code>是<code class="language-plaintext highlighter-rouge">struct A</code>或者<code class="language-plaintext highlighter-rouge">struct AB</code>的实例，那么<code class="language-plaintext highlighter-rouge">foo</code>中的语句<code class="language-plaintext highlighter-rouge">v0.a = 1;</code>就是正确的。如果是<code class="language-plaintext highlighter-rouge">struct C</code>，那么这段代码就是错误的。</li>
+</ol>
+
+<p>因此在模板定义的地方进行语义分析，并不能<strong>完全</strong>得出代码是正确或者错误的结论，只有到了实例化阶段，确定了模板参数的类型后，才知道这段代码正确与否。令人高兴的是，在这一问题上，我们和C++标准委员会的见地一致，说明我们的C++水平已经和Herb Sutter不分伯仲了。既然我们和Herb Sutter水平差不多，那凭什么人家就吃香喝辣？下面我们来选几条标准看看服不服：</p>
+
+<blockquote>
+  <p><strong>14.6 名称解析（Name resolution）</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>1)</strong> 模板定义中能够出现以下三类名称：</p>
+</blockquote>
+
+<blockquote>
+  <ul>
+    <li>模板名称、或模板实现中所定义的名称；</li>
+    <li>和模板参数有关的名称；</li>
+    <li>模板定义所在的定义域内能看到的名称。</li>
+  </ul>
+</blockquote>
+
+<blockquote>
+  <p>…</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>9)</strong> … 如果名字查找和模板参数有关，那么查找会延期到模板参数全都确定的时候。 …</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>10)</strong> 如果（模板定义内出现的）名字和模板参数无关，那么在模板定义处，就应该找得到这个名字的声明。…</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>14.6.2 依赖性名称（Dependent names）</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>1)</strong> …（模板定义中的）表达式和类型可能会依赖于模板参数，并且模板参数会影响到名称查找的作用域 …  如果表达式中有操作数依赖于模板参数，那么整个表达式都依赖于模板参数，名称查找延期到<strong>模板实例化时</strong>进行。并且定义时和实例化时的上下文都会参与名称查找。（依赖性）表达式可以分为类型依赖（类型指模板参数的类型）或值依赖。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>14.6.2.2 类型依赖的表达式</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>2)</strong> 如果成员函数所属的类型是和模板参数有关的，那么这个成员函数中的<code class="language-plaintext highlighter-rouge">this</code>就认为是类型依赖的。</p>
+</blockquote>
+
+<blockquote>
+  <p><strong>14.6.3 非依赖性名称（Non-dependent names）</strong></p>
+</blockquote>
+
+<blockquote>
+  <p><strong>1)</strong> 非依赖性名称在<strong>模板定义</strong>时使用通常的名称查找规则进行名称查找。</p>
+</blockquote>
+
+<p><a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2012/n3337.pdf">Working Draft: Standard of Programming Language C++, N3337</a></p>
+
+<p>知道差距在哪了吗：人家会说黑话。什么时候咱们也会说黑话了，就是标准委员会成员了，反正懂得也不比他们少。不过黑话确实不太好懂 —— 怪我翻译不好的人，自己看原文，再说好懂了人家还靠什么吃饭 —— 我们来举一个例子：</p>
+
+<pre><code class="language-C++">int a;
+struct B { int v; }
+template &lt;typename T&gt; struct X {
+    B b;                  // B 是第三类名字，b 是第一类
+    T t;                  // T 是第二类
+    X* anthor;            // X 这里代指 X&lt;T&gt;，第一类
+    typedef int Y;        // int 是第三类
+    Y y;                  // Y 是第一类
+    C c;                  // C 什么都不是，编译错误。
+    void foo() {
+       b.v += y;          // b 是第一类，非依赖性名称
+       b.v *= T::s_mem;   // T::s_mem 是第二类
+                          // s_mem的作用域由T决定
+                          // 依赖性名称，类型依赖
+    }
+};
+</code></pre>
+
+<p>所以，按照标准的意思，名称查找会在模板定义和实例化时各做一次，分别处理非依赖性名称和依赖性名称的查找。这就是“两阶段名称查找”这一名词的由来。只不过这个术语我也不知道是谁发明的，它并没有出现的标准上，但是频繁出现在StackOverflow和Blog上。</p>
+
+<p>接下来，我们就来解决2.3.1节中留下的几个问题。</p>
+
+<p>先看第四个问题。为什么MSVC中，模板函数的定义内不管填什么编译器都不报错？因为MSVC在分析模板中成员函数定义时没有做任何事情。至于为啥连“大王叫我来巡山”都能过得去，这是C++语法/语义分析的特殊性导致的。
+C++是个非常复杂的语言，以至于它的编译器，不可能通过词法-语法-语义多趟分析清晰分割。因为它的语义将会直接干扰到语法：</p>
+
+<pre><code class="language-C++">void foo(){
+    A&lt;T&gt; b;
+}
+</code></pre>
+<p>在这段简短的代码中，就包含了两个歧义的可能，一是<code class="language-plaintext highlighter-rouge">A</code>是模板，于是<code class="language-plaintext highlighter-rouge">A&lt;T&gt;</code>是一个实例化的类型，<code class="language-plaintext highlighter-rouge">b</code>是变量，另外一种是比较表达式（Comparison Expression）的组合，<code class="language-plaintext highlighter-rouge">((A &lt; T) &gt; b)</code>。</p>
+
+<p>甚至词法分析也会受到语义的干扰，C++11中才明确被修正的<code class="language-plaintext highlighter-rouge">vector&lt;vector&lt;int&gt;&gt;</code>，就因为<code class="language-plaintext highlighter-rouge">&gt;&gt;</code>被误解为右移或流操作符，而导致某些编译器上的错误。因此，在语义没有确定之前，连语法都没有分析的价值。</p>
+
+<p>大约是基于如此考量，为了偷懒，MSVC将包括所有模板成员函数的语法/语义分析工作都挪到了第二个Phase，于是乎连带着语法分析都送进了第二个阶段。符合标准么？显然不符合。</p>
+
+<p>但是这里值得一提的是，MSVC的做法和标准相比，虽然投机取巧，但并非有弊无利。我们来先说一说坏处。考虑以下例子：</p>
+<pre><code class="language-C++">// ----------- X.h ------------
+
+template &lt;typename T&gt; struct X {
+      // 实现代码
+};
+
+// ---------- X.cpp -----------
+
+// ... 一些代码 ...
+X&lt;int&gt; xi; 
+// ... 一些代码 ...
+X&lt;float&gt; xf;
+// ... 一些代码 ...
+</code></pre>
+<p>此时如果X中有一些与模板参数无关的错误，如果名称查找/语义分析在两个阶段完成，那么这些错误会很早、且唯一的被提示出来；但是如果一切都在实例化时处理，那么可能会导致不同的实例化过程提示同样的错误。而模板在运用过程中，往往会产生很多实例，此时便会大量报告同样的错误。</p>
+
+<p>当然，MSVC并不会真的这么做。根据推测，最终他们是合并了相同的错误。因为即便对于模板参数相关的编译错误，也只能看到最后一次实例化的错误信息：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs cpp"><span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-keyword">struct</span> X {};
+	
+<span class="hljs-keyword">template</span> &lt;<span class="hljs-keyword">typename</span> T&gt; <span class="hljs-keyword">struct</span> Y
+{
+    <span class="hljs-keyword">typedef</span> X&lt;T&gt; ReboundType; <span class="hljs-comment">// 类型定义1</span>
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">foo</span><span class="hljs-params">()</span>
+    </span>{
+        X&lt;T&gt; instance0;
+        X&lt;T&gt;::MemberType instance1;
+        WTF instance2
+    }
+};
+
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">poo</span><span class="hljs-params">()</span></span>{
+    Y&lt;<span class="hljs-keyword">int</span>&gt;::foo();
+    Y&lt;<span class="hljs-keyword">float</span>&gt;::foo();
+}
+</code></pre></div></div>
+
+<p>MSVC下和模板相关的错误只有一个：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs coffeescript">error <span class="hljs-attribute">C2039</span>: <span class="hljs-string">'MemberType'</span>: <span class="hljs-keyword">is</span> <span class="hljs-keyword">not</span> a member <span class="hljs-keyword">of</span> <span class="hljs-string">'X&lt;T&gt;'</span>
+          <span class="hljs-reserved">with</span>
+          [
+              T=float
+          ]
+</code></pre></div></div>
+<p>然后是一些语法错误，比如<code class="language-plaintext highlighter-rouge">MemberType</code>不是一个合法的标识符之类的。这样甚至你会误以为<code class="language-plaintext highlighter-rouge">int</code>情况下模板的实例化是正确的。虽然在有了经验之后会发现这个问题挺荒唐的，但是仍然会让新手有困惑。</p>
+
+<p>相比之下，更加遵守标准的Clang在错误提示上就要清晰许多：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs css"><span class="hljs-rule"><span class="hljs-attribute">error</span>:<span class="hljs-value"> unknown type name <span class="hljs-string">'WTF'</span>
+    WTF instance2
+    ^
+error: expected <span class="hljs-string">';'</span> at end of declaration
+    WTF instance2
+                 ^
+                 </span></span>;
+<span class="hljs-rule"><span class="hljs-attribute">error</span>:<span class="hljs-value"> no type named <span class="hljs-string">'MemberType'</span> in <span class="hljs-string">'X&lt;int&gt;'</span>
+    typename X&lt;T&gt;::MemberType instance1</span></span>;
+    ~~~~~~~~~~~~~~~^~~~~~~~~~
+    <span class="hljs-rule"><span class="hljs-attribute">note</span>:<span class="hljs-value"> in instantiation of member function <span class="hljs-string">'Y&lt;int&gt;::foo'</span> requested here
+        Y&lt;int&gt;::<span class="hljs-function">foo</span>()</span></span>;
+                ^
+<span class="hljs-rule"><span class="hljs-attribute">error</span>:<span class="hljs-value"> no type named <span class="hljs-string">'MemberType'</span> in <span class="hljs-string">'X&lt;float&gt;'</span>
+    typename X&lt;T&gt;::MemberType instance1</span></span>;
+    ~~~~~~~~~~~~~~~^~~~~~~~~~
+    <span class="hljs-rule"><span class="hljs-attribute">note</span>:<span class="hljs-value"> in instantiation of member function <span class="hljs-string">'Y&lt;float&gt;::foo'</span> requested here
+        Y&lt;float&gt;::<span class="hljs-function">foo</span>()</span></span>;
+                  ^
+4 <span class="hljs-tag">errors</span> <span class="hljs-tag">generated</span>.
+</code></pre></div></div>
+<p>可以看到，Clang的提示和标准更加契合。它很好地区分了模板在定义和实例化时分别产生的错误。</p>
+
+<p>另一个缺点也与之类似。因为没有足够的检查，如果你写的模板没有被实例化，那么很可能缺陷会一直存在于代码之中。特别是模板代码多在头文件。虽然不如接口那么重要，但也是属于被公开的部分，别人很可能会踩到坑上。缺陷一旦传播开修复起来就没那么容易了。</p>
+
+<p>但是正如我前面所述，这个违背了标准的特性，并不是一无是处。首先，它可以完美的兼容标准。符合标准的、能够被正确编译的代码，一定能够被MSVC的方案所兼容。其次，它带来了一个非常有趣的特性，看下面这个例子：</p>
+
+<pre><code class="language-C++">struct A;
+template &lt;typename T&gt; struct X {
+    int v;
+    void convertTo(A&amp; a) {
+       a.v = v; // 这里需要A的实现
+    }
+};
+
+struct A { int v; };
+
+void main() {
+    X&lt;int&gt; x;
+    x.foo(5);
+}
+</code></pre>
+<p>这个例子在Clang中是错误的，因为：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs css"><span class="hljs-rule"><span class="hljs-attribute">error</span>:<span class="hljs-value"> variable has incomplete type <span class="hljs-string">'A'</span>
+                        A a</span></span>;
+                          ^
+    <span class="hljs-rule"><span class="hljs-attribute">note</span>:<span class="hljs-value"> forward declaration of <span class="hljs-string">'A'</span>
+     struct A</span></span>;
+            ^
+1 <span class="hljs-tag">error</span> <span class="hljs-tag">generated</span>.
+</code></pre></div></div>
+
+<p>符合标准的写法需要将模板类的定义，和模板函数的定义分离开：</p>
+
+<blockquote>
+  <p>TODO 此处例子不够恰当，并且描述有歧义。需要在未来版本中修订。</p>
+</blockquote>
+
+<pre><code class="language-C++">struct A;
+template &lt;typename T&gt; struct X {
+    int v;
+    void convertTo(A&amp; a);
+};
+
+struct A { int v; };
+
+template &lt;typename T&gt; void X&lt;T&gt;::convertTo(A&amp; a) {
+   a.v = v;
+}
+    
+void main() {
+    X&lt;int&gt; x;
+    x.foo(5);
+}
+</code></pre>
+
+<p>但是其实我们知道，<code class="language-plaintext highlighter-rouge">foo</code>要到实例化之后，才需要真正的做语义分析。在MSVC上，因为函数实现就是到模板实例化时才处理的，所以这个例子是完全正常工作的。因此在上面这个例子中，MSVC的实现要比标准更加易于写和维护，是不是有点写Java/C#那种声明实现都在同一处的清爽感觉了呢！</p>
+
+<p>扩展阅读： <a href="http://blog.llvm.org/2009/12/dreaded-two-phase-name-lookup.html">The Dreaded Two-Phase Name Lookup</a></p>
+
+<h4 id="233-多余的--typename-关键字">2.3.3 “多余的”  typename 关键字<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#233-%E5%A4%9A%E4%BD%99%E7%9A%84--typename-%E5%85%B3%E9%94%AE%E5%AD%97" aria-label="Anchor link for: 233 多余的  typename 关键字" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#233-%E5%A4%9A%E4%BD%99%E7%9A%84--typename-%E5%85%B3%E9%94%AE%E5%AD%97" aria-label="Anchor link for: 233 多余的  typename 关键字" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>到了这里，2.3.1 中提到的四个问题，还有三个没有解决：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; struct X {};
+	
+template &lt;typename T&gt; struct Y
+{
+    typedef X&lt;T&gt; ReboundType;						// 这里为什么是正确的？
+    typedef typename X&lt;T&gt;::MemberType MemberType2;	// 这里的typename是做什么的？
+    typedef UnknownType MemberType3;				// 这里为什么会出错？
+};
+</code></pre>
+
+<p>我们运用我们2.3.2节中学习到的标准，来对Y内部做一下分析：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; struct Y
+{
+    // X可以查找到原型；
+    // X&lt;T&gt;是一个依赖性名称，模板定义阶段并不管X&lt;T&gt;是不是正确的。
+    typedef X&lt;T&gt; ReboundType;
+	
+    // X可以查找到原型；
+    // X&lt;T&gt;是一个依赖性名称，X&lt;T&gt;::MemberType也是一个依赖性名称；
+    // 所以模板声明时也不会管X模板里面有没有MemberType这回事。
+    typedef typename X&lt;T&gt;::MemberType MemberType2;
+	
+    // UnknownType 不是一个依赖性名称
+    // 而且这个名字在当前作用域中不存在，所以直接报错。
+    typedef UnknownType MemberType3;				
+};
+</code></pre>
+
+<p>下面，唯一的问题就是第二个：<code class="language-plaintext highlighter-rouge">typename</code>是做什么的？</p>
+
+<p>对于用户来说，这其实是一个语法噪音。也就是说，其实就算没有它，语法上也说得过去。事实上，某些情况下MSVC的确会在标准需要的时候，不用写<code class="language-plaintext highlighter-rouge">typename</code>。但是标准中还是规定了形如 <code class="language-plaintext highlighter-rouge">T::MemberType</code> 这样的<code class="language-plaintext highlighter-rouge">qualified id</code> 在默认情况下不是一个类型，而是解释为<code class="language-plaintext highlighter-rouge">T</code>的一个成员变量<code class="language-plaintext highlighter-rouge">MemberType</code>，只有当<code class="language-plaintext highlighter-rouge">typename</code>修饰之后才能作为类型出现。</p>
+
+<p>事实上，标准对<code class="language-plaintext highlighter-rouge">typename</code>的使用规定极为复杂，也算是整个模板中的难点之一。如果想了解所有的标准，需要阅读标准14.6节下2-7条，以及14.6.2.1第一条中对于<code class="language-plaintext highlighter-rouge">current instantiation</code>的解释。</p>
+
+<p>简单来说，如果编译器能在出现的时候知道它的类型，那么就不需要<code class="language-plaintext highlighter-rouge">typename</code>，如果必须要到实例化的时候才能知道它是不是合法，那么定义的时候就把这个名称作为变量而不是类型。</p>
+
+<p>在这里，我举几个例子帮助大家理解<code class="language-plaintext highlighter-rouge">typename</code>的用法，这几个例子已经足以涵盖日常使用<a href="https://goo.gl/zCRNYx">（预览）</a>：</p>
+
+<pre><code class="language-C++">struct A;
+template &lt;typename T&gt; struct B;
+template &lt;typename T&gt; struct X {
+    typedef X&lt;T&gt; _A; // 编译器当然知道 X&lt;T&gt; 是一个类型。
+    typedef X    _B; // X 等价于 X&lt;T&gt; 的缩写
+    typedef T    _C; // T 不是一个类型还玩毛
+    
+    // ！！！注意我要变形了！！！
+    class Y {
+        typedef X&lt;T&gt;     _D;          // X 的内部，既然外部高枕无忧，内部更不用说了
+        typedef X&lt;T&gt;::Y  _E;          // 嗯，这里也没问题，编译器知道Y就是当前的类型，
+                                      // 这里在VS2015上会有错，需要添加 typename，
+                                      // Clang 上顺利通过。
+        typedef typename X&lt;T*&gt;::Y _F; // 这个居然要加 typename！
+                                      // 因为，X&lt;T*&gt;和X&lt;T&gt;不一样哦，
+                                      // 它可能会在实例化的时候被别的偏特化给抢过去实现了。
+    };
+    
+    typedef A _G;                   // 嗯，没问题，A在外面声明啦
+    typedef B&lt;T&gt; _H;                // B&lt;T&gt;也是一个类型
+    typedef typename B&lt;T&gt;::type _I; // 嗯，因为不知道B&lt;T&gt;::type的信息，
+                                    // 所以需要typename
+    typedef B&lt;int&gt;::type _J;        // B&lt;int&gt; 不依赖模板参数，
+                                    // 所以编译器直接就实例化（instantiate）了
+                                    // 但是这个时候，B并没有被实现，所以就出错了
+};
+</code></pre>
+
+<h3 id="24-本章小结">2.4 本章小结<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#24-%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93" aria-label="Anchor link for: 24 本章小结" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#24-%E6%9C%AC%E7%AB%A0%E5%B0%8F%E7%BB%93" aria-label="Anchor link for: 24 本章小结" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>这一章是写作中最艰难的一章，中间停滞了将近一年。因为要说清楚C++模板中一些语法噪音和设计决议并不是一件轻松的事情。不过通过这一章的学习，我们知道了下面这几件事情：</p>
+
+<ol>
+  <li>
+    <p><strong>部分特化/偏特化</strong> 和 <strong>特化</strong> 相当于是模板实例化过程中的<code class="language-plaintext highlighter-rouge">if-then-else</code>。这使得我们根据不同类型，选择不同实现的需求得以实现；</p>
+  </li>
+  <li>
+    <p>在 2.3.3 一节我们插入了C++模板中最难理解的内容之一：名称查找。名称查找是语义分析的一个环节，模板内书写的 <strong>变量声明</strong>、<strong>typedef</strong>、<strong>类型名称</strong> 甚至 <strong>类模板中成员函数的实现</strong> 都要符合名称查找的规矩才不会出错；</p>
+  </li>
+  <li>
+    <p>C++编译器对语义的分析的原则是“大胆假设，小心求证”：在能求证的地方尽量求证 —— 比如两段式名称查找的第一阶段；无法检查的地方假设你是正确的 —— 比如<code class="language-plaintext highlighter-rouge">typedef typename A&lt;T&gt;::MemberType _X;</code>在模板定义时因为<code class="language-plaintext highlighter-rouge">T</code>不明确不会轻易判定这个语句的死刑。</p>
+  </li>
+</ol>
+
+<p>从下一章开始，我们将进入元编程环节。我们将使用大量的示例，一方面帮助巩固大家学到的模板知识，一方面也会引导大家使用函数式思维去解决常见的问题。</p>
+
+<h2 id="3---深入理解特化与偏特化">3   深入理解特化与偏特化<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#3---%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E7%89%B9%E5%8C%96%E4%B8%8E%E5%81%8F%E7%89%B9%E5%8C%96" aria-label="Anchor link for: 3   深入理解特化与偏特化" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#3---%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E7%89%B9%E5%8C%96%E4%B8%8E%E5%81%8F%E7%89%B9%E5%8C%96" aria-label="Anchor link for: 3   深入理解特化与偏特化" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h2>
+
+<h3 id="31-正确的理解偏特化">3.1 正确的理解偏特化<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#31-%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%90%86%E8%A7%A3%E5%81%8F%E7%89%B9%E5%8C%96" aria-label="Anchor link for: 31 正确的理解偏特化" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#31-%E6%AD%A3%E7%A1%AE%E7%9A%84%E7%90%86%E8%A7%A3%E5%81%8F%E7%89%B9%E5%8C%96" aria-label="Anchor link for: 31 正确的理解偏特化" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h4 id="311-偏特化与函数重载的比较">3.1.1 偏特化与函数重载的比较<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#311-%E5%81%8F%E7%89%B9%E5%8C%96%E4%B8%8E%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E7%9A%84%E6%AF%94%E8%BE%83" aria-label="Anchor link for: 311 偏特化与函数重载的比较" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#311-%E5%81%8F%E7%89%B9%E5%8C%96%E4%B8%8E%E5%87%BD%E6%95%B0%E9%87%8D%E8%BD%BD%E7%9A%84%E6%AF%94%E8%BE%83" aria-label="Anchor link for: 311 偏特化与函数重载的比较" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>在前面的章节中，我们介绍了偏特化的形式、也介绍了简单的用例。因为偏特化和函数重载存在着形式上的相似性，因此初学者便会借用重载的概念，来理解偏特化的行为。只是，重载和偏特化尽管相似但仍有差异。</p>
+
+<p>我们来先看一个函数重载的例子：</p>
+
+<pre><code class="language-C++">void doWork(int);
+void doWork(float);
+void doWork(int, int);
+
+void f() {
+    doWork(0);
+    doWork(0.5f);
+    doWork(0, 0);
+}
+</code></pre>
+
+<p>在这个例子中，我们展现了函数重载可以在两种条件下工作：参数数量相同、类型不同；参数数量不同。</p>
+
+<p>仿照重载的形式，我们通过特化机制，试图实现一个模板的“重载”：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; struct DoWork;	 // (0) 这是原型
+
+template &lt;&gt; struct DoWork&lt;int&gt; {};       // (1) 这是 int 类型的"重载"
+template &lt;&gt; struct DoWork&lt;float&gt; {};     // (2) 这是 float 类型的"重载"
+template &lt;&gt; struct DoWork&lt;int, int&gt; {};  // (3) 这是 int, int 类型的“重载”
+
+void f(){
+    DoWork&lt;int&gt;      i;
+    DoWork&lt;float&gt;    f;
+    DoWork&lt;int, int&gt; ii;
+}
+</code></pre>
+
+<p>这个例子在字面上“看起来”并没有什么问题，可惜编译器在编译的时候仍然提示出错了<a href="http://goo.gl/zI42Zv"><code class="language-plaintext highlighter-rouge">goo.gl/zI42Zv</code></a>：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs javascript"><span class="hljs-number">5</span> : error: too many template <span class="hljs-built_in">arguments</span> <span class="hljs-keyword">for</span> <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">template</span> '<span class="hljs-title">DoWork</span>'
+<span class="hljs-title">template</span> &lt;&gt; <span class="hljs-title">struct</span> <span class="hljs-title">DoWork</span>&lt;<span class="hljs-title">int</span>, <span class="hljs-title">int</span>&gt; </span>{}; <span class="hljs-comment">// 这是 int, int 类型的“重载”</span>
+^ ~~~~
+<span class="hljs-number">1</span> : note: template is declared here
+template &lt;typename T&gt; struct DoWork {}; <span class="hljs-comment">// 这是原型</span>
+~~~~~~~~~~~~~~~~~~~~~ ^
+</code></pre></div></div>
+
+<p>从编译出错的失望中冷静一下，在仔细看看函数特化/偏特化和一般模板的不同之处：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; class X      {};
+template &lt;typename T&gt; class X &lt;T*&gt; {};
+//                            ^^^^ 注意这里
+</code></pre>
+
+<p>对，就是这个<code class="language-plaintext highlighter-rouge">&lt;T*&gt;</code>，跟在X后面的“小尾巴”，我们称作实参列表，决定了第二条语句是第一条语句的跟班。所以，第二条语句，即“偏特化”，必须要符合原型X的基本形式：那就是只有一个模板参数。这也是为什么<code class="language-plaintext highlighter-rouge">DoWork</code>尝试以<code class="language-plaintext highlighter-rouge">template &lt;&gt; struct DoWork&lt;int, int&gt;</code>的形式偏特化的时候，编译器会提示模板实参数量过多。</p>
+
+<p>另外一方面，在类模板的实例化阶段，它并不会直接去寻找 <code class="language-plaintext highlighter-rouge">template &lt;&gt; struct DoWork&lt;int, int&gt;</code>这个小跟班，而是会先找到基本形式，<code class="language-plaintext highlighter-rouge">template &lt;typename T&gt; struct DoWork;</code>，然后再去寻找相应的特化。</p>
+
+<p>我们以<code class="language-plaintext highlighter-rouge">DoWork&lt;int&gt; i;</code>为例，尝试复原一下编译器完成整个模板匹配过程的场景，帮助大家理解。看以下示例代码：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; struct DoWork;	      // (0) 这是原型
+
+template &lt;&gt; struct DoWork&lt;int&gt; {};            // (1) 这是 int 类型的特化
+template &lt;&gt; struct DoWork&lt;float&gt; {};          // (2) 这是 float 类型的特化
+template &lt;typename U&gt; struct DoWork&lt;U*&gt; {};   // (3) 这是指针类型的偏特化
+
+DoWork&lt;int&gt;    i;  // (4)
+DoWork&lt;float*&gt; pf; // (5)
+</code></pre>
+
+<p>首先，编译器分析(0), (1), (2)三句，得知(0)是模板的原型，(1)，(2)，(3)是模板(0)的特化或偏特化。我们假设有两个字典，第一个字典存储了模板原型，我们称之为<code class="language-plaintext highlighter-rouge">TemplateDict</code>。第二个字典<code class="language-plaintext highlighter-rouge">TemplateSpecDict</code>，存储了模板原型所对应的特化/偏特化形式。所以编译器在这几句时，可以视作</p>
+
+<pre><code class="language-C++">// 以下为伪代码
+TemplateDict[DoWork&lt;T&gt;] = {
+    DoWork&lt;int&gt;,
+    DoWork&lt;float&gt;,
+    DoWork&lt;U*&gt;                     
+};
+</code></pre>
+
+<p>然后 (4) 试图以<code class="language-plaintext highlighter-rouge">int</code>实例化类模板<code class="language-plaintext highlighter-rouge">DoWork</code>。它会在<code class="language-plaintext highlighter-rouge">TemplateDict</code>中，找到<code class="language-plaintext highlighter-rouge">DoWork</code>，它有一个形式参数<code class="language-plaintext highlighter-rouge">T</code>接受类型，正好和我们实例化的要求相符合。并且此时<code class="language-plaintext highlighter-rouge">T</code>被推导为<code class="language-plaintext highlighter-rouge">int</code>。(5) 中的<code class="language-plaintext highlighter-rouge">float*</code>也是同理。</p>
+
+<pre><code class="language-C++">{   // 以下为 DoWork&lt;int&gt; 查找对应匹配的伪代码
+    templateProtoInt = TemplateDict.find(DoWork, int);    // 查找模板原型，查找到(0)
+    template = templatePrototype.match(int);              // 以 int 对应 int 匹配到 (1)
+}
+
+{   // 以下为DoWork&lt;float*&gt; 查找对应匹配的伪代码
+    templateProtoIntPtr = TemplateDict.find(DoWork, float*) // 查找模板原型，查找到(0)
+    template = templateProtoIntPtr.match(float*)            // 以 float* 对应 U* 匹配到 (3)，此时U为float
+}
+</code></pre>
+
+<p>那么根据上面的步骤所展现的基本原理，我们随便来几个练习：</p>
+
+<pre><code class="language-C++">template &lt;typename T, typename U&gt; struct X            ;    // 0 
+                                                           // 原型有两个类型参数
+                                                           // 所以下面的这些偏特化的实参列表
+                                                           // 也需要两个类型参数对应
+template &lt;typename T&gt;             struct X&lt;T,  T  &gt; {};    // 1
+template &lt;typename T&gt;             struct X&lt;T*, T  &gt; {};    // 2
+template &lt;typename T&gt;             struct X&lt;T,  T* &gt; {};    // 3
+template &lt;typename U&gt;             struct X&lt;U,  int&gt; {};    // 4
+template &lt;typename U&gt;             struct X&lt;U*, int&gt; {};    // 5
+template &lt;typename U, typename T&gt; struct X&lt;U*, T* &gt; {};    // 6
+template &lt;typename U, typename T&gt; struct X&lt;U,  T* &gt; {};    // 7
+
+template &lt;typename T&gt;             struct X&lt;unique_ptr&lt;T&gt;, shared_ptr&lt;T&gt;&gt;; // 8
+
+// 以下特化，分别对应哪个偏特化的实例？
+// 此时偏特化中的T或U分别是什么类型？
+
+X&lt;float*,  int&gt;      v0;                       
+X&lt;double*, int&gt;      v1;                       
+X&lt;double,  double&gt;   v2;                          
+X&lt;float*,  double*&gt;  v3;                           
+X&lt;float*,  float*&gt;   v4;                          
+X&lt;double,  float*&gt;   v5;                          
+X&lt;int,     double*&gt;  v6;                           
+X&lt;int*,    int&gt;      v7;                       
+X&lt;double*, double&gt;   v8;
+</code></pre>
+
+<p>在上面这段例子中，有几个值得注意之处。首先，偏特化时的模板形参，和原型的模板形参没有任何关系。和原型不同，它的顺序完全不影响模式匹配的顺序，它只是偏特化模式，如<code class="language-plaintext highlighter-rouge">&lt;U, int&gt;</code>中<code class="language-plaintext highlighter-rouge">U</code>的声明，真正的模式，是由<code class="language-plaintext highlighter-rouge">&lt;U, int&gt;</code>体现出来的。</p>
+
+<p>这也是为什么在特化的时候，当所有类型都已经确定，我们就可以抛弃全部的模板参数，写出<code class="language-plaintext highlighter-rouge">template &lt;&gt; struct X&lt;int, float&gt;</code>这样的形式：因为所有列表中所有参数都确定了，就不需要额外的形式参数了。</p>
+
+<p>其次，作为一个模式匹配，偏特化的实参列表中展现出来的“样子”，就是它能被匹配的原因。比如，<code class="language-plaintext highlighter-rouge">struct X&lt;T, T&gt;</code>中，要求模板的两个参数必须是相同的类型。而<code class="language-plaintext highlighter-rouge">struct X&lt;T, T*&gt;</code>，则代表第二个模板类型参数必须是第一个模板类型参数的指针，比如<code class="language-plaintext highlighter-rouge">X&lt;float***, float****&gt;</code>就能匹配上。当然，除了简单的指针、<code class="language-plaintext highlighter-rouge">const</code>和<code class="language-plaintext highlighter-rouge">volatile</code>修饰符，其他的类模板也可以作为偏特化时的“模式”出现，例如示例8，它要求传入同一个类型的<code class="language-plaintext highlighter-rouge">unique_ptr</code>和<code class="language-plaintext highlighter-rouge">shared_ptr</code>。C++标准中指出下列模式都是可以被匹配的：</p>
+
+<blockquote>
+  <p>N3337, 14.8.2.5/8</p>
+</blockquote>
+
+<blockquote>
+  <p>令<code class="language-plaintext highlighter-rouge">T</code>是模板类型实参或者类型列表（如 <em>int, float, double</em>  这样的，<code class="language-plaintext highlighter-rouge">TT</code>是template-template实参（参见6.2节），<code class="language-plaintext highlighter-rouge">i</code>是模板的非类型参数（整数、指针等），则以下形式的形参都会参与匹配：</p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">T</code>,<code class="language-plaintext highlighter-rouge">cv-list T</code>,<code class="language-plaintext highlighter-rouge">T*</code>, <code class="language-plaintext highlighter-rouge">template-name &lt;T&gt;</code>, <code class="language-plaintext highlighter-rouge">T&amp;</code>, <code class="language-plaintext highlighter-rouge">T&amp;&amp;</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">T [ integer-constant ]</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">type (T)</code>, <code class="language-plaintext highlighter-rouge">T()</code>, <code class="language-plaintext highlighter-rouge">T(T)</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">T type ::*</code>, <code class="language-plaintext highlighter-rouge">type T::*</code>, <code class="language-plaintext highlighter-rouge">T T::*</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">T (type ::*)()</code>, <code class="language-plaintext highlighter-rouge">type (T::*)()</code>, <code class="language-plaintext highlighter-rouge">type (type ::*)(T)</code>, <code class="language-plaintext highlighter-rouge">type (T::*)(T)</code>, <code class="language-plaintext highlighter-rouge">T (type ::*)(T)</code>, <code class="language-plaintext highlighter-rouge">T (T::*)()</code>, <code class="language-plaintext highlighter-rouge">T (T::*)(T)</code></p>
+</blockquote>
+
+<blockquote>
+  <p><code class="language-plaintext highlighter-rouge">type [i]</code>, <code class="language-plaintext highlighter-rouge">template-name &lt;i&gt;</code>, <code class="language-plaintext highlighter-rouge">TT&lt;T&gt;</code>, <code class="language-plaintext highlighter-rouge">TT&lt;i&gt;</code>, <code class="language-plaintext highlighter-rouge">TT&lt;&gt;</code></p>
+</blockquote>
+
+<p>对于某些实例化，偏特化的选择并不是唯一的。比如v4的参数是<code class="language-plaintext highlighter-rouge">&lt;float*, float*&gt;</code>，能够匹配的就有三条规则，1，6和7。很显然，6还是比7好一些，因为能多匹配一个指针。但是1和6，就很难说清楚谁更好了。一个说明了两者类型相同；另外一个则说明了两者都是指针。所以在这里，编译器也没办法决定使用那个，只好爆出了编译器错误。</p>
+
+<p>其他的示例可以先自己推测一下， 再去编译器上尝试一番：<a href="http://goo.gl/9UVzje"><code class="language-plaintext highlighter-rouge">goo.gl/9UVzje</code></a>。</p>
+
+<h4 id="312-不定长的模板参数">3.1.2 不定长的模板参数<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#312-%E4%B8%8D%E5%AE%9A%E9%95%BF%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0" aria-label="Anchor link for: 312 不定长的模板参数" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#312-%E4%B8%8D%E5%AE%9A%E9%95%BF%E7%9A%84%E6%A8%A1%E6%9D%BF%E5%8F%82%E6%95%B0" aria-label="Anchor link for: 312 不定长的模板参数" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>不过这个时候也许你还不死心。有没有一种办法能够让例子<code class="language-plaintext highlighter-rouge">DoWork</code>像重载一样，支持对长度不一的参数列表分别偏特化/特化呢？</p>
+
+<p>答案当然是肯定的。</p>
+
+<p>首先，首先我们要让模板实例化时的模板参数统一到相同形式上。逆向思维一下，虽然两个类型参数我们很难缩成一个参数，但是我们可以通过添加额外的参数，把一个扩展成两个呀。比如这样：</p>
+
+<pre><code class="language-C++">DoWork&lt;int,   void&gt; i;
+DoWork&lt;float, void&gt; f;
+DoWork&lt;int,   int &gt; ii;
+</code></pre>
+
+<p>这时，我们就能写出统一的模板原型：</p>
+
+<pre><code class="language-C++">template &lt;typename T0, typename T1&gt; struct DoWork;
+</code></pre>
+
+<p>继而偏特化/特化问题也解决了：</p>
+
+<pre><code class="language-C++">template &lt;&gt; struct DoWork&lt;int,   void&gt; {};  // (1) 这是 int 类型的特化
+template &lt;&gt; struct DoWork&lt;float, void&gt; {};  // (2) 这是 float 类型的特化
+template &lt;&gt; struct DoWork&lt;int,    int&gt; {};  // (3) 这是 int, int 类型的特化
+</code></pre>
+
+<p>显而易见这个解决方案并不那么完美。首先，不管是偏特化还是用户实例化模板的时候，都需要多撰写好几个<code class="language-plaintext highlighter-rouge">void</code>，而且最长的那个参数越长，需要写的就越多；其次，如果我们的<code class="language-plaintext highlighter-rouge">DoWork</code>在程序维护的过程中新加入了一个参数列表更长的实例，那么最悲惨的事情就会发生 —— 原型、每一个偏特化、每一个实例化都要追加上<code class="language-plaintext highlighter-rouge">void</code>以凑齐新出现的实例所需要的参数数量。</p>
+
+<p>所幸模板参数也有一个和函数参数相同的特性：默认实参（Default Arguments）。只需要一个例子，你们就能看明白了<a href="http://goo.gl/TtmcY9"><code class="language-plaintext highlighter-rouge">goo.gl/TtmcY9</code></a>：</p>
+
+<pre><code class="language-C++">template &lt;typename T0, typename T1 = void&gt; struct DoWork;
+
+template &lt;typename T&gt; struct DoWork&lt;T&gt; {};
+template &lt;&gt;           struct DoWork&lt;int&gt; {};
+template &lt;&gt;           struct DoWork&lt;float&gt; {};
+template &lt;&gt;           struct DoWork&lt;int, int&gt; {};
+
+DoWork&lt;int&gt; i;
+DoWork&lt;float&gt; f;
+DoWork&lt;double&gt; d;
+DoWork&lt;int, int&gt; ii;
+</code></pre>
+
+<p>所有参数不足，即原型中参数<code class="language-plaintext highlighter-rouge">T1</code>没有指定的地方，都由T1自己的默认参数<code class="language-plaintext highlighter-rouge">void</code>补齐了。</p>
+
+<p>但是这个方案仍然有些美中不足之处。</p>
+
+<p>比如，尽管我们默认了所有无效的类型都以<code class="language-plaintext highlighter-rouge">void</code>结尾，所以正确的类型列表应该是类似于<code class="language-plaintext highlighter-rouge">&lt;int, float, char, void, void&gt;</code>这样的形态。但你阻止不了你的用户写出类似于<code class="language-plaintext highlighter-rouge">&lt;void, int, void, float, char, void, void&gt;</code>这样不符合约定的类型参数列表。</p>
+
+<p>其次，假设这段代码中有一个函数，它的参数使用了和类模板相同的参数列表类型，如下面这段代码：</p>
+
+<pre><code class="language-C++">template &lt;typename T0, typename T1 = void&gt; struct X {
+    static void call(T0 const&amp; p0, T1 const&amp; p1);        // 0
+};
+
+template &lt;typename T0&gt; struct X&lt;T0&gt; {
+    static void call(T0 const&amp; p0);                      // 1
+};
+
+void foo(){
+    X&lt;int&gt;::call(5);                // 调用函数 1
+    X&lt;int, float&gt;::call(5, 0.5f);   // 调用函数 0
+}
+</code></pre>
+
+<p>那么，每加一个参数就要多写一个偏特化的形式，甚至还要重复编写一些可以共享的实现。</p>
+
+<p>不过不管怎么说，以长参数加默认参数的方式支持变长参数是可行的做法，这也是C++98/03时代的唯一选择。</p>
+
+<p>例如，<a href="https://github.com/boostorg/tuple/blob/develop/include/boost/tuple/detail/tuple_basic.hpp"><code class="language-plaintext highlighter-rouge">Boost.Tuple</code></a>就使用了这个方法，支持了变长的Tuple：</p>
+
+<pre><code class="language-C++">// Tuple 的声明，来自 boost
+struct null_type;
+
+template &lt;
+  class T0 = null_type, class T1 = null_type, class T2 = null_type,
+  class T3 = null_type, class T4 = null_type, class T5 = null_type,
+  class T6 = null_type, class T7 = null_type, class T8 = null_type,
+  class T9 = null_type&gt;
+class tuple;
+
+// Tuple的一些用例
+tuple&lt;int&gt; a;
+tuple&lt;double&amp;, const double&amp;, const double, double*, const double*&gt; b;
+tuple&lt;A, int(*)(char, int), B(A::*)(C&amp;), C&gt; c;
+tuple&lt;std::string, std::pair&lt;A, B&gt; &gt; d;
+tuple&lt;A*, tuple&lt;const A*, const B&amp;, C&gt;, bool, void*&gt; e;
+</code></pre>
+
+<p>此外，Boost.MPL也使用了这个手法将<code class="language-plaintext highlighter-rouge">boost::mpl::vector</code>映射到<code class="language-plaintext highlighter-rouge">boost::mpl::vector _n_</code>上。但是我们也看到了，这个方案的缺陷很明显：代码臃肿和潜在的正确性问题。此外，过度使用模板偏特化、大量冗余的类型参数也给编译器带来了沉重的负担。</p>
+
+<p>为了缓解这些问题，在C++11中，引入了变参模板（Variadic Template）。我们来看看支持了变参模板的C++11是如何实现tuple的：</p>
+
+<pre><code class="language-C++">template &lt;typename... Ts&gt; class tuple;
+</code></pre>
+
+<p>是不是一下子简洁了很多！这里的<code class="language-plaintext highlighter-rouge">typename... Ts</code>相当于一个声明，是说<code class="language-plaintext highlighter-rouge">Ts</code>不是一个类型，而是一个不定常的类型列表。同C语言的不定长参数一样，它通常只能放在参数列表的最后。看下面的例子：</p>
+
+<pre><code class="language-C++">template &lt;typename... Ts, typename U&gt; class X {};              // (1) error!
+template &lt;typename... Ts&gt;             class Y {};              // (2)
+template &lt;typename... Ts, typename U&gt; class Y&lt;U, Ts...&gt; {};    // (3)
+template &lt;typename... Ts, typename U&gt; class Y&lt;Ts..., U&gt; {};    // (4) error!
+</code></pre>
+
+<p>为什么第(1)条语句会出错呢？(1)是模板原型，模板实例化时，要以它为基础和实例化时的类型实参相匹配。因为C++的模板是自左向右匹配的，所以不定长参数只能结尾。其他形式，无论写作<code class="language-plaintext highlighter-rouge">Ts, U</code>，或者是<code class="language-plaintext highlighter-rouge">Ts, V, Us,</code>，或者是<code class="language-plaintext highlighter-rouge">V, Ts, Us</code>都是不可取的。(4) 也存在同样的问题。</p>
+
+<p>但是，为什么(3)中， 模板参数和(1)相同，都是<code class="language-plaintext highlighter-rouge">typename... Ts, typename U</code>，但是编译器却并没有报错呢？</p>
+
+<p>答案在这一节的早些时候。(3)和(1)不同，它并不是模板的原型，它只是<code class="language-plaintext highlighter-rouge">Y</code>的一个偏特化。回顾我们在之前所提到的，偏特化时，模板参数列表并不代表匹配顺序，它们只是为偏特化的模式提供的声明，也就是说，它们的匹配顺序，只是按照<code class="language-plaintext highlighter-rouge">&lt;U, Ts...&gt;</code>来，而之前的参数只是告诉你<code class="language-plaintext highlighter-rouge">Ts</code>是一个类型列表，而<code class="language-plaintext highlighter-rouge">U</code>是一个类型，排名不分先后。</p>
+
+<p>在这里，我们只提到了变长模板参数的声明，如何使用我们将在第四章讲述。</p>
+
+<h4 id="313-模板的默认实参">3.1.3 模板的默认实参<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#313-%E6%A8%A1%E6%9D%BF%E7%9A%84%E9%BB%98%E8%AE%A4%E5%AE%9E%E5%8F%82" aria-label="Anchor link for: 313 模板的默认实参" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#313-%E6%A8%A1%E6%9D%BF%E7%9A%84%E9%BB%98%E8%AE%A4%E5%AE%9E%E5%8F%82" aria-label="Anchor link for: 313 模板的默认实参" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h4>
+
+<p>在上一节中，我们介绍了模板对默认实参的支持。当时我们的例子很简单，默认模板实参是一个确定的类型<code class="language-plaintext highlighter-rouge">void</code>或者自定义的<code class="language-plaintext highlighter-rouge">null_type</code>：</p>
+
+<pre><code class="language-C++">template &lt;
+    typename T0, typename T1 = void, typename T2 = void
+&gt; class Tuple;
+</code></pre>
+
+<p>实际上，模板的默认参数不仅仅可以是一个确定的类型，它还能是以其他类型为参数的一个类型表达式。
+考虑下面的例子：我们要执行两个同类型变量的除法，它对浮点、整数和其他类型分别采取不同的措施。
+对于浮点，执行内置除法；对于整数，要处理除零保护，防止引发异常；对于其他类型，执行一个叫做<code class="language-plaintext highlighter-rouge">CustomeDiv</code>的函数。</p>
+
+<p>第一步，我们先把浮点正确的写出来：</p>
+
+<pre><code class="language-C++">#include &lt;type_traits&gt;
+
+template &lt;typename T&gt; T CustomDiv(T lhs, T rhs) {
+    // Custom Div的实现
+}
+
+template &lt;typename T, bool IsFloat = std::is_floating_point&lt;T&gt;::value&gt; struct SafeDivide {
+    static T Do(T lhs, T rhs) {
+        return CustomDiv(lhs, rhs);
+    }
+};
+
+template &lt;typename T&gt; struct SafeDivide&lt;T, true&gt;{     // 偏特化A
+    static T Do(T lhs, T rhs){
+        return lhs/rhs;
+    }
+};
+
+template &lt;typename T&gt; struct SafeDivide&lt;T, false&gt;{   // 偏特化B
+    static T Do(T lhs, T rhs){
+        return lhs;
+    }
+};
+
+void foo(){
+    SafeDivide&lt;float&gt;::Do(1.0f, 2.0f);	// 调用偏特化A
+    SafeDivide&lt;int&gt;::Do(1, 2);          // 调用偏特化B
+}
+</code></pre>
+
+<p>在实例化的时候，尽管我们只为<code class="language-plaintext highlighter-rouge">SafeDivide</code>指定了参数<code class="language-plaintext highlighter-rouge">T</code>，但是它的另一个参数<code class="language-plaintext highlighter-rouge">IsFloat</code>在缺省的情况下，可以根据<code class="language-plaintext highlighter-rouge">T</code>，求出表达式<code class="language-plaintext highlighter-rouge">std::is_floating_point&lt;T&gt;::value</code>的值作为实参的值，带入到<code class="language-plaintext highlighter-rouge">SafeDivide</code>的匹配中。</p>
+
+<p>嗯，这个时候我们要再把整型和其他类型纳入进来，无外乎就是加这么一个参数<a href="http://goo.gl/0Lqywt"><code class="language-plaintext highlighter-rouge">goo.gl/0Lqywt</code></a>：</p>
+
+<pre><code class="language-C++">#include &lt;complex&gt;
+#include &lt;type_traits&gt;
+
+template &lt;typename T&gt; T CustomDiv(T lhs, T rhs) {
+    T v;
+    // Custom Div的实现
+    return v;
+}
+
+template &lt;
+    typename T,
+    bool IsFloat = std::is_floating_point&lt;T&gt;::value,
+    bool IsIntegral = std::is_integral&lt;T&gt;::value
+&gt; struct SafeDivide {
+    static T Do(T lhs, T rhs) {
+        return CustomDiv(lhs, rhs);
+    }
+};
+
+template &lt;typename T&gt; struct SafeDivide&lt;T, true, false&gt;{    // 偏特化A
+    static T Do(T lhs, T rhs){
+        return lhs/rhs;
+    }
+};
+
+template &lt;typename T&gt; struct SafeDivide&lt;T, false, true&gt;{   // 偏特化B
+    static T Do(T lhs, T rhs){
+        return rhs == 0 ? 0 : lhs/rhs;
+    }
+};
+
+void foo(){
+    SafeDivide&lt;float&gt;::Do(1.0f, 2.0f);	                          // 调用偏特化A
+    SafeDivide&lt;int&gt;::Do(1, 2);                                    // 调用偏特化B
+    SafeDivide&lt;std::complex&lt;float&gt;&gt;::Do({1.f, 2.f}, {1.f, -2.f}); // 调用一般形式
+}
+</code></pre>
+
+<p>当然，这时也许你会注意到，<code class="language-plaintext highlighter-rouge">is_integral</code>，<code class="language-plaintext highlighter-rouge">is_floating_point</code>和其他类类型三者是互斥的，那能不能只使用一个条件量来进行分派呢？答案当然是可以的：<a href="http://goo.gl/jYp5J2"><code class="language-plaintext highlighter-rouge">goo.gl/jYp5J2</code></a>：</p>
+
+<div class="language-cpp highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs cpp"><span class="cp"><span class="hljs-preprocessor">#<span class="hljs-keyword">include</span> &lt;complex&gt;</span>
+<span class="hljs-preprocessor">#<span class="hljs-keyword">include</span> &lt;type_traits&gt;</span>
+</span>
+<span class="k"><span class="hljs-keyword">template</span></span> <span class="o">&lt;</span><span class="k"><span class="hljs-keyword">typename</span></span> <span class="nc">T</span><span class="p">&gt;</span> <span class="n"><span class="hljs-function">T</span></span><span class="hljs-function"> </span><span class="nf"><span class="hljs-function"><span class="hljs-title">CustomDiv</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">(</span></span></span><span class="n"><span class="hljs-function"><span class="hljs-params">T</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">lhs</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">,</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">T</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">rhs</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">)</span></span></span><span class="hljs-function"> </span><span class="p">{</span>
+    <span class="n">T</span> <span class="n">v</span><span class="p">;</span>
+    <span class="c1"><span class="hljs-comment">// Custom Div的实现</span></span>
+    <span class="k"><span class="hljs-keyword">return</span></span> <span class="n">v</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k"><span class="hljs-keyword">template</span></span> <span class="o">&lt;</span><span class="k"><span class="hljs-keyword">typename</span></span> <span class="nc">T</span><span class="p">,</span> <span class="k"><span class="hljs-keyword">typename</span></span> <span class="nc">Enabled</span> <span class="o">=</span> <span class="n"><span class="hljs-built_in">std</span></span><span class="o">::</span><span class="n"><span class="hljs-keyword">true_t</span>ype</span><span class="p">&gt;</span> <span class="k"><span class="hljs-keyword">struct</span></span> <span class="nc">SafeDivide</span> <span class="p">{</span>
+    <span class="k"><span class="hljs-function"><span class="hljs-keyword">static</span></span></span><span class="hljs-function"> </span><span class="n"><span class="hljs-function">T</span></span><span class="hljs-function"> </span><span class="n"><span class="hljs-function"><span class="hljs-title">Do</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">(</span></span></span><span class="n"><span class="hljs-function"><span class="hljs-params">T</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">lhs</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">,</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">T</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">rhs</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">)</span></span></span><span class="hljs-function"> </span><span class="p">{</span>
+        <span class="k"><span class="hljs-keyword">return</span></span> <span class="n">CustomDiv</span><span class="p">(</span><span class="n">lhs</span><span class="p">,</span> <span class="n">rhs</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k"><span class="hljs-keyword">template</span></span> <span class="o">&lt;</span><span class="k"><span class="hljs-keyword">typename</span></span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k"><span class="hljs-keyword">struct</span></span> <span class="nc">SafeDivide</span><span class="o">&lt;</span>
+    <span class="n">T</span><span class="p">,</span> <span class="k"><span class="hljs-keyword">typename</span></span> <span class="n"><span class="hljs-built_in">std</span></span><span class="o">::</span><span class="n">is_floating_point</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&gt;</span><span class="p">{</span>    <span class="c1"><span class="hljs-comment">// 偏特化A</span></span>
+    <span class="k"><span class="hljs-function"><span class="hljs-keyword">static</span></span></span><span class="hljs-function"> </span><span class="n"><span class="hljs-function">T</span></span><span class="hljs-function"> </span><span class="n"><span class="hljs-function"><span class="hljs-title">Do</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">(</span></span></span><span class="n"><span class="hljs-function"><span class="hljs-params">T</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">lhs</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">,</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">T</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">rhs</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">)</span></span>{</span>
+        <span class="k"><span class="hljs-keyword">return</span></span> <span class="n">lhs</span><span class="o">/</span><span class="n">rhs</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="k"><span class="hljs-keyword">template</span></span> <span class="o">&lt;</span><span class="k"><span class="hljs-keyword">typename</span></span> <span class="nc">T</span><span class="p">&gt;</span> <span class="k"><span class="hljs-keyword">struct</span></span> <span class="nc">SafeDivide</span><span class="o">&lt;</span>
+    <span class="n">T</span><span class="p">,</span> <span class="k"><span class="hljs-keyword">typename</span></span> <span class="n"><span class="hljs-built_in">std</span></span><span class="o">::</span><span class="n">is_integral</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;::</span><span class="n">type</span><span class="o">&gt;</span><span class="p">{</span>          <span class="c1"><span class="hljs-comment">// 偏特化B</span></span>
+    <span class="k"><span class="hljs-function"><span class="hljs-keyword">static</span></span></span><span class="hljs-function"> </span><span class="n"><span class="hljs-function">T</span></span><span class="hljs-function"> </span><span class="n"><span class="hljs-function"><span class="hljs-title">Do</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">(</span></span></span><span class="n"><span class="hljs-function"><span class="hljs-params">T</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">lhs</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">,</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">T</span></span></span><span class="hljs-function"><span class="hljs-params"> </span></span><span class="n"><span class="hljs-function"><span class="hljs-params">rhs</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">)</span></span>{</span>
+        <span class="k"><span class="hljs-keyword">return</span></span> <span class="n">rhs</span> <span class="o">==</span> <span class="mi"><span class="hljs-number">0</span></span> <span class="o">?</span> <span class="mi"><span class="hljs-number">0</span></span> <span class="o">:</span> <span class="n">lhs</span><span class="o">/</span><span class="n">rhs</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+
+<span class="kt"><span class="hljs-function"><span class="hljs-keyword">void</span></span></span><span class="hljs-function"> </span><span class="nf"><span class="hljs-function"><span class="hljs-title">foo</span></span></span><span class="p"><span class="hljs-function"><span class="hljs-params">()</span></span>{</span>
+    <span class="n">SafeDivide</span><span class="o">&lt;</span><span class="kt"><span class="hljs-keyword">float</span></span><span class="o">&gt;::</span><span class="n">Do</span><span class="p">(</span><span class="mf"><span class="hljs-number">1.0</span></span><span class="n"><span class="hljs-number">f</span></span><span class="p">,</span> <span class="mf"><span class="hljs-number">2.0</span></span><span class="n"><span class="hljs-number">f</span></span><span class="p">);</span>	<span class="c1"><span class="hljs-comment">// 调用偏特化A</span></span>
+    <span class="n">SafeDivide</span><span class="o">&lt;</span><span class="kt"><span class="hljs-keyword">int</span></span><span class="o">&gt;::</span><span class="n">Do</span><span class="p">(</span><span class="mi"><span class="hljs-number">1</span></span><span class="p">,</span> <span class="mi"><span class="hljs-number">2</span></span><span class="p">);</span>          <span class="c1"><span class="hljs-comment">// 调用偏特化B</span></span>
+    <span class="n">SafeDivide</span><span class="o">&lt;</span><span class="n"><span class="hljs-built_in">std</span></span><span class="o">::</span><span class="n"><span class="hljs-keyword">complex</span></span><span class="o">&lt;</span><span class="kt"><span class="hljs-keyword">float</span></span><span class="o">&gt;&gt;::</span><span class="n">Do</span><span class="p">({</span><span class="mf"><span class="hljs-number">1.</span></span><span class="n"><span class="hljs-number">f</span></span><span class="p">,</span> <span class="mf"><span class="hljs-number">2.</span></span><span class="n"><span class="hljs-number">f</span></span><span class="p">},</span> <span class="p">{</span><span class="mf"><span class="hljs-number">1.</span></span><span class="n"><span class="hljs-number">f</span></span><span class="p">,</span> <span class="o">-</span><span class="mf"><span class="hljs-number">2.</span></span><span class="n"><span class="hljs-number">f</span></span><span class="p">});</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>我们借助这个例子，帮助大家理解一下这个结构是怎么工作的：</p>
+
+<ol>
+  <li>对<code class="language-plaintext highlighter-rouge">SafeDivide&lt;int&gt;</code></li>
+</ol>
+
+<ul>
+  <li>
+    <p>通过匹配类模板的泛化形式，计算默认实参，可以知道我们要匹配的模板实参是<code class="language-plaintext highlighter-rouge">SafeDivide&lt;int, true_type&gt;</code></p>
+  </li>
+  <li>
+    <p>计算两个偏特化的形式的匹配：A得到<code class="language-plaintext highlighter-rouge">&lt;int, false_type&gt;</code>,和B得到 <code class="language-plaintext highlighter-rouge">&lt;int, true_type&gt;</code></p>
+  </li>
+  <li>
+    <p>最后偏特化B的匹配结果和模板实参一致，使用它。</p>
+  </li>
+</ul>
+
+<ol>
+  <li>针对<code class="language-plaintext highlighter-rouge">SafeDivide&lt;complex&lt;float&gt;&gt;</code></li>
+</ol>
+
+<ul>
+  <li>
+    <p>通过匹配类模板的泛化形式，可以知道我们要匹配的模板实参是<code class="language-plaintext highlighter-rouge">SafeDivide&lt;complex&lt;float&gt;, true_type&gt;</code></p>
+  </li>
+  <li>
+    <p>计算两个偏特化形式的匹配：A和B均得到<code class="language-plaintext highlighter-rouge">SafeDivide&lt;complex&lt;float&gt;, false_type&gt;</code></p>
+  </li>
+  <li>
+    <p>A和B都与模板实参无法匹配，所以使用原型，调用<code class="language-plaintext highlighter-rouge">CustomDiv</code></p>
+  </li>
+</ul>
+
+<h3 id="32-后悔药sfinae">3.2 后悔药：SFINAE<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#32-%E5%90%8E%E6%82%94%E8%8D%AFsfinae" aria-label="Anchor link for: 32 后悔药sfinae" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#32-%E5%90%8E%E6%82%94%E8%8D%AFsfinae" aria-label="Anchor link for: 32 后悔药sfinae" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<p>考虑下面这个函数模板：</p>
+
+<pre><code class="language-C++">template &lt;typename T, typename U&gt;
+void foo(T t, typename U::type u) {
+  // ...
+}
+</code></pre>
+
+<p>到本节为止，我们所有的例子都保证了一旦咱们敲定了模板参数中 <code class="language-plaintext highlighter-rouge">T</code> 和 <code class="language-plaintext highlighter-rouge">U</code>，函数参变量 <code class="language-plaintext highlighter-rouge">t</code> 和 <code class="language-plaintext highlighter-rouge">u</code> 的类型都是成立的，比如下面这样：</p>
+
+<pre><code class="language-C++">struct X {
+  typedef float type;
+};
+
+template &lt;typename T, typename U&gt;
+void foo(T t, typename U::type u) {
+  // ...
+}
+
+void callFoo() {
+  foo&lt;int, X&gt;(5, 5.0); // T == int, typename U::type == X::type == int
+}
+</code></pre>
+
+<p>那么这里有一个可能都不算是问题的问题 —— 对于下面的代码，你认为它会提示怎么样的错误：</p>
+
+<pre><code class="language-C++">struct X {
+  typedef float type;
+};
+
+struct Y {
+  typedef float type2;
+};
+
+template &lt;typename T, typename U&gt;
+void foo(T t, typename U::type u) {
+  // ...
+}
+
+void callFoo() {
+  foo&lt;int, X&gt;(5, 5.0); // T == int, typename U::type == X::type == int
+  foo&lt;int, Y&gt;(5, 5.0); // ???
+}
+</code></pre>
+
+<p>这个时候你也许会说：啊，这个简单，<code class="language-plaintext highlighter-rouge">Y</code> 没有 <code class="language-plaintext highlighter-rouge">type</code> 这个成员自然会出错啦！嗯，这个时候咱们来看看Clang给出的结果：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code class="hljs coffeescript"><span class="hljs-attribute">error</span>: <span class="hljs-literal">no</span> matching <span class="hljs-reserved">function</span> <span class="hljs-keyword">for</span> call to <span class="hljs-string">'foo'</span>
+   foo&lt;int, Y&gt;(<span class="hljs-number">5</span>, <span class="hljs-number">5.0</span>); <span class="hljs-regexp">//</span> ???
+   ^~~~~~~~~~~
+   <span class="hljs-attribute">note</span>: candidate template <span class="hljs-attribute">ignored</span>: substitution failure [<span class="hljs-reserved">with</span> T = int, U = Y]: <span class="hljs-literal">no</span> type named <span class="hljs-string">'type'</span> <span class="hljs-keyword">in</span> <span class="hljs-string">'Y'</span>
+       <span class="hljs-reserved">void</span> foo(T t, typename <span class="hljs-attribute">U</span>::type u) {
+</code></pre></div></div>
+
+<p>完整翻译过来就是，直接的出错原因是没有匹配的 <code class="language-plaintext highlighter-rouge">foo</code> 函数，间接原因是尝试用 <code class="language-plaintext highlighter-rouge">[T = int, U = y]</code> 做类型替换的时候失败了，所以这个函数模板就被忽略了。等等，不是出错，而是被忽略了？那么也就是说，只要有别的能匹配的类型兜着，编译器就无视这里的失败了？</p>
+
+<p>银河火箭队的阿喵说，就是这样。不信邪的朋友可以试试下面的代码：</p>
+
+<pre><code class="language-C++">struct X {
+  typedef float type;
+};
+
+struct Y {
+  typedef float type2;
+};
+
+template &lt;typename T, typename U&gt;
+void foo(T t, typename U::type u) {
+  // ...
+}
+
+template &lt;typename T, typename U&gt;
+void foo(T t, typename U::type2 u) {
+  // ...
+} 
+void callFoo() {
+  foo&lt;int, X&gt;(5, 5.0); // T == int, typename U::type == X::type == int
+  foo&lt;int, Y&gt;( 1, 1.0 ); // ???
+}
+</code></pre>
+
+<p>这下相信编译器真的是不关心替换失败了吧。我们管这种只要有正确的候选，就无视替换失败的做法为SFINAE。</p>
+
+<p>我们不用纠结这个词的发音，它来自于 Substitution failure is not an error 的首字母缩写。这一句之乎者也般难懂的话，由之乎者 —— 啊，不，Substitution，Failure和Error三个词构成。</p>
+
+<p>我们从最简单的词“Error”开始理解。Error就是一般意义上的编译错误。一旦出现编译错误，大家都知道，编译器就会中止编译，并且停止接下来的代码生成和链接等后续活动。</p>
+
+<p>其次，我们再说“Failure”。很多时候光看字面意思，很多人会把 Failure 和 Error 等同起来。但是实际上Failure很多场合下只是一个中性词。比如我们看下面这个虚构的例子就知道这两者的区别了。</p>
+
+<p>假设我们有一个语法分析器，其中某一个规则需要匹配一个token，它可以是标识符，字面量或者是字符串，那么我们会有下面的代码：</p>
+
+<pre><code class="language-C++">switch(token)
+{
+case IDENTIFIER:
+    // do something
+    break;
+case LITERAL_NUMBER:
+    // do something
+    break;
+case LITERAL_STRING:
+    // do something
+    break;
+default:
+    throw WrongToken(token);
+}
+</code></pre>
+<p>假如我们当前的token是 <code class="language-plaintext highlighter-rouge">LITERAL_STRING</code> 的时候，那么第一步它在匹配 <code class="language-plaintext highlighter-rouge">IDENTIFIER</code> 时，我们可以认为它失败（failure）了，但是它在第三步就会匹配上，所以它并不是一个错误。</p>
+
+<p>但是如果这个token既不是标识符、也不是数字字面量、也不是字符串字面量，而且我们的语法规定除了这三类值以外其他统统都是非法的时，我们才认为它是一个error。</p>
+
+<p>大家所熟知的函数重载也是如此。比如说下面这个例子：</p>
+
+<pre><code class="language-C++">struct A {};
+struct B: public A {};
+struct C {};
+
+void foo(A const&amp;) {}
+void foo(B const&amp;) {}
+
+void callFoo() {
+  foo( A() );
+  foo( B() );
+  foo( C() );
+}
+</code></pre>
+
+<p>那么 <code class="language-plaintext highlighter-rouge">foo( A() )</code> 虽然匹配 <code class="language-plaintext highlighter-rouge">foo(B const&amp;)</code> 会失败，但是它起码能匹配 <code class="language-plaintext highlighter-rouge">foo(A const&amp;)</code>，所以它是正确的；<code class="language-plaintext highlighter-rouge">foo( B() )</code> 能同时匹配两个函数原型，但是 <code class="language-plaintext highlighter-rouge">foo(B const&amp;)</code> 要更好一些，因此它选择了这个原型。而 <code class="language-plaintext highlighter-rouge">foo( C() );</code> 因为两个函数都匹配失败（Failure）了，所以它找不到相应的原型，这时才会爆出一个编译器错误（Error）。</p>
+
+<p>所以到这里我们就明白了，在很多情况下，Failure is not an error。编译器在遇到Failure的时候，往往还需要尝试其他的可能性。</p>
+
+<p>好，现在我们把最后一个词，Substitution，加入到我们的字典中。现在这句话的意思就是说，我们要把 Failure is not an error 的概念，推广到Substitution阶段。</p>
+
+<p>所谓substitution，就是将函数模板中的形参，替换成实参的过程。概念很简洁但是实现却颇多细节，所以C++标准中对这一概念的解释比较拗口。它分别指出了以下几点：</p>
+
+<ul>
+  <li>
+    <p>什么时候函数模板会发生实参 替代（Substitute） 形参的行为；</p>
+  </li>
+  <li>
+    <p>什么样的行为被称作 Substitution；</p>
+  </li>
+  <li>
+    <p>什么样的行为不可以被称作 Substitution Failure —— 他们叫SFINAE error。</p>
+  </li>
+</ul>
+
+<p>我们在此不再详述，有兴趣的同学可以参照<a href="http://en.cppreference.com/w/cpp/language/sfinae"><code class="language-plaintext highlighter-rouge">这里</code></a>，这是标准的一个精炼版本。这里我们简单的解释一下。</p>
+
+<p>考虑我们有这么个函数签名：</p>
+
+<pre><code class="language-C++">template &lt;
+  typename T0, 
+  // 一大坨其他模板参数
+  typename U = /* 和前面T有关的一大坨 */
+&gt;
+RType /* 和模板参数有关的一大坨 */
+functionName (
+   PType0 /* PType0 是和模板参数有关的一大坨 */,
+   PType1 /* PType1 是和模板参数有关的一大坨 */,
+   // ... 其他参数
+) {
+  // 实现，和模板参数有关的一大坨
+}
+</code></pre>
+
+<p>那么，在这个函数模板被实例化的时候，所有函数签名上的“和模板参数有关的一大坨”被推导出具体类型的过程，就是替换。一个更具体的例子来解释上面的“一大坨”：</p>
+
+<pre><code class="language-C++">template &lt;
+  typename T, 
+  typenname U = typename vector&lt;T&gt;::iterator // 1
+&gt;
+typename vector&lt;T&gt;::value_type  // 1
+  foo( 
+      T*, // 1
+      T&amp;, // 1
+      typename T::internal_type, // 1
+      typename add_reference&lt;T&gt;::type, // 1
+      int // 这里都不需要 substitution
+  )
+{
+   // 整个实现部分，都没有 substitution。这个很关键。
+}
+</code></pre>
+
+<p>所有标记为 <code class="language-plaintext highlighter-rouge">1</code> 的部分，都是需要替换的部分，而它们在替换过程中的失败（failure），就称之为替换失败（substitution failure）。</p>
+
+<p>下面的代码是提供了一些替换成功和替换失败的示例：</p>
+
+<pre><code class="language-C++">struct X {
+  typedef int type;
+};
+
+struct Y {
+  typedef int type2;
+};
+
+template &lt;typename T&gt; void foo(typename T::type);    // Foo0
+template &lt;typename T&gt; void foo(typename T::type2);   // Foo1
+template &lt;typename T&gt; void foo(T);                   // Foo2
+
+void callFoo() {
+   foo&lt;X&gt;(5);    // Foo0: Succeed, Foo1: Failed,  Foo2: Failed
+   foo&lt;Y&gt;(10);   // Foo0: Failed,  Foo1: Succeed, Foo2: Failed
+   foo&lt;int&gt;(15); // Foo0: Failed,  Foo1: Failed,  Foo2: Succeed
+}
+</code></pre>
+
+<p>在这个例子中，当我们指定 <code class="language-plaintext highlighter-rouge">foo&lt;Y&gt;</code> 的时候，substitution就开始工作了，而且会同时工作在三个不同的 <code class="language-plaintext highlighter-rouge">foo</code> 签名上。如果我们仅仅因为 <code class="language-plaintext highlighter-rouge">Y</code> 没有 <code class="language-plaintext highlighter-rouge">type</code>，匹配 <code class="language-plaintext highlighter-rouge">Foo0</code> 失败了，就宣布代码有错，中止编译，那显然是武断的。因为 <code class="language-plaintext highlighter-rouge">Foo1</code> 是可以被正确替换的，我们也希望 <code class="language-plaintext highlighter-rouge">Foo1</code> 成为 <code class="language-plaintext highlighter-rouge">foo&lt;Y&gt;</code> 的原型。</p>
+
+<p>std/boost库中的 <code class="language-plaintext highlighter-rouge">enable_if</code> 是 SFINAE 最直接也是最主要的应用。所以我们通过下面 <code class="language-plaintext highlighter-rouge">enable_if</code> 的例子，来深入理解一下 SFINAE 在模板编程中的作用。</p>
+
+<p>假设我们有两个不同类型的计数器（counter），一种是普通的整数类型，另外一种是一个复杂对象，它从接口 <code class="language-plaintext highlighter-rouge">ICounter</code> 继承，这个接口有一个成员叫做increase实现计数功能。现在，我们想把这两种类型的counter封装一个统一的调用：inc_counter。那么，我们直觉会简单粗暴的写出下面的代码：</p>
+
+<pre><code class="language-C++">struct ICounter {
+  virtual void increase() = 0;
+  virtual ~ICounter() {}
+};
+
+struct Counter: public ICounter {
+   void increase() override {
+      // Implements
+   }
+};
+
+template &lt;typename T&gt;
+void inc_counter(T&amp; counterObj) {
+  counterObj.increase();
+}
+
+template &lt;typename T&gt;
+void inc_counter(T&amp; intTypeCounter){
+  ++intTypeCounter;
+}
+
+void doSomething() {
+  Counter cntObj;
+  uint32_t cntUI32;
+
+  // blah blah blah
+  inc_counter(cntObj);
+  inc_counter(cntUI32);
+}
+</code></pre>
+
+<p>我们非常希望它展现出预期的行为。因为其实我们是知道对于任何一个调用，两个 <code class="language-plaintext highlighter-rouge">inc_counter</code> 只有一个是能够编译正确的。“有且唯一”，我们理应当期望编译器能够挑出那个唯一来。</p>
+
+<p>可惜编译器做不到这一点。首先，它就告诉我们，这两个签名</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; void inc_counter(T&amp; counterObj);
+template &lt;typename T&gt; void inc_counter(T&amp; intTypeCounter);
+</code></pre>
+
+<p>其实是一模一样的。我们遇到了 <code class="language-plaintext highlighter-rouge">redefinition</code>。</p>
+
+<p>我们看看 <code class="language-plaintext highlighter-rouge">enable_if</code> 是怎么解决这个问题的。我们通过 <code class="language-plaintext highlighter-rouge">enable_if</code> 这个 <code class="language-plaintext highlighter-rouge">T</code> 对于不同的实例做个限定：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; void inc_counter(
+  T&amp; counterObj, 
+  typename std::enable_if&lt;
+    is_base_of&lt;T, ICounter&gt;::value
+  &gt;::type* = nullptr );
+
+template &lt;typename T&gt; void inc_counter(
+  T&amp; counterInt,
+  typename std::enable_if&lt;
+    std::is_integral&lt;T&gt;::value
+  &gt;::type* = nullptr );
+</code></pre>
+
+<p>然后我们解释一下，这个 <code class="language-plaintext highlighter-rouge">enable_if</code> 是怎么工作的，语法为什么这么丑：</p>
+
+<p>首先，替换（substitution）只有在推断函数类型的时候，才会起作用。推断函数类型需要参数的类型，所以， <code class="language-plaintext highlighter-rouge">typename std::enable_if&lt;std::is_integral&lt;T&gt;::value&gt;::type</code> 这么一长串代码，就是为了让 <code class="language-plaintext highlighter-rouge">enable_if</code> 参与到函数类型中；</p>
+
+<p>其次， <code class="language-plaintext highlighter-rouge">is_integral&lt;T&gt;::value</code> 返回一个布尔类型的编译器常数，告诉我们它是或者不是一个 <code class="language-plaintext highlighter-rouge">integral type</code>，<code class="language-plaintext highlighter-rouge">enable_if&lt;C&gt;</code> 的作用就是，如果这个 <code class="language-plaintext highlighter-rouge">C</code> 值为 <code class="language-plaintext highlighter-rouge">True</code>，那么 <code class="language-plaintext highlighter-rouge">enable_if&lt;C&gt;::type</code> 就会被推断成一个 <code class="language-plaintext highlighter-rouge">void</code> 或者是别的什么类型，让整个函数匹配后的类型变成 <code class="language-plaintext highlighter-rouge">void inc_counter&lt;int&gt;(int &amp; counterInt, void* dummy = nullptr);</code> 如果这个值为 <code class="language-plaintext highlighter-rouge">False</code> ，那么 <code class="language-plaintext highlighter-rouge">enable_if&lt;false&gt;</code> 这个特化形式中，压根就没有这个 <code class="language-plaintext highlighter-rouge">::type</code>，于是替换就失败了。和我们之前的例子中一样，这个函数原型就不会被产生出来。</p>
+
+<p>所以我们能保证，无论对于 <code class="language-plaintext highlighter-rouge">int</code> 还是 <code class="language-plaintext highlighter-rouge">counter</code> 类型的实例，我们都只有一个函数原型通过了substitution —— 这样就保证了它的“有且唯一”，编译器也不会因为你某个替换失败而无视成功的那个实例。</p>
+
+<p>这个例子说到了这里，熟悉C++的你，一定会站出来说我们只要把第一个签名改成：</p>
+
+<pre><code class="language-C++">void inc_counter(ICounter&amp; counterObj);
+</code></pre>
+
+<p>就能完美解决这个问题了，根本不需要这么复杂的编译器机制。</p>
+
+<p>嗯，你说的没错，在这里这个特性一点都没用。</p>
+
+<p>这也提醒我们，当你觉得需要写 <code class="language-plaintext highlighter-rouge">enable_if</code> 的时候，首先要考虑到以下可能性：</p>
+
+<ul>
+  <li>
+    <p>重载（对模板函数）</p>
+  </li>
+  <li>
+    <p>偏特化（对模板类而言）</p>
+  </li>
+  <li>
+    <p>虚函数</p>
+  </li>
+</ul>
+
+<p>但是问题到了这里并没有结束。因为 <code class="language-plaintext highlighter-rouge">increase</code> 毕竟是个虚函数。假如 <code class="language-plaintext highlighter-rouge">Counter</code> 需要调用的地方实在是太多了，这个时候我们会非常期望 <code class="language-plaintext highlighter-rouge">increase</code> 不再是个虚函数以提高性能。此时我们会调整继承层级：</p>
+
+<pre><code class="language-C++">struct ICounter {};
+struct Counter: public ICounter {
+  void increase() {
+    // impl
+  }
+};
+</code></pre>
+
+<p>那么原有的 <code class="language-plaintext highlighter-rouge">void inc_counter(ICounter&amp; counterObj)</code> 就无法再执行下去了。这个时候你可能会考虑一些变通的办法：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt;
+void inc_counter(ICounter&amp; c) {};
+
+template &lt;typename T&gt;
+void inc_counter(T&amp; c) { ++c; };
+
+void doSomething() {
+  Counter cntObj;
+  uint32_t cntUI32;
+
+  // blah blah blah
+  inc_counter(cntObj); // 1
+  inc_counter(static_cast&lt;ICounter&amp;&gt;(cntObj)); // 2
+  inc_counter(cntUI32); // 3
+}
+</code></pre>
+
+<p>对于调用 <code class="language-plaintext highlighter-rouge">1</code>，因为 <code class="language-plaintext highlighter-rouge">cntObj</code> 到 <code class="language-plaintext highlighter-rouge">ICounter</code> 是需要类型转换的，所以比 <code class="language-plaintext highlighter-rouge">void inc_counter(T&amp;) [T = Counter]</code> 要更差一些。然后它会直接实例化后者，结果实现变成了 <code class="language-plaintext highlighter-rouge">++cntObj</code>，BOOM！</p>
+
+<p>那么我们做 <code class="language-plaintext highlighter-rouge">2</code> 试试看？嗯，工作的很好。但是等等，我们的初衷是什么来着？不就是让 <code class="language-plaintext highlighter-rouge">inc_counter</code> 对不同的计数器类型透明吗？这不是又一夜回到解放前了？</p>
+
+<p>所以这个时候，就能看到 <code class="language-plaintext highlighter-rouge">enable_if</code> 是如何通过 SFINAE 发挥威力的了：</p>
+
+<pre><code class="language-C++">#include &lt;type_traits&gt;
+#include &lt;utility&gt;
+#include &lt;cstdint&gt;
+
+struct ICounter {};
+struct Counter: public ICounter {
+  void increase() {
+    // impl
+  }
+};
+
+template &lt;typename T&gt; void inc_counter(
+  T&amp; counterObj, 
+  typename std::enable_if&lt;
+    std::is_base_of&lt;ICounter, T&gt;::value
+  &gt;::type* = nullptr ){
+  counterObj.increase();  
+}
+
+template &lt;typename T&gt; void inc_counter(
+  T&amp; counterInt,
+  typename std::enable_if&lt;
+    std::is_integral&lt;T&gt;::value
+  &gt;::type* = nullptr ){
+  ++counterInt;
+}
+  
+void doSomething() {
+  Counter cntObj;
+  uint32_t cntUI32;
+
+  // blah blah blah
+  inc_counter(cntObj); // OK!
+  inc_counter(cntUI32); // OK!
+}
+</code></pre>
+
+<p>这个代码是不是看起来有点脏脏的。眼尖的你定睛一瞧，咦， <code class="language-plaintext highlighter-rouge">ICounter</code> 不是已经空了吗，为什么我们还要用它作为基类呢？</p>
+
+<p>这是个好问题。在本例中，我们用它来区分一个<code class="language-plaintext highlighter-rouge">counter</code>是不是继承自<code class="language-plaintext highlighter-rouge">ICounter</code>。最终目的，是希望知道 <code class="language-plaintext highlighter-rouge">counter</code> 有没有 <code class="language-plaintext highlighter-rouge">increase</code> 这个函数。</p>
+
+<p>所以 <code class="language-plaintext highlighter-rouge">ICounter</code> 只是相当于一个标签。而于情于理这个标签都是个累赘。但是在C++11之前，我们并没有办法去写类似于：</p>
+
+<pre><code class="language-C++">template &lt;typename T&gt; void foo(T&amp; c, decltype(c.increase())* = nullptr);
+</code></pre>
+
+<p>这样的函数签名，因为假如 <code class="language-plaintext highlighter-rouge">T</code> 是 <code class="language-plaintext highlighter-rouge">int</code>，那么 <code class="language-plaintext highlighter-rouge">c.increase()</code> 这个函数调用就不存在。但它又不属于Type Failure，而是一个Expression Failure，在C++11之前它会直接导致编译器出错，这并不是我们所期望的。所以我们才退而求其次，用一个类似于标签的形式来提供我们所需要的类型信息。以后的章节，后面我们会说到，这种和类型有关的信息我们可以称之为 <code class="language-plaintext highlighter-rouge">type traits</code>。</p>
+
+<p>到了C++11，它正式提供了 Expression SFINAE，这时我们就能抛开 <code class="language-plaintext highlighter-rouge">ICounter</code> 这个无用的Tag，直接写出我们要写的东西：</p>
+
+<pre><code class="language-C++">struct Counter {
+   void increase() {
+      // Implements
+   }
+};
+
+template &lt;typename T&gt;
+void inc_counter(T&amp; intTypeCounter, std::decay_t&lt;decltype(++intTypeCounter)&gt;* = nullptr) {
+  ++intTypeCounter;
+}
+
+template &lt;typename T&gt;
+void inc_counter(T&amp; counterObj, std::decay_t&lt;decltype(counterObj.increase())&gt;* = nullptr) {
+  counterObj.increase();
+}
+
+void doSomething() {
+  Counter cntObj;
+  uint32_t cntUI32;
+
+  // blah blah blah
+  inc_counter(cntObj);
+  inc_counter(cntUI32);
+}
+</code></pre>
+
+<p>此外，还有一种情况只能使用 SFINAE，而无法使用包括继承、重载在内的任何方法，这就是Universal Reference。比如，</p>
+
+<pre><code class="language-C++">// 这里的a是个通用引用，可以准确的处理左右值引用的问题。
+template &lt;typename ArgT&gt; void foo(ArgT&amp;&amp; a);
+</code></pre>
+
+<p>加入我们要限定ArgT只能是 float 的衍生类型，那么写成下面这个样子是不对的，它实际上只能接受 float 的右值引用。</p>
+
+<pre><code class="language-C++">void foo(float&amp;&amp; a);
+</code></pre>
+
+<p>此时的唯一选择，就是使用Universal Reference，并增加 <code class="language-plaintext highlighter-rouge">enable_if</code> 限定类型，如下面这样：</p>
+
+<pre><code class="language-C++">template &lt;typename ArgT&gt;
+void foo(
+  ArgT&amp;&amp; a, 
+  typename std::enabled_if&lt;
+    is_same&lt;std::decay_t&lt;ArgT&gt;, float&gt;::value
+  &gt;::type* = nullptr
+);
+</code></pre>
+
+<p>从上面这些例子可以看到，SFINAE最主要的作用，是保证编译器在泛型函数、偏特化、及一般重载函数中遴选函数原型的候选列表时不被打断。除此之外，它还有一个很重要的元编程作用就是实现部分的编译期自省和反射。</p>
+
+<p>虽然它写起来并不直观，但是对于既没有编译器自省、也没有Concept的C++1y来说，已经是最好的选择了。</p>
+
+<p>（补充例子：构造函数上的enable_if）</p>
+
+<h2 id="4-元编程下的数据结构与算法">4 元编程下的数据结构与算法<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#4-%E5%85%83%E7%BC%96%E7%A8%8B%E4%B8%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95" aria-label="Anchor link for: 4 元编程下的数据结构与算法" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#4-%E5%85%83%E7%BC%96%E7%A8%8B%E4%B8%8B%E7%9A%84%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95" aria-label="Anchor link for: 4 元编程下的数据结构与算法" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h2>
+<h3 id="41-表达式与数值计算">4.1 表达式与数值计算<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#41-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97" aria-label="Anchor link for: 41 表达式与数值计算" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#41-%E8%A1%A8%E8%BE%BE%E5%BC%8F%E4%B8%8E%E6%95%B0%E5%80%BC%E8%AE%A1%E7%AE%97" aria-label="Anchor link for: 41 表达式与数值计算" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="41-获得类型的属性类型萃取type-traits">4.1 获得类型的属性——类型萃取（Type Traits）<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#41-%E8%8E%B7%E5%BE%97%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%B1%9E%E6%80%A7%E7%B1%BB%E5%9E%8B%E8%90%83%E5%8F%96type-traits" aria-label="Anchor link for: 41 获得类型的属性类型萃取type traits" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#41-%E8%8E%B7%E5%BE%97%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%B1%9E%E6%80%A7%E7%B1%BB%E5%9E%8B%E8%90%83%E5%8F%96type-traits" aria-label="Anchor link for: 41 获得类型的属性类型萃取type traits" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="42-列表与数组">4.2 列表与数组<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#42-%E5%88%97%E8%A1%A8%E4%B8%8E%E6%95%B0%E7%BB%84" aria-label="Anchor link for: 42 列表与数组" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#42-%E5%88%97%E8%A1%A8%E4%B8%8E%E6%95%B0%E7%BB%84" aria-label="Anchor link for: 42 列表与数组" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="43-字典结构">4.3 字典结构<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#43-%E5%AD%97%E5%85%B8%E7%BB%93%E6%9E%84" aria-label="Anchor link for: 43 字典结构" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#43-%E5%AD%97%E5%85%B8%E7%BB%93%E6%9E%84" aria-label="Anchor link for: 43 字典结构" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="44-快速排序">4.4 “快速”排序<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#44-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F" aria-label="Anchor link for: 44 快速排序" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#44-%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F" aria-label="Anchor link for: 44 快速排序" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="45-其它常用的轮子">4.5 其它常用的“轮子”<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#45-%E5%85%B6%E5%AE%83%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BD%AE%E5%AD%90" aria-label="Anchor link for: 45 其它常用的轮子" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#45-%E5%85%B6%E5%AE%83%E5%B8%B8%E7%94%A8%E7%9A%84%E8%BD%AE%E5%AD%90" aria-label="Anchor link for: 45 其它常用的轮子" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h2 id="5-模板的进阶技巧">5 模板的进阶技巧<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#5-%E6%A8%A1%E6%9D%BF%E7%9A%84%E8%BF%9B%E9%98%B6%E6%8A%80%E5%B7%A7" aria-label="Anchor link for: 5 模板的进阶技巧" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#5-%E6%A8%A1%E6%9D%BF%E7%9A%84%E8%BF%9B%E9%98%B6%E6%8A%80%E5%B7%A7" aria-label="Anchor link for: 5 模板的进阶技巧" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h2>
+<h3 id="51-嵌入类">5.1 嵌入类<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#51-%E5%B5%8C%E5%85%A5%E7%B1%BB" aria-label="Anchor link for: 51 嵌入类" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#51-%E5%B5%8C%E5%85%A5%E7%B1%BB" aria-label="Anchor link for: 51 嵌入类" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="52-template-template-class">5.2 Template-Template Class<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#52-template-template-class" aria-label="Anchor link for: 52 template template class" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#52-template-template-class" aria-label="Anchor link for: 52 template template class" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="53-高阶函数">5.3 高阶函数<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#53-%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" aria-label="Anchor link for: 53 高阶函数" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#53-%E9%AB%98%E9%98%B6%E5%87%BD%E6%95%B0" aria-label="Anchor link for: 53 高阶函数" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="54-闭包模板的基于对象">5.4 闭包：模板的“基于对象”<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#54-%E9%97%AD%E5%8C%85%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1" aria-label="Anchor link for: 54 闭包模板的基于对象" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#54-%E9%97%AD%E5%8C%85%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%9F%BA%E4%BA%8E%E5%AF%B9%E8%B1%A1" aria-label="Anchor link for: 54 闭包模板的基于对象" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<p>stl allocator?
+mpl::apply</p>
+<h3 id="55-占位符placeholder在c中实现方言的基石">5.5 占位符(placeholder)：在C++中实现方言的基石<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#55-%E5%8D%A0%E4%BD%8D%E7%AC%A6placeholder%E5%9C%A8c%E4%B8%AD%E5%AE%9E%E7%8E%B0%E6%96%B9%E8%A8%80%E7%9A%84%E5%9F%BA%E7%9F%B3" aria-label="Anchor link for: 55 占位符placeholder在c中实现方言的基石" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#55-%E5%8D%A0%E4%BD%8D%E7%AC%A6placeholder%E5%9C%A8c%E4%B8%AD%E5%AE%9E%E7%8E%B0%E6%96%B9%E8%A8%80%E7%9A%84%E5%9F%BA%E7%9F%B3" aria-label="Anchor link for: 55 占位符placeholder在c中实现方言的基石" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="56-编译期多态">5.6 编译期“多态”<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#56-%E7%BC%96%E8%AF%91%E6%9C%9F%E5%A4%9A%E6%80%81" aria-label="Anchor link for: 56 编译期多态" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#56-%E7%BC%96%E8%AF%91%E6%9C%9F%E5%A4%9A%E6%80%81" aria-label="Anchor link for: 56 编译期多态" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h2 id="6---模板的威力从foreach-transform到linq">6   模板的威力：从foreach, transform到Linq<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#6---%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%A8%81%E5%8A%9B%E4%BB%8Eforeach-transform%E5%88%B0linq" aria-label="Anchor link for: 6   模板的威力从foreach transform到linq" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#6---%E6%A8%A1%E6%9D%BF%E7%9A%84%E5%A8%81%E5%8A%9B%E4%BB%8Eforeach-transform%E5%88%B0linq" aria-label="Anchor link for: 6   模板的威力从foreach transform到linq" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h2>
+<h3 id="61-foreach与transform">6.1 Foreach与Transform<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#61-foreach%E4%B8%8Etransform" aria-label="Anchor link for: 61 foreach与transform" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#61-foreach%E4%B8%8Etransform" aria-label="Anchor link for: 61 foreach与transform" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="62-boost中的模板">6.2 Boost中的模板<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#62-boost%E4%B8%AD%E7%9A%84%E6%A8%A1%E6%9D%BF" aria-label="Anchor link for: 62 boost中的模板" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#62-boost%E4%B8%AD%E7%9A%84%E6%A8%A1%E6%9D%BF" aria-label="Anchor link for: 62 boost中的模板" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<p>Any Spirit Hana TypeErasure</p>
+<h3 id="63-reactorlinq与c中的实践">6.3 Reactor、Linq与C++中的实践<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#63-reactorlinq%E4%B8%8Ec%E4%B8%AD%E7%9A%84%E5%AE%9E%E8%B7%B5" aria-label="Anchor link for: 63 reactorlinq与c中的实践" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#63-reactorlinq%E4%B8%8Ec%E4%B8%AD%E7%9A%84%E5%AE%9E%E8%B7%B5" aria-label="Anchor link for: 63 reactorlinq与c中的实践" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="64-更高更快更强从linq到fp">6.4 更高更快更强：从Linq到FP<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#64-%E6%9B%B4%E9%AB%98%E6%9B%B4%E5%BF%AB%E6%9B%B4%E5%BC%BA%E4%BB%8Elinq%E5%88%B0fp" aria-label="Anchor link for: 64 更高更快更强从linq到fp" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#64-%E6%9B%B4%E9%AB%98%E6%9B%B4%E5%BF%AB%E6%9B%B4%E5%BC%BA%E4%BB%8Elinq%E5%88%B0fp" aria-label="Anchor link for: 64 更高更快更强从linq到fp" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+
+<h2 id="7---结语讨论有益争端无用">7   结语：讨论有益，争端无用<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#7---%E7%BB%93%E8%AF%AD%E8%AE%A8%E8%AE%BA%E6%9C%89%E7%9B%8A%E4%BA%89%E7%AB%AF%E6%97%A0%E7%94%A8" aria-label="Anchor link for: 7   结语讨论有益争端无用" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#7---%E7%BB%93%E8%AF%AD%E8%AE%A8%E8%AE%BA%E6%9C%89%E7%9B%8A%E4%BA%89%E7%AB%AF%E6%97%A0%E7%94%A8" aria-label="Anchor link for: 7   结语讨论有益争端无用" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h2>
+<h3 id="71-更好的编译器更友善的出错信息">7.1 更好的编译器，更友善的出错信息<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#71-%E6%9B%B4%E5%A5%BD%E7%9A%84%E7%BC%96%E8%AF%91%E5%99%A8%E6%9B%B4%E5%8F%8B%E5%96%84%E7%9A%84%E5%87%BA%E9%94%99%E4%BF%A1%E6%81%AF" aria-label="Anchor link for: 71 更好的编译器更友善的出错信息" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#71-%E6%9B%B4%E5%A5%BD%E7%9A%84%E7%BC%96%E8%AF%91%E5%99%A8%E6%9B%B4%E5%8F%8B%E5%96%84%E7%9A%84%E5%87%BA%E9%94%99%E4%BF%A1%E6%81%AF" aria-label="Anchor link for: 71 更好的编译器更友善的出错信息" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="72-模板的症结易于实现难于完美">7.2 模板的症结：易于实现，难于完美<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#72-%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%97%87%E7%BB%93%E6%98%93%E4%BA%8E%E5%AE%9E%E7%8E%B0%E9%9A%BE%E4%BA%8E%E5%AE%8C%E7%BE%8E" aria-label="Anchor link for: 72 模板的症结易于实现难于完美" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#72-%E6%A8%A1%E6%9D%BF%E7%9A%84%E7%97%87%E7%BB%93%E6%98%93%E4%BA%8E%E5%AE%9E%E7%8E%B0%E9%9A%BE%E4%BA%8E%E5%AE%8C%E7%BE%8E" aria-label="Anchor link for: 72 模板的症结易于实现难于完美" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<h3 id="73-一些期望">7.3 一些期望<a class="anchorjs-link " href="http://www.yhc201.com/blog/2018/05/10/cpp-template/#73-%E4%B8%80%E4%BA%9B%E6%9C%9F%E6%9C%9B" aria-label="Anchor link for: 73 一些期望" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a><a class="anchorjs-link " href="file:///H:/algorithm/C++%E6%A8%A1%E6%9D%BF%E7%BC%96%E7%A8%8B/C++%20Template%20-%20%E5%B1%8B%E9%A1%B6%E4%B8%8A%E7%9A%84%E9%B1%BC.html#73-%E4%B8%80%E4%BA%9B%E6%9C%9F%E6%9C%9B" aria-label="Anchor link for: 73 一些期望" data-anchorjs-icon="#" style="opacity: 1; padding-left: 0.375em;"></a></h3>
+<p>alexandrescu 关于 min max 的讨论：《再谈Min和Max》
+std::experimental::any / boost.any 对于 reference 的处理</p>
+
+
+
+                <hr>
+
+                <ul class="pager">
+                    
+                    <li class="previous">
+                        <a href="http://www.yhc201.com/blog/2018/05/09/ids-camera/" data-toggle="tooltip" data-placement="top" title="" data-original-title="IDS-Camera-5240-NIR">← Previous Post</a>
+                    </li>
+                    
+                    
+                    <li class="next">
+                        <a href="http://www.yhc201.com/blog/2018/05/14/installation-opensfm/" data-toggle="tooltip" data-placement="top" title="" data-original-title="OpenSfM Installation">Next Post →</a>
+                    </li>
+                    
+                </ul>
+
+                <!-- Duoshuo Share start -->
+                <style>
+                    .ds-share{
+                        text-align: right;
+                    }
+
+                    @media only screen and (max-width: 700px) {
+                        .ds-share {
+
+                        }
+                    }
+                </style>
+
+                <div class="ds-share" data-thread-key="/blog/2018/05/10/cpp-template" data-title="C++ Template" data-images="http://www.yhc201.com/img/grey_second.jpeg" data-content="C++ Template 进阶指南
+
+本文摘自 https://github.com/wuye9036/CppTemplateTutorial
+
+0. 前... | Microdust:Azeril&#39;s blog" data-url="http://www.yhc201.com/blog/2018/05/10/cpp-template/">
+                    <div class="ds-share-inline">
+                      <ul class="ds-share-icons-16">
+
+                        <!-- <li data-toggle="ds-share-icons-more"><a class="ds-more" href="#">分享到：</a></li> -->
+                         <!-- <li><a class="ds-wechat flat" href="javascript:void(0);" data-service="wechat">微信</a></li>-->
+                        <!-- <li><a class="ds-weibo flat" href="javascript:void(0);" data-service="weibo">微博</a></li> -->
+                        <!-- <li><a class="ds-douban flat" href="javascript:void(0);" data-service="douban">豆瓣</a></li> -->
+                      </ul>
+                      <div class="ds-share-icons-more">
+                      </div>
+                    </div>
+                <hr>
+                </div>
+                <!-- Duoshuo Share end-->
+
+
+                <!-- 多说评论框 start -->
+                <div class="comment">
+                    <div class="ds-thread" data-thread-key="/blog/2018/05/10/cpp-template" data-title="C++ Template" data-url="http://www.yhc201.com/blog/2018/05/10/cpp-template/"></div>
+                </div>
+                <!-- 多说评论框 end -->
+            </div>
+        </div>
+    </div>
+</article><remove-web-limits-iqxin id="rwl-iqxin" class="rwl-exempt" style="position: fixed; top: 0px; left: 0px;"><qxinbutton type="qxinbutton" id="rwl-setbtn"> set </qxinbutton> <lalala style="cursor:move; font-size:12px;">限制解除</lalala> <input type="checkbox" name="" id="black_node"><style type="text/css">#rwl-iqxin{position:fixed;transform:translate(-95px,0);width:85px;height:25px;font-size:12px;font-weight: 500;font-family:Verdana, Arial, '宋体';color:#fff;background:#333;z-index:2147483647;margin: 0;opacity:0.05;transition:0.3s;overflow:hidden;user-select:none;text-align:center;white-space:nowrap;line-height:25px;padding:0 16px;border:1px solid #ccc;border-width:1px 1px 1px 0;border-bottom-right-radius:5px;box-sizing: content-box;}#rwl-iqxin input{margin: 0;padding: 0;vertical-align:middle;-webkit-appearance:checkbox;-moz-appearance:checkbox;position: static;clip: auto;opacity: 1;cursor: pointer;}#rwl-iqxin.rwl-active-iqxin{left: 0px;transform:translate(0,0);opacity: 0.9;height: 32px;line-height: 32px}#rwl-iqxin label{margin:0;padding:0;font-weight:500;}#rwl-iqxin #rwl-setbtn{margin: 0 4px 0 0;padding: 0 0 0 4px;border: none;border-radius: 2px;cursor: pointer;background: #fff;color: #000;} </style></remove-web-limits-iqxin>
+
+
+<!-- mathjax script -->
+<script src="./Template_files/MathJax.js.下载" id="">
+</script>
+
+<!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+<script type="text/javascript">
+var duoshuoQuery = {short_name:"cnfeat"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0]
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+</script>
+<!-- 多说公共JS代码 end -->
+
+<!-- async load function -->
+<script>
+    function async(u, c) {
+      var d = document, t = 'script',
+          o = d.createElement(t),
+          s = d.getElementsByTagName(t)[0];
+      o.src = u;
+      if (c) { o.addEventListener('load', function (e) { c(null, e); }, false); }
+      s.parentNode.insertBefore(o, s);
+    }
+</script>
+
+<!-- anchor-js, Doc:http://bryanbraun.github.io/anchorjs/ -->
+<script>
+    async("http://cdn.bootcss.com/anchor-js/1.1.1/anchor.min.js",function(){
+        anchors.options = {
+          visible: 'always',
+          placement: 'right',
+          icon: '#'
+        };
+        anchors.add().remove('.intro-header h1').remove('.subheading');
+    })
+</script>
+<style>
+    /* place left on bigger screen */
+    @media all and (min-width: 800px) {
+        .anchorjs-link{
+            position: absolute;
+            left: -0.75em;
+            font-size: 1.1em;
+            margin-top : -0.1em;
+        }
+    }
+</style>
+
+
+    <!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    <!-- kill the Facebook and Weibo -->
+                    <li>
+                        <a href="http://www.yhc201.com/feed.xml">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+                            </span>
+                        </a>
+                    </li>
+                    
+
+                    
+                    
+                    <!--
+                    
+                    -->
+
+                    <!--
+                    
+                    -->
+
+                    
+                    <!--
+                    
+                    -->
+
+                </ul>
+                <p class="copyright text-muted">
+                © 2020  Bryan ❖ Powered by Jekyll.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- jQuery -->
+<script src="./Template_files/jquery.min.js.下载"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="./Template_files/bootstrap.min.js.下载"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="./Template_files/clean-blog.min.js.下载"></script>
+
+
+
+<!-- Highlight.js -->
+<script>
+    async("http://cdn.bootcss.com/highlight.js/8.6/highlight.min.js",function(){
+        hljs.initHighlightingOnLoad();
+    })
+</script>
+<link href="./Template_files/github.min.css" rel="stylesheet">
+
+
+
+
+
+<div id="__nightingale_view_cover" style="width: 100%; height: 100%; transition: -webkit-transform 10s ease-in-out 0s; position: fixed !important; left: 0px !important; bottom: 0px !important; overflow: hidden !important; background: rgb(0, 0, 0) !important; pointer-events: none !important; z-index: 2147483647; opacity: 0;"></div></body></html>

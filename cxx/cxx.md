@@ -136,6 +136,9 @@ github链接： https://github.com/parallel101/course
 
 ![](../images/c++_1.png)
 
+
+[filename](./Template.html ':include width=1200 height=1600px' )
+
 ---
 
 ## 设计模式
