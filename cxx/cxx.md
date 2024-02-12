@@ -274,3 +274,396 @@ private:
 ---
 
 ## 线程池
+```c++
+//thread_pool.h
+#pragma once
+/*********************************************************************************************
+*  @Copyright (c) , All rights reserved.
+*  @file:       threadpool.h
+*  @version:    ver 1.0
+*  @author:     闹闹
+*  @brief:      线程池代码整和
+*  @change:
+*  @email: 	1319144981@qq.com
+*  Date             Version    Changed By      Changes
+*  2021/5/10 16:18:20    1.0       闹闹            create
+写一句自己最喜欢的话吧。
+为天地立心，为生民立命，为往圣继绝学，为万世开太平。
+**********************************************************************************************/
+/*--------------------------------------------------------------------------------------------------
+* modify_author:			闹闹
+* modify_time:      2021/6/9 16:12:07
+* modify_content:	修改部分内容
+* modify_reference:
+* modify_other:
+* modify_version:  1.0.0.2
+--------------------------------------------------------------------------------------------------*/
+/*--------------------------------------------------------------------------------------------------
+* modify_author:			闹闹
+* modify_time:      2021/9/22 11:02:53
+* modify_content:
+* modify_reference:
+* modify_other:
+* modify_version:
+--------------------------------------------------------------------------------------------------*/
+#ifndef __THREAD_POOL_H__
+#define __THREAD_POOL_H__
+#include <thread>
+#include <mutex>
+#include <iostream>
+#include <future>
+#include <chrono>
+#include <queue>
+#include <vector>
+#include <assert.h>
+#include <stddef.h>
+#include <condition_variable>
+namespace nao {
+	namespace threadpool {
+		/**
+		 * @brief Event是一个同步对象，它允许一条线程通知另外的一条或者多条线程特定的事件已经发生了。
+		 * Event是一个同步对象，它允许一条线程通知另外的一条或者多条线程特定的事件已经发生了。
+		 * 参考博客
+		 * https://blog.csdn.net/FlushHip/article/details/82840301
+		 * wait的函数解释
+		 * https://zh.cppreference.com/w/cpp/thread/condition_variable/wait
+		 * 使用Event特别容易出现死锁，避免把Event的操作放在锁的范围中，
+		 * 因为Event本身就有一把锁，锁套锁，一不小心，加锁顺序错乱就死锁了。
+		 * 用一个标志变量来标识特定的事件是否发生了(条件满足就设置标志变量，把业务逻辑分离出去)，
+		 * 再用一个标志变量标识是否全部唤醒。
+		*/
+		class Event {
+		private:
+			//删除拷贝和赋值构造函数
+			Event(const Event&) = delete;
+			Event& operator=(const Event&) = delete;
+		public:
+			//一个标识变量标识特定事件是否发生
+			bool _flag = false;
+			//一个标志变量标识是否全部唤醒
+			bool _all = false;
+			std::mutex _mu;
+			std::condition_variable _con;
+		public:
+			Event() = default;
+			void wait();
+			template<typename _Rep, typename _Period> bool waitFor(const std::chrono::duration<_Rep, _Period>& duration);
+			template<typename _Clock, typename _Duration>bool waitUntil(const std::chrono::time_point<_Clock, _Duration>& point);
+			void notifyOne();
+			void notifyAll();
+			void reset();
+		};// class Event
+
+		/**
+		 * @brief C++中可以把变量和锁绑定在一起作为一个对象，
+		 *        使得这个对象平时使用起来和变量无异，只不过这个对象带了一把锁。
+		 * @tparam T
+		 *	参考博客
+		 *	https://blog.csdn.net/FlushHip/article/details/82852378
+		 *	可变参数模板
+		 *	https://www.cnblogs.com/qicosmos/p/4325949.html
+		 *
+		*/
+		template<typename T>
+		class MutexObject {
+		private:
+			T          _data;
+			std::mutex _mu;
+		public:
+			MutexObject() {}
+			template<typename... Args> MutexObject(Args... args) :_data(args...) {}
+			MutexObject<T>& operator = (const T& data) {
+				this->_data = data;
+				return *this;
+			}
+			MutexObject<T>& operator = (const MutexObject<T>& other) {
+				this->_data = other._data;
+				return *this;
+			}
+			operator T& () { return _data; }
+			operator T && () { return std::move(_data); }
+			T* operator -> () { return &_data; }
+			T* operator & () { return operator->(); }
+			std::mutex& mutex() { return _mu; }
+			T& data() { return _data; }
+		}; //class MutexObject
+
+#define MUTEXOBJECT_LOCK_GUARD(obj) std::lock_guard<std::mutex> lock(obj.mutex())
+#define MUTEXOBJECT_UNIQUE_LOCK(obj) std::unique_lock<std::mutex> lock(obj.mutex())
+		/**
+		 * @brief
+		 *   获取线程返回结果
+		 *   std::future<int> fu[LEN];
+		 *   fu[i] = pool.Submit(fun, i);
+		 *   fu[i].get();
+		 *   阻塞等待返回
+		 *   fu.wait()
+		 *   参考链接
+		 *   https://blog.csdn.net/FlushHip/article/details/82882301#comments_13516343
+		 *   https://blog.csdn.net/windpenguin/article/details/75581552
+		 *   https://blog.csdn.net/u011726005/article/details/78266706
+		 *
+		*/
+		class ThreadPool {
+			typedef std::function<void()> Task;
+			typedef std::queue<Task>  TaskQueue;
+			typedef std::shared_ptr<std::thread> ThreadPtr;
+			typedef std::vector<ThreadPtr> Pool;
+		private:
+			MutexObject<Pool>      _pool;
+			MutexObject<TaskQueue> _taskQueue;
+			Event                  _event_;
+			std::size_t            _coreCnt;
+			bool                   _expand;
+			std::size_t            _maxCnt;
+			std::atomic<bool>      _run;
+
+		public:
+			ThreadPool(std::size_t coreCnt = 1, bool expand = false, std::size_t maxCnt = std::thread::hardware_concurrency()) :_coreCnt(coreCnt), _expand(coreCnt ? expand : true), _maxCnt(maxCnt), _run(true) {}
+			~ThreadPool();
+			void start();
+			void close();
+			template<typename Fun, typename...Args> std::future<typename std::result_of<Fun(Args...)>::type> submit(Fun&& fun, Args&&... args);
+		private:
+			bool _needNewThread();
+			void _newThread();
+			void _dispath(bool core);
+			void _killSelf();
+			Task _pickOneTask();
+		};//class ThreadPool
+	}//namespace threadpool
+}//namespace nao
+#include "thread_pool-inl.h"
+#endif  //__THREAD_POOL_H__
+/*----------------------------------------------------------------------------- (C) COPYRIGHT LEI *****END OF FILE------------------------------------------------------------------------------*/
+
+
+//thread_pool-inl.h
+#include "thread_pool.h"
+namespace nao {
+	namespace threadpool {
+		template<typename _Rep, typename _Period>
+		bool Event::waitFor(const std::chrono::duration<_Rep, _Period>& duration) {
+			std::unique_lock<std::mutex> lock(_mu);
+			bool ret = true;
+			ret = _con.wait_for(lock, duration, [this]() {return this->_flag || this->_all; });
+			if (ret && !_all) _flag = false;
+			return ret;
+		}
+
+		template<typename _Clock, typename _Duration>
+		bool Event::waitUntil(const std::chrono::time_point<_Clock, _Duration>& point) {
+			std::unique_lock<std::mutex> lock(_mu);
+			bool ret = true;
+			ret = _con.wait_until(lock, point, [this]() {return this->_flag || this->_all; });
+			if (ret && !_all) _flag = false;
+			return ret;
+		}
+
+		template<typename Fun, typename...Args>
+		std::future<typename std::result_of<Fun(Args...)>::type> ThreadPool::submit(Fun&& fun, Args&&... args) {
+			if (!_run.load())
+				throw std::runtime_error("ThreadPool has closed");
+			typedef typename std::result_of<Fun(Args...)>::type ReturnType;
+			auto task = std::make_shared<std::packaged_task<ReturnType()>>(std::bind(std::forward<Fun>(fun), std::forward<Args>(args)...));
+			do
+			{
+				MUTEXOBJECT_LOCK_GUARD(_taskQueue);
+				_taskQueue->emplace([task]() {
+					(*task)();
+					});
+				//std::cout << "任务队列加入任务" << std::endl;
+			} while (false);
+			_event_.notifyOne();
+			if (_needNewThread())
+			{
+				_newThread();
+			}
+			return task->get_future();
+		}
+	}//namespace threadpool
+}//namespace nao
+
+//thread_pool.cpp
+#include "thread_pool.h"
+namespace nao {
+	namespace threadpool {
+		void Event::wait() {
+			std::unique_lock<std::mutex> lock(_mu);
+			//如果返回false， 此处阻塞，并释放锁，直到条件满足，再次返回此处，恢复锁的上锁状态，并继续执行。
+			_con.wait(lock, [this]() {return this->_flag || this->_all; });
+			if (!_all)_flag = false;
+		}
+
+		void Event::notifyOne() {
+			std::lock_guard<std::mutex> lock(_mu);
+			_flag = true;
+			_con.notify_one();
+		}
+
+		void  Event::notifyAll() {
+			std::lock_guard<std::mutex> lock(_mu);
+			_all = true;
+			_con.notify_all();
+		}
+
+		void Event::reset() {
+			std::lock_guard<std::mutex> lock(_mu);
+			_flag = _all = false;
+		}
+
+		ThreadPool::~ThreadPool() {
+			close();
+		}
+
+		void ThreadPool::start() {
+			_run = true;
+			_event_.reset();
+		}
+
+		void ThreadPool::close() {
+			_run = false;
+			_event_.notifyAll();
+			Pool vec;
+			do {
+				MUTEXOBJECT_LOCK_GUARD(_pool);
+				vec = _pool.data();
+			} while (false);
+			std::for_each(std::begin(vec), std::end(vec), [](const ThreadPtr& it) {
+				if (it->joinable()) {
+					if (std::this_thread::get_id() == it->get_id()) {
+						it->detach();
+					}
+					else {
+						it->join();
+					}
+				}
+				});
+		}
+
+		bool ThreadPool::_needNewThread() {
+			do {
+				MUTEXOBJECT_LOCK_GUARD(_pool);
+				if (_pool->empty())
+					return true;
+				if (_pool->size() == _maxCnt)
+					return false;
+			} while (false);
+			do {
+				MUTEXOBJECT_LOCK_GUARD(_taskQueue);
+				return _taskQueue->size() > 0;
+			} while (false);
+			assert(false);
+		}
+
+		void ThreadPool::_newThread() {
+			MUTEXOBJECT_LOCK_GUARD(_pool);
+			if (_pool->size() < _coreCnt) {
+				_pool->emplace_back(new std::thread(std::bind(&ThreadPool::_dispath, this, true)));
+			}
+			else if (_expand) {
+				_pool->emplace_back(new std::thread(std::bind(&ThreadPool::_dispath, this, false)));
+			}
+		}
+
+		void ThreadPool::_dispath(bool core) {
+			while (_run.load()) {
+				if (Task task = _pickOneTask()) {
+					task();
+				}
+				else if (!_event_.waitFor(std::chrono::minutes(1)) && !core) {
+					_killSelf();
+					break;
+				}
+			}
+		}
+
+		void ThreadPool::_killSelf() {
+			MUTEXOBJECT_LOCK_GUARD(_pool);
+			auto it = std::find_if(std::begin(_pool.data()), std::end(_pool.data()), [](const ThreadPtr& it) {
+				return std::this_thread::get_id() == it->get_id();
+				});
+
+			(*it)->detach();
+			_pool->erase(it);
+		}
+
+		ThreadPool::Task ThreadPool::_pickOneTask() {
+			MUTEXOBJECT_LOCK_GUARD(_taskQueue);
+			Task ret = nullptr;
+			if (!_taskQueue->empty()) {
+				ret = std::move(_taskQueue->front());
+				_taskQueue->pop();
+				//std::cout << "任务队列弹出任务" << std::endl;
+			}
+			return ret;
+		}
+	}//namespace threadpool
+}//namespace nao
+
+//example.cpp
+#include "thread_pool.h"
+
+#include <iostream>
+using namespace nao::threadpool;
+
+std::mutex g_mu;
+int fun(int n)
+{
+	{
+		//线程同步需要自己做
+		std::unique_lock<std::mutex> lock(g_mu);
+		std::cout << "Fun输出 n : " << n << std::endl;
+		return n;
+	}
+
+	//std::this_thread::sleep_for(std::chrono::milliseconds(500));
+}
+
+void work()
+{
+	static const int LEN = 30;
+	ThreadPool pool(4, true, 10);
+	int n = 5;
+	pool.submit(fun, n);
+
+	{
+		std::unique_lock<std::mutex> lock(g_mu);
+		std::cout << "n : " << n << std::endl;
+	}
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+	pool.submit(fun, 1);
+	pool.close();
+
+
+	std::cout << "********************** " << std::endl;
+	pool.start();
+	std::future<int> fu[LEN];
+	for (int i = 0; i < LEN; i++)
+		fu[i] = pool.submit(fun, i);
+	/*
+	wait 是阻塞线程，等待线程结束
+	*/
+	for (int i = 0; i < LEN; fu[i++].wait()) {}
+	std::cout << "获取结果******* " << std::endl;
+	for (int i = 0; i < LEN;i++)
+	{
+		//get取得线程返回值
+		int value = fu[i].get();
+		std::cout << "第"<<i<<"个线程结果："<< value << std::endl;
+
+	}
+	pool.close();
+}
+
+int main()
+{
+	work();
+	std::this_thread::sleep_for(std::chrono::seconds(2));
+
+	system("pause");
+	return 0;
+}
+
+```
+高级线程池 ，包括主线程，辅线程，任务盗取，负载均衡，无锁队列。 参考链接： https://github.com/ChunelFeng/CThreadPool

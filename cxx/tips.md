@@ -837,6 +837,244 @@ int main()
 
 不存在空引用，因此不能通过返回值来判断转换是否安全。C++ 的解决办法是：dynamic_cast 在进行引用的强制转换时，如果发现转换不安全，就会拋出一个异常，通过处理异常，就能发现不安全的转换。
 
+
+## 关键词
+### volatile
+
+volatile 关键字是一种类型修饰符，用它声明的类型变量表示可以被某些编译器未知的因素更改，比如：操作系统、硬件或者其它线程等。遇到这个关键字声明的变量，编译器对访问该变量的代码就不再进行优化，从而可以提供对特殊地址的稳定访问。声明时语法：int volatile vInt; 当要求使用 volatile 声明的变量的值的时候，系统总是重新从它所在的内存读取数据，即使它前面的指令刚刚从该处读取过数据。而且读取的数据立刻被保存。例如：
+```c++
+volatile int i=10;
+int a = i;
+...
+// 其他代码，并未明确告诉编译器，对 i 进行过操作
+int b = i;
+```
+volatile 指出 i 是随时可能发生变化的，每次使用它的时候必须从 i的地址中读取，因而编译器生成的汇编代码会重新从i的地址读取数据放在 b 中。而优化做法是，由于编译器发现两次从 i读数据的代码之间的代码没有对 i 进行过操作，它会自动把上次读的数据放在 b 中。而不是重新从 i 里面读。这样以来，如果 i是一个寄存器变量或者表示一个端口数据就容易出错，所以说 volatile 可以保证对特殊地址的稳定访问。注意，在 VC 6 中，一般调试模式没有进行代码优化，所以这个关键字的作用看不出来。下面通过插入汇编代码，测试有无 volatile 关键字，对程序最终代码的影响，输入下面的代码：
+```c++
+#include <stdio.h>
+
+void main()
+{
+    int i = 10;
+    int a = i;
+
+    printf("i = %d", a);
+
+    // 下面汇编语句的作用就是改变内存中 i 的值
+    // 但是又不让编译器知道
+    __asm {
+        mov dword ptr [ebp-4], 20h
+    }
+
+    int b = i;
+    printf("i = %d", b);
+}
+```
+在 Debug 版本模式运行程序，输出结果如下：`i = 10  i = 32` 在 Release 版本模式运行程序，输出结果如下：`i = 10 i = 10`
+输出的结果明显表明，Release 模式下，编译器对代码进行了优化，第二次没有输出正确的 i 值。下面，我们把 i 的声明加上 volatile 关键字，看看有什么变化：
+```c++
+#include <stdio.h>
+
+void main
+{
+    volatile int i = 10;
+    int a = i;
+
+    printf("i = %d", a);
+    __asm {
+        mov dword ptr [ebp-4], 20h
+    }
+
+    int b = i;
+    printf("i = %d", b);
+}
+```
+分别在 Debug 和 Release 版本运行程序，输出都是：` i = 10  i = 32 `
+
+这说明这个 volatile 关键字发挥了它的作用。其实不只是内嵌汇编操纵栈"这种方式属于编译无法识别的变量改变，另外更多的可能是多线程并发访问共享变量时，一个线程改变了变量的值，怎样让改变后的值对其它线程 visible。一般说来，volatile用在如下的几个地方：
+
+    1) 中断服务程序中修改的供其它程序检测的变量需要加 volatile；
+    2) 多任务环境下各任务间共享的标志应该加 volatile；
+    3) 存储器映射的硬件寄存器通常也要加 volatile 说明，因为每次对它的读写都可能由不同意义；
+
+多线程下的volatile
+
+有些变量是用 volatile 关键字声明的。当两个线程都要用到某一个变量且该变量的值会被改变时，应该用 volatile 声明，该关键字的作用是防止优化编译器把变量从内存装入 CPU 寄存器中。如果变量被装入寄存器，那么两个线程有可能一个使用内存中的变量，一个使用寄存器中的变量，这会造成程序的错误执行。volatile 的意思是让编译器每次操作该变量时一定要从内存中真正取出，而不是使用已经存在寄存器中的值，如下：`volatile  BOOL  bStop  =  FALSE;`
+
+```c++
+//在一个线程中
+while(  !bStop  )  {  ...  }
+bStop  =  FALSE;
+return;
+
+//在另外一个线程中
+bStop  =  TRUE;
+while(  bStop  );  //等待上面的线程终止，如果bStop不使用volatile申明，那么这个循环将是一个死循环，因为bStop已经读取到了寄存器中，寄存器中bStop的值永远不会变成FALSE，加上volatile，程序在执行时，每次均从内存中读出bStop的值，就不会死循环了。
+```
+这个关键字是用来设定某个对象的存储位置在内存中，而不是寄存器中。因为一般的对象编译器可能会将其的拷贝放在寄存器中用以加快指令的执行速度，例如下段代码中：
+
+```c++
+...
+int  nMyCounter  =  0;
+for(;  nMyCounter<100;nMyCounter++)
+{
+...
+}
+...
+
+```
+在此段代码中，nMyCounter 的拷贝可能存放到某个寄存器中（循环中，对 nMyCounter 的测试及操作总是对此寄存器中的值进行），但是另外又有段代码执行了这样的操作：nMyCounter -= 1; 这个操作中，对 nMyCounter 的改变是对内存中的 nMyCounter 进行操作，于是出现了这样一个现象：nMyCounter 的改变不同步。
+
+其他参考链接： https://zhuanlan.zhihu.com/p/112742540
+
+### constexpr
+在普通函数中的使用constexpr
+```c++
+#include <iostream>
+constexpr int Getlen(int a ,int b ){
+    return a+b;
+}
+int main(){
+    int std::array[Getlen(1,2)];
+    return 0;
+
+}
+
+```
+未用constexpr时，数组的大小必须是常量，在声明数组array时，用函数返回值，此时会报错：error C2131: 表达式的计算结果不是常数，note: 对未定义的函数或为未声明为“constexpr”的函数的调用导致了故障。用constexpr关键字可以解决这种问题，在GetLen函数前加constexpr声明。
+当然，constexpr修饰的函数也有一定的限制：
+
+    函数体尽量只包含一个return语句，多个可能会编译出错；
+    函数体可以包含其他语句，但是不能是运行期语句，只能是编译期语句；
+
+编译器会将constexpr函数视为内联函数！所以在编译时若能求出其值，则会把函数调用替换成结果值。
+
+在类的构造函数中也可以使用constexpr关键字
+constexpr还能修饰类的构造函数，即保证传递给该构造函数的所有参数都是constexpr，那么产生的对象的所有成员都是constexpr。该对象是constexpr对象了，可用于只使用constexpr的场合。注意constexpr构造函数的函数体必须为空，所有成员变量的初始化都放到初始化列表中。
+
+```c++
+#include <iostream>
+using namespace std;
+
+class Test
+{
+public:
+	constexpr Test(int num1, int num2) : m_num1(num1), m_num2(num2)
+	{
+
+	}
+
+public:
+	int m_num1;
+	int m_num2;
+};
+
+int main(void)
+{
+	constexpr Test t1(1, 2);
+
+	enum e
+	{
+		x = t1.m_num1,
+		y = t1.m_num2
+	};
+
+	return 0;
+}
+```
+const和constexpr对指针的修饰有什么差别呢？
+
+    const 和 constexpr 变量之间的主要区别在于：const 变量的初始化可以延迟到运行时，而 constexpr 变量必须在编译时进行初始化。所有 constexpr 变量均为常量，因此必须使用常量表达式初始化。
+    constexpr和指针
+    在使用const时，如果关键字const出现在星号左边，表示被指物是常量；如果出现在星号右边，表示指针本身是常量；如果出现在星号两边，表示被指物和指针两者都是常量。
+
+    与const不同，在constexpr声明中如果定义了一个指针，限定符constexpr仅对指针有效，与指针所指对象无关。
+    constexpr是一种很强的约束，更好的保证程序的正确定语义不被破坏；编译器可以对constexper代码进行非常大的优化，例如：将用到的constexpr表达式直接替换成结果, 相比宏来说没有额外的开销。
+
+
+```c++
+#include <iostream>
+using namespace std;
+
+int g_tempA = 4;
+const int g_conTempA = 4;
+constexpr int g_conexprTempA = 4;
+
+int main(void)
+{
+	int tempA = 4;
+	const int conTempA = 4;
+	constexpr int conexprTempA = 4;
+
+	/*1.正常运行,编译通过*/
+	const int *conptrA = &tempA;
+	const int *conptrB = &conTempA;
+	const int *conptrC = &conexprTempA;
+
+	/*2.局部变量的地址要运行时才能确认，故不能在编译期决定，编译不过*/
+	constexpr int *conexprPtrA = &tempA;
+	constexpr int *conexprPtrB = &conTempA;
+	constexpr int *conexprPtrC = &conexprTempA;
+
+	/*3.第一个通过，后面两个不过,因为constexpr int *所限定的是指针是常量，故不能将常量的地址赋给顶层const*/
+	constexpr int *conexprPtrD = &g_tempA;
+	constexpr int *conexprPtrE = &g_conTempA;
+	constexpr int *conexprPtrF = &g_conexprTempA;
+
+	/*4.局部变量的地址要运行时才能确认，故不能在编译期决定，编译不过*/
+	constexpr const int *conexprConPtrA = &tempA;
+	constexpr const int *conexprConPtrB = &conTempA;
+	constexpr const int *conexprConPtrC = &conexprTempA;
+	/*5.正常运行，编译通过*/
+	constexpr const int *conexprConPtrD = &g_tempA;
+	constexpr const int *conexprConPtrE = &g_conTempA;
+	constexpr const int *conexprConPtrF = &g_conexprTempA;
+
+	return 0;
+}
+```
+
+对引用的修饰
+
+```c++
+#include <iostream>
+using namespace std;
+
+int g_tempA = 4;
+const int g_conTempA = 4;
+constexpr int g_conexprTempA = 4;
+
+int main(void)
+{
+	int tempA = 4;
+	const int conTempA = 4;
+	constexpr int conexprTempA = 4;
+	/*1.正常运行，编译通过*/
+	const int &conptrA = tempA;
+	const int &conptrB = conTempA;
+	const int &conptrC = conexprTempA;
+
+	/*2.有两个问题：一是引用到局部变量，不能再编译器确定；二是conexprPtrB和conexprPtrC应该为constexpr const类型，编译不过*/
+	constexpr int &conexprPtrA = tempA;
+	constexpr int &conexprPtrB = conTempA;
+	constexpr int &conexprPtrC = conexprTempA;
+
+	/*3.第一个编译通过，后两个不通过，原因是因为conexprPtrE和conexprPtrF应该为constexpr const类型*/
+	constexpr int &conexprPtrD = g_tempA;
+	constexpr int &conexprPtrE = g_conTempA;
+	constexpr int &conexprPtrF = g_conexprTempA;
+
+	/*4.正常运行，编译通过*/
+	constexpr const int &conexprConPtrD = g_tempA;
+	constexpr const int &conexprConPtrE = g_conTempA;
+	constexpr const int &conexprConPtrF = g_conexprTempA;
+
+	return 0;
+}
+```
+简单的说constexpr所引用的对象必须在编译期就决定地址。还有一个奇葩的地方就是可以通过上例conexprPtrD来修改g_tempA的值，也就是说constexpr修饰的引用不是常量，如果要确保其实常量引用需要constexpr const来修饰。
+
+
 ## 异步基础
 c++ 多线程的资料教程很多，就不自己写了了，放一点自己看到不错的链接。
 
@@ -930,13 +1168,13 @@ void store(T desired, std::memory_order order = std::memory_order_seq_cst) noexc
 ```
 存储操作的内存顺序参数：
 
-| value                | 内存顺序               | 描述  |
-| ---------------------| ----------------------| ---------- |
-| memory_order_relaxed | 无序的内存访问         |不做任何同步，仅保证该原子类型变量的操作是原子化的，并不保证其对其他线程的可见性和正确性。|
-| memory_order_consume | 与消费者关系有关的顺序  |保证本次读取之前所有依赖于该原子类型变量值的操作都已经完成，但不保证其他线程对该变量的存储结果已经可见。|
-| memory_order_acquire | 获取关系的顺序         |保证本次读取之前所有先于该原子类型变量写入内存的操作都已经完成，并且其他线程对该变量的存储结果已经可见。|
-| memory_order_seq_cst | 顺序一致性的顺序       |保证本次操作以及之前和之后的所有原子操作都按照一个全局的内存顺序执行，从而保证多线程环境下对变量的读写的正确性和一致性。这是最常用的内存顺序。|
-| memory_order_release | 释放关系的顺序         |保证本次写入之后所有后于该原子类型变量写入内存的操作都已经完成，并且其他线程可以看到该变量的存储结果。|
+| value                | 内存顺序               | 描述                                                                                                                                           |
+| -------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| memory_order_relaxed | 无序的内存访问         | 不做任何同步，仅保证该原子类型变量的操作是原子化的，并不保证其对其他线程的可见性和正确性。                                                     |
+| memory_order_consume | 与消费者关系有关的顺序 | 保证本次读取之前所有依赖于该原子类型变量值的操作都已经完成，但不保证其他线程对该变量的存储结果已经可见。                                       |
+| memory_order_acquire | 获取关系的顺序         | 保证本次读取之前所有先于该原子类型变量写入内存的操作都已经完成，并且其他线程对该变量的存储结果已经可见。                                       |
+| memory_order_seq_cst | 顺序一致性的顺序       | 保证本次操作以及之前和之后的所有原子操作都按照一个全局的内存顺序执行，从而保证多线程环境下对变量的读写的正确性和一致性。这是最常用的内存顺序。 |
+| memory_order_release | 释放关系的顺序         | 保证本次写入之后所有后于该原子类型变量写入内存的操作都已经完成，并且其他线程可以看到该变量的存储结果。                                         |
 
 ```c++
 #include <iostream>
@@ -1086,13 +1324,13 @@ bool compare_exchange_strong(T& expected, T desired,
 
 专业化支持的操作
 
-|   操作                |  描述                 |
-| ---------------------| ----------------------|
-|fetch_add	|添加到包含的值并返回它在操作之前具有的值|
-|fetch_sub|	从包含的值中减去，并返回它在操作之前的值。|
-|fetch_and	|读取包含的值，并将其替换为在读取值和 之间执行按位 AND 运算的结果。|
-|fetch_or	|读取包含的值，并将其替换为在读取值和 之间执行按位 OR 运算的结果。|
-|fetch_xor	|读取包含的值，并将其替换为在读取值和 之间执行按位 XOR 运算的结果。|
+| 操作      | 描述                                                               |
+| --------- | ------------------------------------------------------------------ |
+| fetch_add | 添加到包含的值并返回它在操作之前具有的值                           |
+| fetch_sub | 从包含的值中减去，并返回它在操作之前的值。                         |
+| fetch_and | 读取包含的值，并将其替换为在读取值和 之间执行按位 AND 运算的结果。 |
+| fetch_or  | 读取包含的值，并将其替换为在读取值和 之间执行按位 OR 运算的结果。  |
+| fetch_xor | 读取包含的值，并将其替换为在读取值和 之间执行按位 XOR 运算的结果。 |
 
 ```c++
 // atomic::load/store example
@@ -1125,7 +1363,524 @@ int main ()
 }
 
 ```
-### CAS机制
+### CAS(Compare & Set/Compare & Swap)
+CAS是解决多线程并行情况下使用锁造成性能损耗的一种机制。
+
+    CAS操作包含三个操作数——内存位置（V）、预期原值（A）、新值(B)。
+    如果内存位置的值与预期原值相匹配，那么处理器会自动将该位置值更新为新值。
+    否则，处理器不做任何操作。
+    无论哪种情况，它都会在CAS指令之前返回该位置的值。
+    CAS有效地说明了“我认为位置V应该包含值A；如果包含该值，则将B放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。
+
+一个 CAS 涉及到以下操作：假设内存中的原数据V，旧的预期值A，需要修改的新值B
+
+    比较 A 与 V 是否相等
+    如果比较相等，将 B 写入 V
+    返回操作是否成功
+
+CAS算法原理描述
+
+    在对变量进行计算之前(如 ++ 操作)，首先读取原变量值，称为 旧的预期值 A
+    然后在更新之前再获取当前内存中的值，称为 当前内存值 V
+    如果 A==V 则说明变量从未被其他线程修改过，此时将会写入新值 B
+    如果 A!=V 则说明变量已经被其他线程修改过，当前线程应当什么也不做。
+
+用C语言来描述该操作
+看一看内存*reg里的值是不是oldval，如果是的话，则对其赋值newval。
+```c++
+int compare_and_swap (int* reg, int oldval, int newval)
+{
+      int old_reg_val = *reg;
+      if (old_reg_val == oldval)
+               *reg = newval;
+      return old_reg_val;
+}
+```
+变种为返回bool值形式的操作
+返回 bool值的好处在于，调用者可以知道有没有更新成功
+
+```c++
+bool compare_and_swap (int *accum, int *dest, int newval)
+{
+      if ( *accum == *dest )
+      {
+           *dest = newval;
+           return true;
+      }
+      return false;
+}
+```
+GCC的CAS，GCC4.1+版本中支持CAS的原子操作。
+```c++
+1）bool __sync_bool_compare_and_swap (type *ptr, type oldval, type newval, ...)
+2）type __sync_val_compare_and_swap (type *ptr, type oldval, type newval, ...)
+```
+C++11中的CAS，C++11中的STL中的atomic类的函数可以让你跨平台。
+```c++
+template< class T > bool atomic_compare_exchange_weak( std::atomic* obj,T* expected, T desired );
+template< class T > bool atomic_compare_exchange_weak( volatile std::atomic* obj,T* expected, T desired );
+```
+基于链表的非阻塞堆栈实现
+```c++
+//数据结构
+template
+class Stack {
+    typedef struct Node {
+                          T data;
+                          Node* next;
+                          Node(const T& d) : data(d), next(0) { }
+                        } Node;
+    Node *top;
+    public:
+       Stack( ) : top(0) { }
+       void push(const T& data);
+       T pop( ) throw (…);
+};
+//在非阻塞堆栈中压入数据(push)
+void Stack::push(const T& data)
+{
+    Node *n = new Node(data);
+    while (1) {
+        n->next = top;
+        if (__sync_bool_compare_and_swap(&top, n->next, n)) { // CAS
+            break;
+        }
+    }
+}
+```
+上述过程描述：
+
+    从单一线程的角度来看，创建了一个新节点，它的 next 指针指向堆栈的顶部。
+    接下来，调用 CAS 内置函数，把新的节点复制到 top 位置。
+    从多个线程的角度来看，完全可能有两个或更多线程同时试图把数据压入堆栈。
+    假设线程 A 试图把 20 压入堆栈，线程 B 试图压入 30，而线程 A 先获得了时间片。
+    但是，在 n->next = top 指令结束之后，调度程序暂停了线程 A。
+    现在，线程 B 获得了时间片（它很幸运），它能够完成 CAS，把 30 压入堆栈后结束。
+    接下来，线程 A 恢复执行，显然对于这个线程 *top 和 n->next 不匹配，因为线程 B 修改了 top 位置的内容。
+    因此，代码回到循环的开头，指向正确的 top 指针（线程 B 修改后的），调用 CAS，把 20 压入堆栈后结束。
+    整个过程没有使用任何锁。
+
+```c++
+//从非阻塞堆栈弹出数据(pop)
+T Stack::pop( )
+{
+    while (1) {
+        Node* result = top;
+        if (result == NULL)
+           throw std::string(“Cannot pop from empty stack”);
+        if (top && __sync_bool_compare_and_swap(&top, result, result->next)) { // CAS
+            return result->data;
+        }
+    }
+}
+
+```
+这样，即使线程 B 在线程 A 试图弹出数据的同时修改了堆栈顶，也可以确保不会跳过堆栈中的元素
+
+无锁队列的链表实现
+
+用CAS实现的入队操作
+```c++
+EnQueue(x)//进队列
+{
+    //准备新加入的结点数据
+    q = newrecord();
+    q->value = x;
+    q->next = NULL;
+
+    do{
+        p = tail; //取链表尾指针的快照
+    }while( CAS(p->next, NULL, q) != TRUE); //如果没有把结点链上，再试
+
+    CAS(tail, p, q); //置尾结点
+}
+```
+我们可以看到，程序中的那个 do- while 的 Re-Try-Loo。就是说，很有可能我在准备在队列尾加入结点时，别的线程已经加成功了，于是tail指针就变了，于是我的CAS返回了false，于是程序再试，直到试成功为止。
+
+为什么我们的“置尾结点”的操作不判断是否成功:
+
+    如果有一个线程T1，它的while中的CAS如果成功的话，那么其它所有随后线程的CAS都会失败，然后就会再循环，
+    此时，如果T1 线程还没有更新tail指针，其它的线程继续失败，因为tail->next不是NULL了。
+    直到T1线程更新完tail指针，于是其它的线程中的某个线程就可以得到新的tail指针，继续往下走了。
+
+这里有一个潜在的问题——如果T1线程在用CAS更新tail指针的之前，线程停掉了，那么其它线程就进入死循环了。下面是改良版的EnQueue()
+
+```c++
+EnQueue(x)//进队列改良版
+{
+    q = newrecord();
+    q->value = x;
+    q->next = NULL;
+
+    p = tail;
+    oldp = p
+    do{
+        while(p->next != NULL)
+            p = p->next;
+    }while( CAS(p.next, NULL, q) != TRUE); //如果没有把结点链上，再试
+
+    CAS(tail, oldp, q); //置尾结点
+}
+```
+
+我们让每个线程，自己fetch 指针 p 到链表尾。但是这样的fetch会很影响性能。而通实际情况看下来，99.9%的情况不会有线程停转的情况，所以，更好的做法是，你可以接合上述的这两个版本，如果retry的次数超了一个值的话（比如说3次），那么，就自己fetch指针。
+
+用CAS实现的出队操作
+
+```c++
+DeQueue()//出队列
+{
+    do{
+        p = head;
+        if(p->next == NULL){
+            returnERR_EMPTY_QUEUE;
+        }
+    while( CAS(head, p, p->next) != TRUE );
+    returnp->next->value;
+}
+
+```
+![](./images/31.jpg)
+
+DeQueue的代码操作的是 head->next，而不是head本身。这样考虑是因为一个边界条件，我们需要一个dummy的头指针来解决链表中如果只有一个元素，head和tail都指向同一个结点的问题，这样EnQueue和DeQueue要互相排斥了。
+
+总结:上述我们设计了支持并发访问的数据结构。可以看到，设计可以基于互斥锁，也可以是无锁的。无论采用哪种方式，要考虑的问题不仅仅是这些数据结构的基本功能 — 具体来说，必须一直记住线程会争夺执行权，要考虑线程重新执行时如何恢复操作。目前，解决方案（尤其是无锁解决方案）与平台/编译器紧密相关。
+
+
+CAS的ABA问题
+
+ABA问题描述：
+
+    进程P1在共享变量中读到值为A
+    P1被抢占了，进程P2执行
+    P2把共享变量里的值从A改成了B，再改回到A，此时被P1抢占。
+    P1回来看到共享变量里的值没有被改变，于是继续执行。
+
+
+举例1：
+
+    比如上述的DeQueue()函数，因为我们要让head和tail分开，所以我们引入了一个dummy指针给head，当我们做CAS的之前，如果head的那块内存被回收并被重用了，而重用的内存又被EnQueue()进来了，这会有很大的问题。（内存管理中重用内存基本上是一种很常见的行为）
+
+举例2：
+
+    我们假设一个提款机的例子。假设有一个遵循CAS原理的提款机，小灰有100元存款，要用这个提款机来提款50元。
+    由于提款机硬件出了点问题，小灰的提款操作被同时提交了两次，开启了两个线程，两个线程都是获取当前值100元，要更新成50元。
+    理想情况下，应该一个线程更新成功，一个线程更新失败，小灰的存款值被扣一次。
+    线程1首先执行成功，把余额从100改成50.线程2因为某种原因阻塞。这时，小灰的妈妈刚好给小灰汇款50元。
+    线程2仍然是阻塞状态，线程3执行成功，把余额从50改成了100。
+    线程2恢复运行，由于阻塞之前获得了“当前值”100，并且经过compare检测，此时存款实际值也是100，所以会成功把变量值100更新成50。
+    原本线程2应当提交失败，小灰的正确余额应该保持100元，结果由于ABA问题提交成功了。
+
+
+解决ABA问题
+
+真正要做到严谨的CAS机制，我们在compare阶段不仅要比较期望值A和地址V中的实际值，还要比较变量的版本号是否一致。
+
+举个栗子：
+
+    假设地址V中存储着变量值A，当前版本号是01。线程1获取了当前值A和版本号01，想要更新为B，但是被阻塞了。
+![](./images/32.jpg)
+
+    这时候，内存地址V中变量发生了多次改变，版本号提升为03，但是变量值仍然是A。
+
+![](./images/33.jpg)
+
+    随后线程1恢复运行，进行compare操作。经过比较，线程1所获得的值和地址的实际值都是A，但是版本号不相等，所以这一次更新失败
+
+![](./images/34.jpg)
+
+CAS的问题
+
+ABA问题
+
+    因为CAS需要在操作值的时候，检查值有没有发生变化，没有发生变化才去更新。
+    但是如果一个值原来是A变成了B，又变成了A，CAS检查会判断该值未发生变化，实际却变化了。
+    解决思路：增加版本号，每次变量更新时把版本号+1，A-B-A就变成了1A-2B-3A。JDK5之后的atomic包提供了AtomicStampedReference来解决ABA问题，它的compareAndSet方法会首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志。全部相等，才会以原子方式将该引用、该标志的值设置为更新值。
+
+时间长、开销大
+
+    自旋CAS如果长时间不成功，会给CPU带来非常大的执行开销。
+
+
+只能保证一个共享变量的原子操作
+
+    对一个共享变量执行操作时，可以循环CAS方式确保原子操作。
+    但是对多个共享变量，就不灵了。
+    这里可以使用锁，或把多个共享变量合并为1个共享变量，如i=2,j=a,合并为ij=2a。然后用CAS操作ij。在JDK5后，提供了AtomicReference类来保证对象间的原子性，可以把多个共享变量放在一个对象里进行CAS操作。
+
+### 原子内存序
+
+编译器和CPU指令重排
+
+代码顺序：就是你按照代码一行一行从上往下的顺序；
+
+编译器对代码可能进行指令重排。也就是编译生成的二进制（机器码）的顺序与源代码可能不同，例如一个线程中有两行代码x++；y++；虽然y++在x++之后，但是编译器可能会把y++放到x++之前。而且CPU内部也有指令重排，也就是说，CPU执行指令的顺序，也不见得是完全严格按照机器码的顺序。当代CPU的IPC（每时钟执行指令数）一般都远大于1，也就是所谓的多发射，很多命令都是同时执行的。比如，当代CPU当中（一个核心）一般会有2套以上的整数ALU（加法器），2套以上的浮点ALU（加法器），往往还有独立的乘法器，以及，独立的Load和Store执行器。Load和Store模块往往还有8个以上的队列，也就是可以同时进行8个以上内存地址（cache line）的读写交换。
+
+依赖关系
+
+单线程中指令重排也不会乱排，不相关的指令可以重排，相关的指令不能重排；例如线程1中有两条指令x++；y++；这两条指令是完全不相关的，可以任意调整顺序。但是如果是x++；y=x;那这两条指令是依赖关系，那么一定是按照代码顺序去执行。
+
+memoryorder作用
+
+memory order，其实就是限制编译器以及CPU对单线程当中的指令执行顺序进行重排的程度（此外还包括对cache的控制方法）。这种限制，决定了以atomic操作为基准点（边界），对其之前后的内存访问命令，能够在多大的范围内自由重排（或者反过来，需要施加多大的保序限制），也被称为栅栏。从而形成了6种模式。它本身与多线程无关，是限制的单一线程当中指令执行顺序。
+
+
+| 编号 | 顺序关系                                                | 说明                                                                                                                                                                                                                                                        |
+| ---- | ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Relaxed order限制相关变量的原子操作。                   | 只保证线程1中的g.Store和线程2中的g.load操作是原子操作。不保证线程之间的g操作指令同步顺序。也不限制其他变量的顺序。                                                                                                                                          |
+| 2    | Release-acquire同步多线程顺序，强制其他变量的顺带关系。 | （1）线程1中，g.store(release)之前读写操作不允许重排到g.store(release)后面。（2）g.load(acquire)之后的读写操作不允许被重排到g.load(acquire)之前。（3）如果g.store()在gload()之前执行，那么g.store(release)之前的所有写操作对g.load(acquire)之后的命令可见。 |
+| 3    | Release-consume只同步同步顺序，强制其他变量的顺带关系。 | （1）只保证原子操作，不会影响非依赖关系变量的重排顺序限制。（2）对有依赖关系的变量，如果g.store()在gload()之前执行，限制g.store(release)之前的所有写操作对g.load(acquire)之后的命令可见。                                                                   |
+| 4    | memory_order_acq_rel                                    | （1）在当前线程对读取和写入施加 acquire-release 语义，语句后的不能重排到前面，语句前的不能重排到后面。（2）可以看见其他线程施加 release 语义之前的所有写入，同时自己的 release 结束后所有写入对其他施加 acquire 语义的线程可见。                            |
+| 5    | memory_order_seq_cst                                    | 顺序一致性模型，（1）对变量施加acq_rel语义限制的限制，（2）同时还建立一个对所有原子变量操作的全局唯一修改顺序，所有线程看到的内存操作的顺序都是一样的。                                                                                                     |
+
+
+
+ Relaxed ordering
+
+![](./images/25.jpg)
+Relaxed ordering，放松的排序，只保证操作是原子操作，但是不保证任何顺序，单线程中除了依赖关系的按照代码顺序，没有依赖关系的则排序任意。举个例子。如下建立两个原子变量，线程1中执行赋值操作A，B，线程2中执行读取操作C，D。因为Relaxed ordering只保证操作A,B,C,D是原子操作，A,B之间没有依赖关系，C,D之间也没有依赖关系，所以线程1中执行顺序可以是A,B，也可以是B,A，线程2中执行顺序可以是C,D，也可以是D，C，线程1和线程2之间也没有任何同步关系，所以线程1和线程2同时执行时，A,B,C,D可以是任意顺序，如果D在A之前执行，例如执行顺序是B,D,C,A，则D指令断言会出现失败，因为A操作还没有写入f为true。例子中C操作的 while循环，只是保证B操作执行完。实际应用中可以不用循环。
+
+```c++
+atomic<bool> f=false;
+atomic<bool> g=false;
+// thread1
+f.store(true, memory_order_relaxed);//A
+g.store(true, memory_order_relaxed);//B
+// thread2
+while(!g.load(memory_order_relaxed));//C
+assert(f.load(memory_order_relaxed));//D
+```
+如果存在依赖关系，把B改成g.store(f, memory_order_relaxed);，g依赖于f，则线程1中执行顺序只能是A,B，线程2中还是任意顺序CD，或者DC。线程1和线程2中执行顺序还是任意顺序，只是A必须在B前面。可以是ABCD、ACBD，DABC等；D还是有可能在A之前执行，所以D还是会出现断言失败。怎么保证A一定在D之前执行，让断言不失败呢，也是要控制两个线程中的两条指令的顺序，可以使用Release – acquire顺序关系来实现。
+
+
+ Release – acquire
+
+![](./images/26.jpg)
+
+多线程并发是为了提高效率，多线程同步是为了解决同时访问同一个变量的问题，线程1中g.store（release）写变量和线程2中g.load(acquire)读变量组合使用，并不是保证g.store（release）一定在g.load(acquire)之前执行，如果线程1一直sleep几秒，线程2会执行g.load(acquire)命令。这里的同步是指线程1中g.store（release）之前读写不能被重排到g.store（release）之后，线程2 g.load(acquire)之后的读写不能被重排到g.load(acquire)之前，如果g.store（release）先于g.load(acquire)之前执行（前提），那么线程1中g.store（release）之前的读写对线程2中g.load(acquire)之后的读写可见。如果g.load(acquire)先于g.store（release）之前执行，那么无法保证线程1中g.store（release）之前的读写对线程2中g.load(acquire)之后的读写可见。总结三点如下：
+
+	（1） load(acquire)所在的线程中load(acquire)之后的所有写操作（包含非依赖关系），不允许被移动到这个load()的前面，一定在load之后执行。
+	（2） store（release）之前的所有读写操作（包含非依赖关系），不允许被重排到这个store(release)的后面，一定在store之前执行。
+	（3） 如果store(release)在load（acquire）之前执行了（前提），那么store(release)之前的写操作对 load(acquire)之后的读写操作可见。
+
+```c++
+bool f=false;
+atomic<bool> g=false;
+// thread1
+f=true//A
+g.store(true, memory_order_release);//B
+// thread2
+while(!g.load(memory_order_ acquire));//C
+assert(f));//D
+```
+
+根据规则（1），线程1中A不允许被重排到B之后，根据规则（2）D不允许被重排到C之前，根据规则（3），因为C中有while循环，一直等待，等到B执行完了，C中循环才退出，保证B在C之前执行完，A又一定在B之前执行完，那么D读到就永远是true，永远不会失败。如果C没 循环，即使加了release和acquire，也不能保证B在C之前执行，D也可能会出现失败。
+
+release -- acquire 有个牛逼的副作用：线程 1 中所有发生在 B 之前的A操作，都会在B之前执行，D也一定在C之后执行，A，D好像很无辜，无缘无故的就被强制顺序了。如果不想让A,D被顺带强制顺序，可以使用Release – consume。
+
+Release – consume
+
+![](./images/27.jpg)
+Release – consume实例,Release – consume也是实现多线程之间指令的同步问题，与Release – acquire不同的是，Release – consume不会限制线程中其他变量的顺序重排，不会顺带强制其前后其他指令（无依赖关系）的顺序。避免了其他指令强制顺序带来的额外开销。例如：
+```c++
+bool f=false;
+atomic<bool> g=false;
+// thread1
+f=true//A
+g.store(true, memory_order_release);//B
+// thread2
+while(!g.load(memory_order_consume);//C
+assert(f));//D
+```
+同样的例子例子中使用了release和consume关系，不会限制A、B和C、D指令的顺序，可以任意重排，线程1中可以是AB，BA，线程2中可以是CD，DC。线程1和线程2可以是任意的排列组合。所以D有可能断言失败。这种情况和relax是一样的。
+
+Release – consume依赖关系变量限制重排,有依赖关系的变量的指令顺序还是会按照代码顺序去执行，如果AB之间有依赖关系例如下面的例子：
+```c++
+bool f=false;
+atomic<bool> g=false;
+// thread1
+f=true//A
+g.store(f, memory_order_release);//B g依赖于f
+// thread2
+while(!g.load(memory_order_consume);//C
+assert(f));//D
+```
+因为B中的变量g依赖于f，所以线程1中指令顺序只能是AB，线程2中D一定成功，因为在线程1中g依赖于f，所以A一定在B之前执行，线程2中D也被限制不能重排到C之前，C中的while循环会一直等到g变为true，说明f已经为true，那么D永远成功。
+
+relax和consume的区别
+
+那么relax和consume不是一样吗？都是线程中有依赖关系就按照代码顺序。否则可以任意排序，relax和consume的区别是什么？如下面的例子所示，将release和consume都换成relax。
+
+```c++
+bool f=false;
+atomic<bool> g=false;
+// thread1
+f=true//A
+g.store(f, memory_order_relax);//B g依赖于f
+// thread2
+while(!g.load(memory_order_ relax);//C
+assert(f));//D
+```
+线程1中g依赖于f，所以按照代码顺序，A在B之前执行。因为在线程2中CD之间没有依赖关系，所以线程2中CD可以任意重排。而如果是consume，那么线程2中就只能是CD顺序，不能被重排。因为线程1中依赖关系也影响了线程2中的指令重排限制，线程中B之前的依赖变量写入对线程2中C之后的依赖变量的读取可见。这就是relax和consume的区别。
+
+memory_order_acq_rel
+
+![](./images/28.jpg)
+ 对读取和写入施加 acquire-release 语义，也就是g.store(acquire-release)或者g.load（acquire-release）前面无法被重排到后面，后面无法被重排到前面。
+
+可以看见其他线程施加 release 之前的所有写入，同时自己之前所有写入对其他施加 acquire 语义的线程可见。例如下面的例子：
+
+```c++
+bool f=false;
+atomic<bool> g=false;
+bool h=false;
+// thread1
+f=true//A
+g.store(true, memory_order_release);//B
+// thread2
+while(!g.load(memory_order_ acquire);//C
+assert(f));//D
+assert(h);//E
+//thread3
+h=true;//F
+while(!g.load(memory_order_acq_rel);//G
+assert(f));//H
+```
+根据规则，线程1中A操作不允许被重排到B之后，线程2中DE操作不允许被重排到C之前。线程3中F操作不允许被重排到G之后，H操作不允许被重排到G之前。
+
+线程1中A操作写入对线程2中D读取以及线程3中H操作的读取都是可见，即DH在g为true的前提下，读到的一定是true；同时线程3中F操作的写入对线程2中E操作的读取可见，即E操作在g为true的前提下，读到的一定是true。
+
+Sequentially-consistent ordering
+
+![](./images/29.jpg)
+默认情况下，std::atomic使用的是 Sequentially-consistent ordering，除了包含release/acquire的限制，同时还建立一个对所有原子变量操作的全局唯一修改顺序。即采用统一的全局顺序，所有的线程看到的顺序是一致的。会在多个线程间切换，达到多个线程仿佛在一个线程内顺序执行的效果。即单线程中按照代码顺序，多线程之间按照一个全局统一顺序，具体什么顺序按照时间片的分配。
+```c++
+// 顺序一致
+
+std::atomic<bool> x,y;
+std::atomic<int> z;
+void write_x()
+{
+x.store(true,std::memory_order_seq_cst);//A
+}
+void write_y()
+{
+y.store(true,std::memory_order_seq_cst);//B
+}
+void read_x_then_y()
+{
+while(!x.load(std::memory_order_seq_cst));//C
+if(y.load(std::memory_order_seq_cst))//D
+	++z;
+}
+
+void read_y_then_x()
+{
+while(!y.load(std::memory_order_seq_cst));//E
+if(x.load(std::memory_order_seq_cst))F
+	++z;
+}
+int main()
+{
+	x=false;
+	y=false;
+	z=0;
+
+	std::thread a(write_x);
+	std::thread b(write_y);
+	std::thread c(read_x_then_y);
+	std::thread d(read_y_then_x);
+
+	a.join();
+	b.join();
+	c.join();
+	d.join();
+	assert(z.load()!=0);
+}
+```
+上面一共四个线程，假如四个线程同时启动，那ABCDEF6条指令按照什么顺序执行呢？四个线程并发执行，都可能先执行，总的全局顺序会选择下图中的一条环线顺序开始执行，而且对所有的线程来说都是按照这个全局顺序执行。
+
+例如按照ACDBEF的顺序执行，假如线程write_x先分配到时间片，A先执行，x变为true，线程read_x_then_y中C操作while循环退出，D操作执行，B执行，y变为true，E中while循环退出，执行F。
+
+再比如ABCDEF,ACBEDF等，只是C一定在D之前，E一定在F之前。
+
+
+![](./images/30.jpg)
+
+六种模型参数本质上是限制单线程内部的指令重排顺序，并不是同步不同线程之间的指令顺序，而是通过限制单线程中指令的重排，以控制带有模型参数的变量前后的指令被重排顺序限制。这种限制，决定了以atomic操作为基准点（边界），对其之前的内存访问命令，以及之后的内存访问命令，能够在多大的范围内自由重排。上面的例子中，使用while循环，来一直等待，是为了保证store为true后，load为true，从而退出while循环，因为store之前的写指令在store之前完成，所以store之前的写指令对while（load（acquire））之后的写指令可见，while循环一直等待，强制了多线程间两个指令的顺序，这样写只是为了说明原理，实际应用中不会这样去编程。
+
+
+其他资料
+
+	memory_order_relaxed: 最宽松的内存序，不提供任何同步保证。它只保证原子操作本身是原子的，但不保证操作之间的顺序。
+	memory_order_consume: 消费者内存序，用于同步依赖关系。它保证了依赖于原子操作结果的后续操作将按照正确的顺序执行。
+	memory_order_acquire: 获取内存序，用于同步对共享数据的访问。它保证了在获取操作之后对共享数据的所有读取操作都将看到最新的数据。
+	memory_order_release: 释放内存序，用于同步对共享数据的访问。它保证了在释放操作之前对共享数据的所有写入操作都已完成，并且对其他线程可见。
+	memory_order_acq_rel: 获取-释放内存序，结合了获取和释放两种内存序的特点。它既保证了获取操作之后对共享数据的所有读取操作都将看到最新的数据，又保证了在释放操作之前对共享数据的所有写入操作都已完成，并且对其他线程可见。
+	memory_order_seq_cst: 顺序一致性内存序，提供了最严格的同步保证。它保证了所有线程都将看到相同的操作顺序，并且所有原子操作都将按照程序顺序执行。
+
+
+下面是一个简单的例子，展示了如何使用 memory_order_acquire 和 memory_order_release 来实现一个简单的生产者-消费者模型：
+```c++
+#include <atomic>
+#include <iostream>
+#include <thread>
+
+std::atomic<int> data;
+std::atomic<bool> ready(false);
+
+void producer() {
+    data.store(42, std::memory_order_relaxed);
+    ready.store(true, std::memory_order_release);
+}
+
+void consumer() {
+    while (!ready.load(std::memory_order_acquire))
+        ;
+    std::cout << data.load(std::memory_order_relaxed) << std::endl;
+}
+
+int main() {
+    std::thread t1(producer);
+    std::thread t2(consumer);
+    t1.join();
+    t2.join();
+    return 0;
+}
+```
+在这个例子中，生产者线程使用 memory_order_release 来确保数据被正确地初始化，并且在 ready 变量被设置为 true 之前对其他线程可见。消费者线程则使用 memory_order_acquire 来确保在读取 data 变量之前，ready 变量已经被设置为 true。
+
+下面是另一个例子，展示了如何使用 memory_order_seq_cst 来实现一个简单的计数器：
+```c++
+#include <atomic>
+#include <iostream>
+#include <thread>
+#include <vector>
+
+std::atomic<int> counter(0);
+
+void worker(int n) {
+    for (int i = 0; i < n; ++i) {
+        counter.fetch_add(1, std::memory_order_seq_cst);
+    }
+}
+
+int main() {
+    const int n = 100000;
+    const int num_threads = 4;
+    std::vector<std::thread> threads;
+    for (int i = 0; i < num_threads; ++i) {
+        threads.emplace_back(worker, n);
+    }
+    for (auto& t : threads) {
+        t.join();
+    }
+    std::cout << counter << std::endl;
+    return 0;
+}
+```
+在这个例子中，我们创建了4个线程，每个线程都对一个原子计数器进行了 n 次增加操作。由于我们使用了 memory_order_seq_cst 来保证原子操作的顺序一致性，所以最终计数器的值将恰好等于 n * num_threads。
+
 ## c++ 17 20
 参考链接：
 
