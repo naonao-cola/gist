@@ -125,3 +125,105 @@ jobs:
           branch: main
 ```
 
+
+
+## 仓库推荐
+
+    本项目旨在分享大模型相关技术原理以及实战经验。LLM训练实战
+    https://github.com/liguodongiot/llm-action
+
+    书生·浦语大模型实战营
+    https://github.com/InternLM/tutorial
+
+    基于 ChatGLM 等大语言模型与 Langchain 等应用框架实现，开源、可离线部署的检索增强生成(RAG)大模型知识库项目。
+    https://github.com/chatchat-space/Langchain-Chatchat
+
+    ChatGLM3 series: Open Bilingual Chat LLMs | 开源双语对话语言模型
+    https://github.com/THUDM/ChatGLM3
+
+    MMDeploy 是 OpenMMLab 模型部署工具箱，为各算法库提供统一的部署体验。基于 MMDeploy，开发者可以轻松从训练 repo 生成指定硬件所需 SDK，省去大量适配时间
+    https://github.com/open-mmlab/mmdeploy/tree/main
+
+    PPL Quantization Tool (PPQ)
+    https://github.com/openppl-public/ppq
+
+    awesome-python
+    https://github.com/vinta/awesome-python
+
+    Hydra is a framework for elegantly configuring complex applications，Python程序配置文件
+    https://github.com/facebookresearch/hydra
+
+    TensorRT for YOLOv8、YOLOv8-Pose、YOLOv8-Seg、YOLOv8-Cls、YOLOv7、YOLOv6、YOLOv5、YOLONAS
+    https://github.com/FeiYull/TensorRT-Alpha
+
+    带你从零实现一个高性能的深度学习推理库，支持Unet、Yolov5、Resnet等模型的推理。带有视频教程
+    https://github.com/zjhellofss/KuiperInfer
+
+    深度学习docker环境
+    https://github.com/ufoym/deepo
+
+    官方yolo仓库
+    https://github.com/ultralytics/ultralytics
+
+    Transformers 提供了数以千计的预训练模型，支持 100 多种语言的文本分类、信息抽取、问答、摘要、翻译、文本生成。它的宗旨是让最先进的 NLP 技术人人易用。
+    https://github.com/huggingface/transformers/tree/main
+
+    英伟达 tensorRT 官方仓库
+    https://github.com/NVIDIA/TensorRT
+
+    Simplify your onnx model，修改onnx模型
+    https://github.com/daquexian/onnx-simplifier
+
+    矩阵乘法优化，gemm
+    https://github.com/flame/how-to-optimize-gemm
+
+    c++ vscode项目模板
+    https://github.com/Codesire-Deng/TemplateRepoCxx
+
+    《麻省理工公开课：线性代数》中文笔记
+    https://github.com/MLNLP-World/MIT-Linear-Algebra-Notes
+
+    深度学习500问
+    https://github.com/scutan90/DeepLearning-500-questions
+
+    线性代数的艺术
+    https://github.com/kf-liu/The-Art-of-Linear-Algebra-zh-CN
+
+    Modern C++ Tutorial: C++11/14/17/20
+    https://github.com/changkun/modern-cpp-tutorial
+
+    c++那些事
+    https://github.com/Light-City/CPlusPlusThings
+
+    AI实战-practicalAI 中文版
+    https://github.com/MLEveryday/practicalAI-cn
+
+    使用C++实现了各种算法，这些算法涵盖了计算机科学、数学和统计学、数据科学、机器学习、工程等多个主题。
+    https://github.com/TheAlgorithms/C-Plus-Plus
+
+    Pytorch-Lightning-Template 模板
+    https://github.com/miracleyoo/pytorch-lightning-template
+
+    c++ 协程，风神写的
+    https://github.com/Codesire-Deng/co_context
+
+    TensorRTx aims to implement popular deep learning networks with TensorRT network definition API.
+    https://github.com/wang-xinyu/tensorrtx
+
+    C++ library based on tensorrt integration
+    https://github.com/shouxieai/tensorRT_Pro
+
+    TensorRT c++ api
+    https://github.com/cyrusbehr/tensorrt-cpp-api
+
+    cuda 图像处理库
+    https://github.com/CVCUDA/CV-CUDA
+
+    色图
+    https://github.com/ChunelFeng/CGraph
+
+    图优化库
+    https://github.com/RainerKuemmerle/g2o
+
+    linux 工具
+    https://github.com/me115/linuxtools_rst
