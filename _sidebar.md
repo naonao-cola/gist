@@ -22,7 +22,9 @@
     - [**杂记**](./py/tips.md)
 
 
-- [**camera**](./camera/camera.md)
+- **camera**
+    - [**camera**](./camera/camera.md)
+    - [**halcon**](./camera/halcon.md)
 
 - **TOOLS**
   - [**linux**](./linux/tools.md)
