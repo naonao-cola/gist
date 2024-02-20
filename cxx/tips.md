@@ -1075,6 +1075,309 @@ int main(void)
 简单的说constexpr所引用的对象必须在编译期就决定地址。还有一个奇葩的地方就是可以通过上例conexprPtrD来修改g_tempA的值，也就是说constexpr修饰的引用不是常量，如果要确保其实常量引用需要constexpr const来修饰。
 
 
+### mutable
+mutable的中文意思是“可变的，易变的”，跟constant（既C++中的const）是反义词。
+
+在C++中，mutable也是为了突破const的限制而设置的。被mutable修饰的变量，将永远处于可变的状态，即使在一个const函数中。
+
+我们知道，如果类的成员函数不会改变对象的状态，那么这个成员函数一般会声明成const的。但是，有些时候，我们需要在const的函数里面修改一些跟类状态无关的数据成员，那么这个数据成员就应该被mutalbe来修饰。
+```c++
+class ClxTest
+{
+　public:
+　　void Output() const;
+};
+void ClxTest::Output() const
+{
+　cout << "Output for test!" << endl;
+}
+void OutputTest(const ClxTest& lx)
+{
+　lx.Output();
+}
+```
+类ClxTest的成员函数Output是用来输出的，不会修改类的状态，所以被声明为const的。
+
+函数OutputTest也是用来输出的，里面调用了对象lx的Output输出方法，为了防止在函数中调用其他成员函数修改任何成员变量，所以参数也被const修饰。
+
+如果现在，我们要增添一个功能：计算每个对象的输出次数。如果用来计数的变量是普通的变量的话，那么在const成员函数Output里面是不能修改该变量的值的；而该变量跟对象的状态无关，所以应该为了修改该变量而去掉Output的const属性。这个时候，就该我们的mutable出场了——只要用mutalbe来修饰这个变量，所有问题就迎刃而解了。
+
+```c++
+class ClxTest
+{
+　public:
+　　ClxTest();
+　　~ClxTest();
+
+　　void Output() const;
+　　int GetOutputTimes() const;
+
+　private:
+　　mutable int m_iTimes;
+};
+
+ClxTest::ClxTest()
+{
+　m_iTimes = 0;
+}
+
+ClxTest::~ClxTest()
+{}
+
+void ClxTest::Output() const
+{
+　cout << "Output for test!" << endl;
+　m_iTimes++;
+}
+
+int ClxTest::GetOutputTimes() const
+{
+　return m_iTimes;
+}
+
+void OutputTest(const ClxTest& lx)
+{
+　cout << lx.GetOutputTimes() << endl;
+　lx.Output();
+　cout << lx.GetOutputTimes() << endl;
+}
+
+```
+计数器m_iTimes被mutable修饰，那么它就可以突破const的限制，在被const修饰的函数里面也能被修改。
+
+### noexecpt
+该关键字告诉编译器，函数中不会发生异常,这有利于编译器对程序做更多的优化。
+如果在运行时，noexecpt函数向外抛出了异常（如果函数内部捕捉了异常并完成处理，这种情况不算抛出异常），程序会直接终止，调用std::terminate()函数，该函数内部会调用std::abort()终止程序。
+
+换一句话的意思就是，不传递异常，在异常处直接终止，便于查找bug。
+```c++
+    void swap(Type& x, Type& y) throw()   //C++11之前
+    {
+        x.swap(y);
+    }
+    void swap(Type& x, Type& y) noexcept  //C++11
+    {
+        x.swap(y);
+    }
+
+    void swap(Type& x, Type& y) noexcept(noexcept(x.swap(y)))    //C++11
+    {
+        x.swap(y);
+    }
+
+```
+使用noexcept表明函数或操作不会发生异常，会给编译器更大的优化空间。然而，并不是加上noexcept就能提高效率，步子迈大了也容易扯着蛋。
+以下情形鼓励使用noexcept：
+
+    移动构造函数（move constructor）
+    移动分配函数（move assignment）
+    析构函数（destructor）。这里提一句，在新版本的编译器中，析构函数是默认加上关键字noexcept的。下面代码可以检测编译器是否给析构函数加上关键字noexcept。
+
+```c++
+    struct X
+    {
+        ~X() { };
+    };
+
+    int main()
+    {
+        X x;
+
+        // This will not fire even in GCC 4.7.2 if the destructor is
+        // explicitly marked as noexcept(true)
+        static_assert(noexcept(x.~X()), "Ouch!");
+    }
+```
+### explicit
+C++中的explicit关键字只能用于修饰只有一个参数的类构造函数, 它的作用是表明该构造函数是显示的, 而非隐式的,
+
+```c++
+class CxString  // 没有使用explicit关键字的类声明, 即默认为隐式声明
+{
+public:
+    char *_pstr;
+    int _size;
+    CxString(int size)
+    {
+        _size = size;                // string的预设大小
+        _pstr = malloc(size + 1);    // 分配string的内存
+        memset(_pstr, 0, size + 1);
+    }
+    CxString(const char *p)
+    {
+        int size = strlen(p);
+        _pstr = malloc(size + 1);    // 分配string的内存
+        strcpy(_pstr, p);            // 复制字符串
+        _size = strlen(_pstr);
+    }
+    // 析构函数这里不讨论, 省略...
+};
+
+    // 下面是调用:
+
+    CxString string1(24);     // 这样是OK的, 为CxString预分配24字节的大小的内存
+    CxString string2 = 10;    // 这样是OK的, 为CxString预分配10字节的大小的内存
+    CxString string3;         // 这样是不行的, 因为没有默认构造函数, 错误为: “CxString”: 没有合适的默认构造函数可用
+    CxString string4("aaaa"); // 这样是OK的
+    CxString string5 = "bbb"; // 这样也是OK的, 调用的是CxString(const char *p)
+    CxString string6 = 'c';   // 这样也是OK的, 其实调用的是CxString(int size), 且size等于'c'的ascii码
+    string1 = 2;              // 这样也是OK的, 为CxString预分配2字节的大小的内存
+    string2 = 3;              // 这样也是OK的, 为CxString预分配3字节的大小的内存
+    string3 = string1;        // 这样也是OK的, 至少编译是没问题的, 但是如果析构函数里用free释放_pstr内存指针的时候可能会报错, 完整的代码必须重载运算符"=", 并在其中处理内存释放
+/*
+上面的代码中, "CxString string2 = 10;" 这句为什么是可以的呢? 在C++中, 如果的构造函数只有一个参数时, 那么在编译的时候就会有一个缺省的转换操作:将该构造函数对应数据类型的数据转换为该类对象. 也就是说 "CxString string2 = 10;" 这段代码, 编译器自动将整型转换为CxString类对象, 实际上等同于下面的操作:
+*/
+CxString string2(10);
+//或
+CxString temp(10);
+CxString string2 = temp;
+/*
+但是, 上面的代码中的_size代表的是字符串内存分配的大小, 那么调用的第二句 "CxString string2 = 10;" 和第六句 "CxString string6 = 'c';" 就显得不伦不类, 而且容易让人疑惑. 有什么办法阻止这种用法呢? 答案就是使用explicit关键字. 我们把上面的代码修改一下, 如下:
+*/
+class CxString  // 使用关键字explicit的类声明, 显示转换
+{
+public:
+    char *_pstr;
+    int _size;
+    explicit CxString(int size)
+    {
+        _size = size;
+        // 代码同上, 省略...
+    }
+    CxString(const char *p)
+    {
+        // 代码同上, 省略...
+    }
+};
+
+    // 下面是调用:
+
+    CxString string1(24);     // 这样是OK的
+    CxString string2 = 10;    // 这样是不行的, 因为explicit关键字取消了隐式转换
+    CxString string3;         // 这样是不行的, 因为没有默认构造函数
+    CxString string4("aaaa"); // 这样是OK的
+    CxString string5 = "bbb"; // 这样也是OK的, 调用的是CxString(const char *p)
+    CxString string6 = 'c';   // 这样是不行的, 其实调用的是CxString(int size), 且size等于'c'的ascii码, 但explicit关键字取消了隐式转换
+    string1 = 2;              // 这样也是不行的, 因为取消了隐式转换
+    string2 = 3;              // 这样也是不行的, 因为取消了隐式转换
+    string3 = string1;        // 这样也是不行的, 因为取消了隐式转换, 除非类实现操作符"="的重载
+```
+
+
+## 构造函数
+
+        我们用对象a初始化对象b，后对象a我们就不在使用了，但是对象a的空间还在呀（在析构之前），
+        既然拷贝构造函数，实际上就是把a对象的内容复制一份到b中，那么为什么我们不能直接使用a的
+        空间呢？这样就避免了新的空间的分配，大大降低了构造的成本。这就是移动构造函数设计的初衷；
+
+        拷贝构造函数中，对于指针，我们一定要采用深层复制，而移动构造函数中，对于指针，我们采用
+        浅层复制。浅层复制之所以危险，是因为两个指针共同指向一片内存空间，若第一个指针将其释放，
+        另一个指针的指向就不合法了。所以我们只要避免第一个指针释放空间就可以了。避免的方法就是
+        将第一个指针（比如a->value）置为NULL，这样在调用析构函数的时候，由于有判断是否为NULL
+        的语句，所以析构a的时候并不会回收a->value指向的空间；
+
+        移动构造函数的参数和拷贝构造函数不同，拷贝构造函数的参数是一个左值引用，但是移动构造函
+        数的初值是一个右值引用。意味着，移动构造函数的参数是一个右值或者将亡值的引用。也就是说，
+        只用用一个右值，或者将亡值初始化另一个对象的时候，才会调用移动构造函数。而那个move语句，
+        就是将一个左值变成一个将亡值。
+
+
+### 浅复制
+```c++
+#include<iostream>
+#include<vector>
+using namespace std;
+
+class Test
+{
+public:
+	Test(int num,char *ptr)
+	{
+		x = num; p = ptr;
+		cout << "构造函数"<<endl;
+	}
+	Test(const Test& a) :x(a.x),p(a.p)  //浅复制
+	{
+		cout << "拷贝构造函数" << endl;
+	}
+	Test(Test&& a) : x(a.x)
+	{
+		p = a.p;
+		a.p = NULL;
+		cout << "移动构造函数" << endl;
+	}
+	~Test()
+	{
+		if (p != NULL)
+			delete p;
+	}
+private:
+	int x;
+	char *p;
+};
+
+int main()
+{
+	int x = 8;
+	char ch = 'A';
+	Test a(x,&ch);
+	Test b(a);
+	Test c(move(a));
+
+	return 0;
+}
+//b.p和c.p指向同一个内存，因为都是浅复制。有指针成员变量时，拷贝构造函数要深复制（自动生成的拷贝构造函数是浅复制）
+```
+### 深复制
+```c++
+#include<iostream>
+#include<vector>
+using namespace std;
+
+class Test
+{
+public:
+	Test(int num,char *ptr)
+	{
+		x = num; p = ptr;
+		cout << "构造函数"<<endl;
+	}
+	Test(const Test& a) :x(a.x)
+	{
+		p = new char(1);    //深复制
+		*p = *(a.p);
+		cout << "拷贝构造函数" << endl;
+	}
+	Test(Test&& a) : x(a.x)
+	{
+		p = a.p;
+		a.p = NULL;
+		cout << "移动构造函数" << endl;
+	}
+	~Test()
+	{
+		if (p != NULL)
+			delete p;
+	}
+	int x;
+	char *p;
+};
+
+int main()
+{
+	int x = 2;
+	char ch = '%';
+	char*p = &ch;
+	cout << (void *)p << endl; //输出指针的值要用void*
+	Test a(x,p);
+	Test b(a);
+	Test c(move(a));
+
+	return 0;
+}
+//b的p成员的值与a不同，c的p值与a.p相同
+```
+
 ## 异步基础
 c++ 多线程的资料教程很多，就不自己写了了，放一点自己看到不错的链接。
 
