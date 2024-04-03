@@ -53,6 +53,10 @@ add_packages("opencv")
 # 使用pkg-config
 add_ldflags("$(shell pkg-config --libs --cflags opencv)")
 
+cuda 源文件中的 device 函数需要被 device-link 且只 device-link 一次。在 shared 或 binary 的 target 上 xmake 会自动进行 device-link ，这时它们依赖的 static target 也会同时被 device-link ，因此默认情况下 static target 不会被 device-link。然而，如果最终的 shared 或 binary 的 target 不包含任何 cuda 源文件，则不会发生 device-link 阶段，导致出现 undefined reference 错误。这种情况下，需要手动为 static target 指定
+add_values("cuda.build.devlink", true).
+
+
 ```
 ### xrepo
 
