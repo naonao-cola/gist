@@ -667,3 +667,28 @@ int main()
 
 ```
 高级线程池 ，包括主线程，辅线程，任务盗取，负载均衡，无锁队列。 参考链接： https://github.com/ChunelFeng/CThreadPool
+
+
+
+
+
+### gdb 调试
+参考链接 https://www.cnblogs.com/zhoug2020/p/7283169.html
+
+启动调试 			gdb a.out
+显示当前代码		l
+显示这个函数的代码   函数名
+打印变量的值        print var
+打印变量地址        print &var
+打印地址数据        print *address
+查看指定文件代码    list file:N
+重新运行调试程序    run
+单步运行           step
+执行下一步         next
+条件断点           break 46 if testsize==100
+继续运行程序直接运行到下一个断点 continue
+设置断点			break file:N
+删除N号断点			delete N
+删除全部断点		delete
+查看断点			info breakpoint
+显示当前调用函数堆栈中的函数 backtrace
