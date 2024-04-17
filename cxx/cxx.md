@@ -672,7 +672,7 @@ int main()
 
 
 
-### gdb 调试
+## gdb 调试
 参考链接 https://www.cnblogs.com/zhoug2020/p/7283169.html
 
 启动调试 			gdb a.out
