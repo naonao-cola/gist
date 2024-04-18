@@ -487,6 +487,36 @@ RUN rm -rf /tmp/CMake
 ---
 
 ## docker compose
+
+启用gpu 容器
+参考链接：  https://runebook.dev/zh/docs/docker/compose/gpu-support/index
+
+docker-compose 需要升级
+避免自动退出，需要加 tty: true
+```bash
+version: "2.1"
+services:
+
+  test:
+    image: nvidia/cuda:11.7.1-base-ubuntu20.04
+    command: /bin/bash
+    restart: always
+    container_name: test
+
+
+    #runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+    tty: true
+
+
+```
+
 ```bash
 version: "2.1"
 services:
