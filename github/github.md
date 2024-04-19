@@ -37,6 +37,26 @@ git stash pop
 
 //从提交中删除文件
 git rm -r --cached vs2002/
+//列出所有git正在跟踪的文件
+git ls-files
+//git不再跟踪名为FileName的文件，但是文件保留在工作区中
+git rm --cached FileName
+//删除名为FileName的文件
+git rm FileName
+
+//代码review
+//创建开发分支
+git checkout -b xiaobo_dev
+//将开发分支和master分支绑定，可以通过git pull拉取master分支最新代码
+git branch --set-upstream-to=origin/master xiaobo_dev
+//修改代码前拉取master最新代码到开发分支，在开发分支上拉
+git pull
+//- 推送代码到GitLab
+git push origin xiaobo_dev
+//  - 删除本地仓库中与已删除的远程分支关联的引用
+git remote prune origin
+//  - 强制将临时分支代码回退到master HEAD
+git reset --hard master
 ```
 
     Git常见报错：Updates were rejected because the tip of your current branch is behind
