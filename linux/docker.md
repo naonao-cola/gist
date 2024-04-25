@@ -102,6 +102,28 @@ docker启动时环境变量不生效（docker打包成镜像后环境变量失�
 1、在shell脚本设置环境变量
 2、在Dockerfile中使用ENV命令
 一开始我是用的方案2，但是语法没写对导致我以为这种用法不行才换的写入~/.bashrc这个方案，然后就踩了这个坑
+start.sh
+```
+#!/bin/bash
+#Write Environment
+export CUDA_HOME=/usr/local/cuda
+export PATH=$PATH:$CUDA_HOME/bin
+export LD_LIBRARY_PATH=/usr/local/cuda-11.7/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export LD_LIBRARY_PATH=/usr/local/lib:$LD_LIBRARY_PATH
+export TENSORRT_ROOT=/usr/local/TensorRT-8.4.2.4
+export LD_LIBRARY_PATH=/usr/local/TensorRT-8.4.2.4/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/usr/local/TensorRT-8.4.2.4/targets/x86_64-linux-gnu/lib:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATH=/home/sbg_folder/sbg_algo/3rdparty/ai_inference/lib:$LD_LIBRARY_PATH
+#Write Environment
+# Start the Nginx service
+service nginx start
+#nginx
+# Start the ASP.NET Core app;
+#dotnet TvLightWeb.Inference.dll
+dotnet /home/sbg_folder/inspection/app/TvLightWeb.Inference.dll
+sleep 36500d
+```
 
 ---
 
@@ -502,7 +524,10 @@ services:
     command: /bin/bash
     restart: always
     container_name: test
-
+    environment:
+      - TZ=Asia/Shanghai
+      - NVIDIA_DRIVER_CAPABILITIES=compute,utility
+      - NVIDIA_VISIBLE_DEVICES=all
 
     #runtime: nvidia
     deploy:
@@ -513,7 +538,14 @@ services:
             count: all
             capabilities: [gpu]
     tty: true
-
+    volumes:
+      - "/home/snd/sbg_volume:/home/sbg_folder"
+      - "/home/snd/sbg_volume/inspection/start.sh:/start.sh"
+      - "/home/snd/sbg_volume/inspection/nginx.conf:/etc/nginx/nginx.conf"
+    ports:
+      - "3097:80"
+      - "3098:443"
+    entrypoint: ["sh","/start.sh"]
 
 ```
 
