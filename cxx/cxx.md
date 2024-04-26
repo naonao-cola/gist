@@ -681,6 +681,10 @@ int main()
 
 显示这个函数的代码   函数名
 
+执行完当前函数返回到调用它的函数  finish
+
+跳转执行程序到第5行   jump 5
+
 打印变量的值        print var
 
 打印变量地址        print &var
@@ -694,6 +698,10 @@ int main()
 单步运行           step
 
 执行下一步         next
+
+检测表达式变化则停住  watch i != 10
+
+强制返回当前函数     return
 
 条件断点           break 46 if testsize==100
 
