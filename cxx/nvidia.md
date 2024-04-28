@@ -1,3 +1,12 @@
+
+## SMID 指令
+
+github 仓库：
+https://github.com/xtensor-stack/xsimd
+
+https://github.com/aff3ct/MIPP
+
+
 ## 资料
 
 GPU编程  谭升的博客

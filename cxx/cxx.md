@@ -235,6 +235,16 @@ parallel sections里面的内容要并行执行，具体分工上，每个线程
         function2();
     }
 }
+//高级用法
+/*
+自定义规约操作，适用于vector 的push
+参考：	https://github.com/meiqua/shape_based_matching
+原理实例： https://blog.mangoeffect.net/parallel-programming/learn-openmp-custom-reduction
+*/
+#pragma omp declare reduction \
+    (omp_insert: std::vector<Match>: omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
+
+#pragma omp parallel for reduction(omp_insert:matches)
 ```
 ### 自旋锁
 ```c++
