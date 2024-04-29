@@ -250,3 +250,10 @@ jobs:
 
     docsify 参考仓库
     https://github.com/docsifyjs/awesome-docsify
+
+    lua c++交互仓库
+    https://github.com/ThePhD/sol2
+
+    smid 仓库包
+    https://github.com/xtensor-stack/xsimd
+    https://github.com/aff3ct/MIPP
