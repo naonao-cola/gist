@@ -289,7 +289,20 @@ namespace nao {
 #endif //_WIN32
 
 ```
+## 内存对齐
+```c++
 
+#pragma pack(1) //让编译器对这个结构作1字节对齐
+struct test
+{
+char x1;
+short x2;
+float x3;
+char x4;
+};
+#pragma pack() //取消1字节对齐，恢复为默认4字节对齐
+
+```
 ## 智能指针
 ```c++
 #include <iostream>
