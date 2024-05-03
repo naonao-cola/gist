@@ -19,7 +19,10 @@ https://zhuanlan.zhihu.com/p/412503965
 ```bash
 xmake create -l C++ -P ./hello
 
+#清除配置
 xmake f -c
+#清除所有东西，包括缓存，生成的
+xmake clean -a
 xmake f -v
 # 确认安装包
 xmake f -y
@@ -31,14 +34,17 @@ xmake show
 xmake show -t <target>
 # 检查工程配置和代码
 xmake check
+# 调用clang-tidy 检查代码
+xmake check clang-tidy
+
 xmake project -k vsxmake2022 -m "release,debug" v2022
 
 # 快速检测系统上指定的包信息,请切换到非工程目录下执行上面的命令
 xmake l find_package x264
 # 追加第三方包管理器前缀来测试
 xmake l find_package conan::OpenSSL/1.0.2g
-
-
+# 图形化菜单
+xmake f --menu
 #下载安装好Cuda SDK后，在macosx上会默认安装到/Developer/NVIDIA/CUDA-x.x目录下，Windows上可以通过CUDA_PATH的环境
 #变量找到对应的SDK目录，而 Linux下默认会安装到/usr/local/cuda目录下
 #手动指定Cuda SDK环境目录：
@@ -48,6 +54,12 @@ xmake g --cuda=/usr/local/cuda-9.1/
 #如果想要测试xmake对当前cuda环境的探测支持，可以直接运行
 xmake l detect.sdks.find_cuda
 
+#生成cmakelists.txt
+xmake project -k cmakelists
+#生成compiler_commands
+xmake project -k compile_commands
+
+
 add_requires("opencv",{system = true})
 add_packages("opencv")
 # 使用pkg-config
@@ -56,8 +68,61 @@ add_ldflags("$(shell pkg-config --libs --cflags opencv)")
 cuda 源文件中的 device 函数需要被 device-link 且只 device-link 一次。在 shared 或 binary 的 target 上 xmake 会自动进行 device-link ，这时它们依赖的 static target 也会同时被 device-link ，因此默认情况下 static target 不会被 device-link。然而，如果最终的 shared 或 binary 的 target 不包含任何 cuda 源文件，则不会发生 device-link 阶段，导致出现 undefined reference 错误。这种情况下，需要手动为 static target 指定
 add_values("cuda.build.devlink", true).
 
-
 ```
+### lua脚本
+```bash
+# 编译模式选择
+add_rules("mode.debug", "mode.release","mode.releasedbg")
+
+# 增加自动生成compile_commands.json文件
+add_rules("plugin.compile_commands.autoupdate", {outputdir = ".vscode"})
+
+#自定义选项
+## 定义选项
+option("tensorrt")
+    set_showmenu(true)
+    set_description("TensorRT Path. Example: /usr/local/tensorrt")
+    on_check(function (option)
+        if not option:enabled() then
+            raise("TensorRT path is not set. Please specify the TensorRT path.")
+        end
+    end)
+
+target("deploy")
+    #添加TensorRT链接目录和链接库
+    if has_config("tensorrt") then
+        add_includedirs(path.join("$(tensorrt)", "include"))
+        add_linkdirs(path.join("$(tensorrt)", "lib"))
+        add_links("nvinfer", "nvinfer_plugin", "nvparsers", "nvonnxparser")
+    end
+
+
+## 导出函数包含cuda的device函数是静态库时
+## 如果目标类型是静态库
+    if is_kind("static") then
+        ## 设置 CUDA 开发链接为 true
+        set_policy("build.cuda.devlink", true)
+    else
+        add_defines("ENABLE_DEPLOY_BUILDING_DLL")
+    end
+```
+
+### vscode配置
+
+代码调试配置
+```bash
+## 调试器建议为codelldb， lsp为clangd,可视化文件在自定义符号配置里
+{
+    "clangd.arguments": [
+        "--compile-commands-dir=.vscode", // 编译数据库(compile_commands.json 文件)的目录位
+    ],
+    "xmake.customDebugConfig": {
+        "visualizerFile": "/home/naonao/Downloads/nlohmann_test/hello/nlohmann_json.natvis",
+        "showDisplayString": true,
+    },
+}
+```
+
 ### xrepo
 
 
