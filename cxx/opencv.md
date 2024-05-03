@@ -514,3 +514,73 @@ void test_flannmatch() {
     return ;
 }
 ```
+## 霍夫变换
+
+参考链接：
+
+https://zhuanlan.zhihu.com/p/440016372
+
+https://zhuanlan.zhihu.com/p/645074162
+
+如果我们对图像中的每一个像素点（即x-y坐标系下的每一个点），都转换至参数坐标系下，那么在参数坐标系下，很多条直线的交点对应图像空间中的一条直线，也就是我们要找的边界线；
+
+1、确定一个参数空间(m, b)
+
+2、创建一个初始值全是0的矩阵 ，记为A(m,b); 其中行数为m的取值个数，列数为b的取值个数，从m0至mk表示m的取值，b0至bk表示b的取值， 目前来说，A(m0,b0) =0 ，表示当m = m0,b=b0时，对应的空格内的数字为0；
+
+3、对于图像中的每一个像素点（xi,yi）, 它对应参数坐标系下的一条直线；遍历参数空间下m和b的所有取值，如果（m,b）的取值位于该直线上，则对应的空格内的数字加1；比如(m3,b4)位于该直线上，那么在m3,b4所对应的空格内的数字加1；此过程记为A(m,b) = A(m,b) +1/
+
+4、在最终的矩阵A(m,c)中，找到局部空间内，空格数字最大的值所对应的(m,b)
+
+伪代码
+
+```python
+ 44 def get_line_coef_length(p1,p2):
+ 45     import numpy as np
+ 46     x1,y1=p1
+ 47     x2,y2=p2
+ 48     xe=x1-x2
+ 49     ye=y1-y2
+ 50     dist = np.sqrt(xe*xe+ye*ye)
+ 51     k=float(y2)-float(y1)
+ 52     if x2-x1==0:
+ 53         return dist,180,y1
+ 54     k=k/(float(x2)-float(x1))
+ 55     k_theta = int(np.arctan(k)/3.14*180.0+90.0)
+ 56     b = y1-k*x1
+ 57     #线段长度，角度
+ 58     return dist,k_theta,b
+```
+
+扩展思路：
+
+霍夫变换的思路可以应用到其他的方面，譬如找许多数据中的共类。 图片中的许多点求图片旋转的角度。
+
+## lineMod 匹配算法
+
+参考链接
+
+LineMod源码梳理
+
+https://blog.csdn.net/Jinxiaoyu886/article/details/118994670
+
+理解Linemod匹配算法
+
+https://blog.csdn.net/weixin_50640987/article/details/124382837
+
+https://github.com/meiqua/shape_based_matching
+
+
+扩展思路：
+
+1、 openmp的自定义多线程
+
+2、 MIPP指令集的应用
+
+3、 梯度边缘提取，以及梯度角度的计算
+
+4、 量化梯度方向，对于每一个像素位置最终的梯度方向实际为 3 3×3邻域内统计梯度方向数量最多所对应的方向。
+
+5、 提取特征点，选择的方法是只保留梯度幅值大于一定数值的点。如使用邻域非极大值抑制，控制特征点间的最小距离，保证选点尽量均匀。
+
+6、 梯度拓展，使用二进制表示

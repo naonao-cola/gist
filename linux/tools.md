@@ -1,3 +1,28 @@
+## 常用命令
+
+```bash
+#查看内核版本
+uname -r
+#查看处理器架构
+uname -m
+# 快速定位文件
+locate filename
+#查看so文件的以来
+ldd
+#将文件打包为二进制文件，譬如将图片转为c++ 头文件
+xdd
+#文件复制拷贝
+rsync -a source destination
+#排除文件
+rsync -av --exclude='*.txt' source/ destination
+#多个排除模式
+rsync -av --exclude 'file1.txt' --exclude 'dir1/*' source/ destination
+rsync -av --exclude={'file1.txt','dir1/*'} source/ destination
+#远程同步
+rsync -av username@remote_host:source/ destination
+#断点续传
+rsync -avP -e 'ssh -p 4321'  /dataA username@B:/dataB/
+```
 ## fzf安装
 
 ```bash
@@ -235,6 +260,8 @@ export PATH=$PATH:/home/ay2021/scripts
 ps -aux | grep **
 ps -ef | grep **
 free -h
+#查看内存用量 交换区用量
+free -m
 ```
 
 ## 压缩
@@ -263,6 +290,7 @@ unzip test.zip -d file
 ## 磁盘用量
 
 ```bash
+fdisk -l # 查看磁盘所有分区
 df -hl # 查看磁盘剩余空间
 df -h  #查看每个根路径的分区大小
 du -sh [目录名] #返回该目录的大小
