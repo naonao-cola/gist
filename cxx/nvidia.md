@@ -43,7 +43,10 @@ C标准规定，float类型必须至少能表示6位有效数字，且取值范�
 
 float类型的格式，1位符号，8位指数，23位小数：
 
+![alt text](./images/smid_2.png)
+
 double类型的格式，1位符号，11位指数，52位小数：
+![alt text](./images/smid_3.png)
 ### 向量寄存器
 
 SSE 和 AVX 各自有16个寄存器，SSE 的16个寄存器为 XMM0 - XMM15，XMM是128位寄存器，而YMM是256位寄存器。XMM寄存器也可以用于使用类似x86-SSE的单精度值或者双精度值执行标量浮点运算。
@@ -142,6 +145,91 @@ SSE/AVX指令主要定义于以下一些头文件中：
     <immintrin.h> : AVX, 支持同时操作8个单精度浮点数或4个双精度浮点数。
 
 每一个头文件都包含了之前的所有头文件，所以如果你想要使用SSE4.2以及之前SSE3, SSE2, SSE中的所有函数就只需要包含<nmmintrin.h>头文件。
+
+
+### MIPP 使用
+编译选项
+```lua
+--如果当前平台是arm平台
+if is_arch("armv7") then
+    add_cxxflags("-mfpu=neon")
+elseif is_arch("armv8") then
+    add_cxxflags("-march=native")
+else
+    add_cxxflags("-march=native")
+end
+
+
+-- 另外一种写法
+if is_arch("arm.*") then
+    add_cxxflags("-mfpu=neon")
+else
+    add_cxxflags("-march=native")
+    --# SSE only
+    --add_cxxflags("-msse -msse2 -msse3 -msse4 -mssse3")
+end
+```
+```c++
+
+//矢量寄存器声明,只需使用 mipp::Reg<T> 类型。mipp::Reg<T> r1, r2, r3;
+/*
+我们不知道这里每个寄存器的元素数。这个数字 元素可以通过调用 mipp::N<T>() 函数 （ T 是一个 template 参数，它可以是 double， float， int64_t， uint64_t， int32_t， uint32_t， int16_t， uint16_t， int8_t 或 uint8_t 类型）。
+
+运算支持 加减乘除 与或非，开平方，排序，比较，蒙版 选择，左旋右旋等
+
+*/
+#include <cstdlib> // rand()
+#include "mipp.h"
+
+int main()
+{
+	// data allocation
+	const int n = 32000; // size of the vA, vB, vC vectors
+	mipp::vector<float> vA(n); // in
+	mipp::vector<float> vB(n); // in
+	mipp::vector<float> vC(n); // out
+
+	// data initialization
+	for (int i = 0; i < n; i++) vA[i] = rand() % 10;
+	for (int i = 0; i < n; i++) vB[i] = rand() % 10;
+
+	// declare 3 vector registers
+	mipp::Reg<float> rA, rB, rC;
+
+	// compute rC with the MIPP vectorized functions
+	for (int i = 0; i < n; i += mipp::N<float>()) {
+		rA.load(&vA[i]); // unaligned load by default (use the -DMIPP_ALIGNED_LOADS
+		rB.load(&vB[i]); // macro definition to force aligned loads and stores).
+		rC = rA + rB;
+		rC.store(&vC[i]);
+	}
+
+	return 0;
+}
+
+
+////已有的vector
+// ...
+// compute the vectorized loop size which is a multiple of 'mipp::N<float>()'.
+auto vecLoopSize = (n / mipp::N<float>()) * mipp::N<float>();
+mipp::Reg<float> rout, rin1, rin2;
+for (int i = 0; i < vecLoopSize; i += mipp::N<float>()) {
+	rin1.load(&in1[i]); // unaligned load by default (use the -DMIPP_ALIGNED_LOADS
+	rin2.load(&in2[i]); // macro definition to force aligned loads and stores).
+	// the '0.75f' constant will be broadcast in a vector but it has to be at
+	// the right of a 'mipp::Reg<T>', this is why it has been moved at the right
+	// of the 'rin1' register. Notice that 'std::exp' has been replaced by
+	// 'mipp::exp'.
+	rout = rin1 * 0.75f * mipp::exp(rin2);
+	rout.store(&out[i]);
+}
+
+// scalar tail loop: compute the remaining elements that can't be vectorized.
+for (int i = vecLoopSize; i < n; i++) {
+	out[i] = 0.75f * in1[i] * std::exp(in2[i]);
+}
+// ...
+```
 
 ## 资料
 
