@@ -555,6 +555,41 @@ https://zhuanlan.zhihu.com/p/645074162
 扩展思路：
 
 霍夫变换的思路可以应用到其他的方面，譬如找许多数据中的共类。 图片中的许多点求图片旋转的角度。
+```c++
+#include <limits>
+float calculateSlope(const cv::Point2f& p1, const cv::Point2f& p2)
+{
+    if (p1.x == p2.x) {
+        return std::numeric_limits<float>::infinity();
+    }
+    return (p2.y - p1.y) / (p2.x - p1.x);
+}
+
+double reget_angle(std::vector<cv::Point2f> pts, int min_points_in_line)
+{
+    std::map<float, std::vector<std::pair<int, int>>> line_groups;
+    for (size_t i = 0; i < pts.size(); ++i) {
+        for (size_t j = i + 1; j < pts.size(); ++j) {
+            float slope = calculateSlope(pts[i], pts[j]);
+            float slope_key = roundf(slope * 100) / 100;
+            line_groups[slope_key].push_back(std::make_pair(i, j));
+        }
+    }
+    int max_value = 0;
+    double angle = 0;
+    for (const auto& pair : line_groups) {
+        if (pair.second.size() >= min_points_in_line) {
+            if (pair.second.size() >= max_value) {
+                max_value = pair.second.size();
+                angle = pair.first;
+            }
+        }
+    }
+    angle = atanl(angle) * 180.0 / CV_PI;
+    return angle;
+}
+
+```
 
 ## lineMod 匹配算法
 
@@ -584,3 +619,5 @@ https://github.com/meiqua/shape_based_matching
 5、 提取特征点，选择的方法是只保留梯度幅值大于一定数值的点。如使用邻域非极大值抑制，控制特征点间的最小距离，保证选点尽量均匀。
 
 6、 梯度拓展，使用二进制表示
+
+7、线性内存
