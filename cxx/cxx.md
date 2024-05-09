@@ -245,6 +245,109 @@ parallel sections里面的内容要并行执行，具体分工上，每个线程
     (omp_insert: std::vector<Match>: omp_out.insert(omp_out.end(), omp_in.begin(), omp_in.end()))
 
 #pragma omp parallel for reduction(omp_insert:matches)
+
+/*
+第二部分参考
+https://juejin.cn/post/7154346614566584356
+*/
+#include <stdio.h>
+#include <omp.h>
+#include <time.h>
+/*
+请利用指令 reduction 编写程序实现对实数数组 x(i,j) = (i + j) / (i * j) (i,j = 1~10) 取最小值并指出最小值对应的下标。
+*/
+
+#define m 100
+#define n 100
+double x[m + 1][n + 1];
+struct compare
+{
+    float val;
+    int index;
+    int index1;
+};
+struct compare add_matrix(struct compare X, struct compare Y)
+{
+    struct compare temp;
+    if (X.val < Y.val)
+    {
+        temp.val = X.val;
+        temp.index = X.index;
+        temp.index1 = X.index1;
+    }
+    else
+    {
+        temp.val = Y.val;
+        temp.index = Y.index;
+        temp.index1 = Y.index1;
+    }
+    return temp;
+}
+int main()
+{
+    int tid, nthreads;
+    for (int i = 1; i <= m; i++)
+
+    {
+        for (int j = 1; j <= n; j++)
+
+        {
+            x[i][j] = (float)(i + j) / (i * j);
+        }
+    }
+
+    double x_mymin = 1000;
+    int mymin_i, mymin_j;
+    // omp_set_nested(1);
+    omp_set_dynamic(0);
+    omp_set_num_threads(10);
+    struct compare mymin;
+    mymin.val = x[1][1];
+    mymin.index = 1;
+    mymin.index1 = 1;
+    int i = 1;
+    int j = 1;
+    clock_t begin, end;
+    begin = clock();
+#pragma omp declare reduction(p_add_matrix     \
+                              : struct compare \
+                              : omp_out = add_matrix(omp_out, omp_in)) initializer(omp_priv = {100})
+    {
+#pragma omp parallel for private(tid, nthreads, i, j) shared(x) reduction(p_add_matrix \
+                                                                          : mymin)
+
+        for (i = 1; i <= m; i++)
+
+        {
+            for (j = 1; j <= n; j++)
+
+            {
+                tid = omp_get_thread_num();
+                nthreads = omp_get_num_threads();
+                if (x[i][j] < mymin.val)
+
+                {
+                    mymin.val = x[i][j];
+                    mymin.index = i;
+                    mymin.index1 = j;
+                }
+
+                // printf("*****inner:tid = %d,nthreads = %d,x[%d][%d] = %lf\n", tid, nthreads, i, j, x[i][j]);
+            }
+            // printf("*****outer:tid = %d,nthreads = %d,x[%d][%d] = %lf\n", tid, nthreads, mymin.index, mymin.index1, mymin.val);
+        }
+    }
+    printf("mymin:--------x[%d][%d] = %lf ", mymin.index, mymin.index1, mymin.val);
+    end = clock();
+    double cost;
+    cost = (double)(end - begin) / CLOCKS_PER_SEC;
+    printf("CLOCKS_PER_SEC is %d\n", CLOCKS_PER_SEC);
+    printf("time cost is: %lf secs\n", cost);
+    return 0;
+}
+
+
+
 ```
 ### 自旋锁
 ```c++
