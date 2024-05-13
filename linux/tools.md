@@ -48,6 +48,8 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 ```
 ## vim
 ![](../images/vim.png)
+
+![](../images/vim_2.png)
 ### 命令模式
 1、移动光标
 1）上下左右移动光标
