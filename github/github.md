@@ -44,6 +44,19 @@ git rm --cached FileName
 //删除名为FileName的文件
 git rm FileName
 
+
+// 回退变更
+//1、变更已经提交到工作区，将文件恢复到最近一次提交的状态，撤销工作区的变动
+git checkout -- FileName
+//2、变更已经提交到暂存区，需要用连个命令进行回退
+//将文件从暂存区移除，回到工作区,再从工作区回到上次提交状态
+git reset HEAD FileName
+git checkout -- FileName
+//3、已经提交到仓库,提交到本地仓库的变更都会被撤销，回到指定提交状态。
+git reset --hard commit_id
+
+
+
 //代码review
 //创建开发分支
 git checkout -b xiaobo_dev

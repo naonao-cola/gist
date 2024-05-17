@@ -514,6 +514,673 @@ void test_flannmatch() {
     return ;
 }
 ```
+
+## 聚类
+
+```c++
+//cluster.h
+#include <limits>
+#include <set>
+#include <vector>
+#include <opencv2/opencv.hpp>
+
+namespace nao::algorithm::cluster {
+
+	/** @brief   最大最小距离算法
+	 @param data  输入样本数据，每一行为一个样本，每个样本可以存在多个特征数据
+	 @param Theta 阈值，一般设置为0.5，阈值越小聚类中心越多
+	 @param centerIndex 聚类中心的下标
+	 @return 返回每个样本的类别，类别从1开始，0表示未分类或者分类失败
+	*/
+	cv::Mat MaxMinDisFun(cv::Mat data, float Theta, std::vector<int>& cerIndex);
+
+
+//optics 聚类
+namespace optics{
+		//数据结构
+		typedef double real;
+		const real UNDEFINED = std::numeric_limits<real>::max();
+		//点类型
+		class DataPoint;
+		//用于根据数据点的可达距离对其进行比较。
+		//对于左手侧和右手侧操作数，可达性距离值都不能为UNDEFINED。
+		struct comp_datapoint_ptr_f{
+			bool operator()(const DataPoint* lhs,const DataPoint* rhs)const;
+		};
+
+		//数据集
+		typedef std::set<DataPoint*, comp_datapoint_ptr_f> DataSet;
+		typedef std::vector<DataPoint*> DataVector;
+
+
+		 /** Performs the classic OPTICS algorithm.
+		  * @param db All data points that are to be considered by the algorithm. Changes their values.
+		  * @param eps The epsilon representing the radius of the epsilon-neighborhood.
+		  * @param min_pts The minimum number of points to be found within an epsilon-neigborhood.
+		  * @return Return the OPTICS ordered list of Data points with reachability-distances set.
+		  */
+		DataVector optics(DataVector& db, const real eps, const unsigned int min_pts);
+
+	}//namespace optics
+}
+```
+
+```c++
+#include "cluster.h"
+
+nao::algorithm::cluster {
+    /*计算欧式距离*/
+
+float calcuDistance(uchar * ptr, uchar* ptrCen, int cols)
+{
+	float d = 0.0;
+	for (size_t j = 0; j < cols; j++) {
+		d += (double)(ptr[j] - ptrCen[j]) * (ptr[j] - ptrCen[j]);
+	}
+	d = std::sqrt(d);
+	return d;
+}
+// https://blog.csdn.net/guyuealian/article/details/80255524
+cv::Mat MaxMinDisFun(cv::Mat data, float Theta, std::vector<int>& cerIndex)
+{
+    double maxDistance = 0;
+    // 初始选一个中心点
+    int start = 0;
+    // 相当于指针指示新中心点的位置
+    int index = start;
+    // 中心点计数，也即是类别
+    int k = 0;
+    // 输入的样本数
+    int dataNum = data.rows;
+    // vector<int>	centerIndex;//保存中心点
+    // 表示所有样本到当前聚类中心的距离
+    cv::Mat distance = cv::Mat::zeros(cv::Size(1, dataNum), CV_32FC1);
+    // 取较小距离
+    cv::Mat minDistance = cv::Mat::zeros(cv::Size(1, dataNum), CV_32FC1);
+    // 表示类别
+    cv::Mat classes = cv::Mat::zeros(cv::Size(1, dataNum), CV_32SC1);
+    // 保存第一个聚类中心
+    centerIndex.push_back(index);
+
+    for (size_t i = 0; i < dataNum; i++) {
+        uchar* ptr1 = data.ptr<uchar>(i);
+        uchar* ptrCen = data.ptr<uchar>(centerIndex.at(0));
+        float d = calcuDistance(ptr1, ptrCen, data.cols);
+        distance.at<float>(i, 0) = d;
+        classes.at<int>(i, 0) = k + 1;
+        if (maxDistance < d) {
+            maxDistance = d;
+            // 与第一个聚类中心距离最大的样本
+            index = i;
+        }
+    }
+
+    minDistance = distance.clone();
+    double minVal;
+    double maxVal;
+    cv::Point minLoc;
+    cv::Point maxLoc;
+    maxVal = maxDistance;
+    while (maxVal > (maxDistance * Theta)) {
+        k = k + 1;
+        // 新的聚类中心
+        centerIndex.push_back(index);
+        for (size_t i = 0; i < dataNum; i++) {
+            uchar* ptr1 = data.ptr<uchar>(i);
+            uchar* ptrCen = data.ptr<uchar>(centerIndex.at(k));
+            float d = calcuDistance(ptr1, ptrCen, data.cols);
+            distance.at<float>(i, 0) = d;
+            // 按照当前最近临方式分类，哪个近就分哪个类别
+            if (minDistance.at<float>(i, 0) > distance.at<float>(i, 0)) {
+                minDistance.at<float>(i, 0) = distance.at<float>(i, 0);
+                classes.at<int>(i, 0) = k + 1;
+            }
+        }
+        // 查找minDistance中最大值
+        cv::minMaxLoc(minDistance, &minVal, &maxVal, &minLoc, &maxLoc);
+        index = maxLoc.y;
+    }
+    return classes;
+}
+
+namespace optics {
+// https://zhuanlan.zhihu.com/p/408243818
+class DataPoint {
+private:
+    std::vector<real> data_;
+    real reachability_distance_;
+    bool is_processed_;
+
+public:
+    DataPoint()
+        : data_(std::vector<real>())
+        , reachability_distance_(UNDEFINED)
+        , is_processed_(false)
+    {
+    }
+    virtual ~DataPoint() { }
+
+public:
+    inline void reachability_distance(real d)
+    {
+        assert(d >= 0 && "Reachability distance must not be negative.");
+        reachability_distance_ = d;
+    }
+    inline real reachability_distance() const { return reachability_distance_; }
+    inline void processed(bool b) { is_processed_ = b; }
+    inline bool is_processed() const { return is_processed_; }
+    inline std::vector<real>& data() { return data_; }
+    inline const std::vector<real>& data() const { return data_; }
+    inline real operator[](const std::size_t idx) const
+    {
+        assert(data_.size() > idx && "Index must be within OPTICS::DataPoint::data_'s range.");
+        return data_[idx];
+    }
+} // class DataPoint
+
+template <typename T = int>
+class LabelledDataPoint : public DataPoint {
+
+private:
+    T label_;
+
+public:
+    // 将可达性距离设置为OPTICS:：UNDEFINED，并将已处理的标志设置为false。
+    LabelledDataPoint(T label)
+        : DataPoint()
+        , label_(label)
+    {
+    }
+    ~LabelledDataPoint() { }
+
+public:
+    inline void label(const T& l) { label_ = l; }
+    inline const T& label() const { return label_ };
+
+} // class LabelledDataPoint
+
+/// A Comp_DataPoint_f comparison functor ()-operator implementation.
+bool
+comp_datapoint_ptr_f::operator()(const DataPoint* lhs, const DataPoint* rhs) const
+{
+    assert(lhs != nullptr && "nullptr objects are not allowed");
+    assert(rhs != nullptr && "nullptr objects are not allowed");
+    assert(lhs->data().size() == rhs->data().size() && "Comparing DataPoints requires them to have same dimensionality");
+
+    // return lhs->reachability_distance() < rhs->reachability_distance();
+    if (lhs->reachability_distance() < rhs->reachability_distance())
+        return true;
+    else if (lhs->reachability_distance() == rhs->reachability_distance() && lhs < rhs)
+        return true;
+    else /*lhs->reachability_distance() == rhs->reachability_distance() && lhs >= rhs || lhs->reachability_distance() > rhs->reachability_distance()*/
+        return false;
+}
+
+/** Retrieves the squared euclidean distance of two DataPoints.
+ * @param a The first DataPoint.
+ * @param b The second DataPoint. Both data points must have the same dimensionality.
+ */
+real squared_distance(const DataPoint* a, const DataPoint* b)
+{
+    const std::vector<real>& a_data = a->data();
+    const std::vector<real>& b_data = b->data();
+    const unsigned int vec_size = static_cast<unsigned int>(a_data.size());
+    assert(vec_size == b_data.size() && "Data-vectors of both DataPoints must have same dimensionality");
+    real ret(0);
+
+    for (unsigned int i = 0; i < vec_size; ++i) {
+        ret += std::pow(a_data[i] - b_data[i], 2);
+    }
+    // return std::sqrt( ret);
+    return ret;
+}
+
+/** Updates the seeds priority queue with new neighbors or neighbors that now have a better
+ * reachability distance than before.
+ * @param N_eps All points in the the epsilon-neighborhood of the center_object, including p itself.
+ * @param center_object The point on which to start the update process.
+ * @param c_dist The core distance of the given center_object.
+ * @param o_seeds The seeds priority queue (aka set with special comparator function) that will be modified.
+ */
+void update_seeds(const DataVector& N_eps, const DataPoint* center_object, const real c_dist, DataSet& o_seeds)
+{
+    assert(c_dist != OPTICS::UNDEFINED && "the core distance must be set <> UNDEFINED when entering update_seeds");
+    for (DataVector::const_iterator it = N_eps.begin(); it != N_eps.end(); ++it) {
+        DataPoint* o = *it;
+
+        if (o->is_processed())
+            continue;
+
+        const real new_r_dist = std::max(c_dist, squared_distance(center_object, o));
+        // *** new_r_dist != UNDEFINED ***
+
+        if (o->reachability_distance() == OPTICS::UNDEFINED) {
+            // *** o not in seeds ***
+            o->reachability_distance(new_r_dist);
+            o_seeds.insert(o);
+
+        } else if (new_r_dist < o->reachability_distance()) {
+            // *** o already in seeds & can be improved ***
+            o_seeds.erase(o);
+            o->reachability_distance(new_r_dist);
+            o_seeds.insert(o);
+        }
+    }
+}
+
+/** Finds the squared core distance of one given point.
+ * @param p The point to be examined.
+ * @param min_pts The minimum number of points to be found within an epsilon-neigborhood.
+ * @param N_eps All points in the the epsilon-neighborhood of p, including p itself.
+ * @return The squared core distance of p.
+ */
+real squared_core_distance(const DataPoint* p, const unsigned int min_pts, DataVector& N_eps)
+{
+    assert(min_pts > 0 && "min_pts must be greater than 0");
+    real ret(UNDEFINED);
+    if (N_eps.size() > min_pts) {
+        std::nth_element(N_eps.begin(),
+            N_eps.begin() + min_pts,
+            N_eps.end(),
+            [p](const DataPoint* a, const DataPoint* b) { return squared_distance(p, a) < squared_distance(p, b); });
+        ret = squared_distance(p, N_eps[min_pts]);
+    }
+    return ret;
+}
+
+/** Retrieves all points in the epsilon-surrounding of the given data point, including the point itself.
+ * @param p The datapoint which represents the center of the epsilon surrounding.
+ * @param eps The epsilon value that represents the radius for the neigborhood search.
+ * @param db The database consisting of all datapoints that are checked for neighborhood.
+ * @param A vector of pointers to datapoints that lie within the epsilon-neighborhood
+ *        of the given point p, including p itself.
+ */
+DataVector get_neighbors(const DataPoint* p, const real eps, DataVector& db)
+{
+    assert(eps >= 0 && "eps must not be negative");
+    DataVector ret;
+    const real eps_sq = eps * eps;
+    for (auto q_it = db.begin(); q_it != db.end(); ++q_it) {
+        DataPoint* q = *q_it;
+        if (squared_distance(p, q) <= eps_sq) {
+            ret.push_back(q);
+        }
+    }
+    return ret;
+}
+
+/** Expands the cluster order while adding new neighbor points to the order.
+ * @param db All data points that are to be considered by the algorithm. Changes their values.
+ * @param p The point to be examined.
+ * @param eps The epsilon representing the radius of the epsilon-neighborhood.
+ * @param min_pts The minimum number of points to be found within an epsilon-neigborhood.
+ * @param o_ordered_vector The ordered vector of data points. Elements will be added to this vector.
+ */
+void expand_cluster_order(DataVector& db, DataPoint* p, const real eps, const unsigned int min_pts, DataVector& o_ordered_vector)
+{
+    assert(eps >= 0 && "eps must not be negative");
+    assert(min_pts > 0 && "min_pts must be greater than 0");
+
+    DataVector N_eps = get_neighbors(p, eps, db);
+    p->reachability_distance(UNDEFINED);
+    const real core_dist_p = squared_core_distance(p, min_pts, N_eps);
+    p->processed(true);
+    o_ordered_vector.push_back(p);
+
+    if (core_dist_p == UNDEFINED)
+        return;
+
+    DataSet seeds;
+    update_seeds(N_eps, p, core_dist_p, seeds);
+
+    while (!seeds.empty()) {
+        DataPoint* q = *seeds.begin();
+        seeds.erase(seeds.begin()); // remove first element from seeds
+
+        DataVector N_q = get_neighbors(q, eps, db);
+        const real core_dist_q = squared_core_distance(q, min_pts, N_q);
+        q->processed(true);
+        o_ordered_vector.push_back(q);
+        if (core_dist_q != OPTICS::UNDEFINED) {
+            // *** q is a core-object ***
+            update_seeds(N_q, q, core_dist_q, seeds);
+        }
+    }
+}
+
+DataVector optics(DataVector& db, const real eps, const unsigned int min_pts)
+{
+    assert(eps >= 0 && "eps must not be negative");
+    assert(min_pts > 0 && "min_pts must be greater than 0");
+    DataVector ret;
+    for (auto p_it = db.begin(); p_it != db.end(); ++p_it) {
+        DataPoint* p = *p_it;
+
+        if (p->is_processed())
+            continue;
+
+        expand_cluster_order(db, p, eps, min_pts, ret);
+    }
+    return ret;
+}
+
+} // namespace optics
+}
+;
+
+```
+## 高斯拟合求光斑
+
+```c++
+#include <iostream>
+#include <Eigen/Dense>
+#include "opencv2/opencv.hpp"
+#include "opencv2/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#include <algorithm>
+#ifndef __GAUSS_SPOT__H__
+#define __GAUSS_SPOT__H__
+
+
+namespace nao {
+	namespace algorithm{
+		namespace gauss_spot {
+
+			/**
+			* @brief 初始化数据矩阵
+			* @param img      单通道float型数据
+			* @param vector_A 向量A
+			* @param matrix_B 矩阵B
+			* @return
+			* @参考链接 https://blog.csdn.net/houjixin/article/details/8490653
+			*/
+			bool initData(cv::Mat img, Eigen::VectorXf& vector_A, Eigen::MatrixXf& matrix_B) {
+				if (img.empty())
+					return false;
+				int length = img.cols * img.rows;
+				Eigen::VectorXf tmp_A(length);
+				Eigen::MatrixXf tmp_B(length, 5);
+				int i = 0, j = 0, iPos = 0;
+
+				while (i < img.cols) {
+					j = 0;
+					while (j < img.rows) {
+						float value = *img.ptr<float>(i, j);
+						if (value <= 0.5) value = 1;
+						tmp_A(iPos) = value * log(value);
+						tmp_B(iPos, 0) = value;
+						tmp_B(iPos, 1) = value * i;
+						tmp_B(iPos, 2) = value * j;
+						tmp_B(iPos, 3) = value * i * i;
+						tmp_B(iPos, 4) = value * j * j;
+						++iPos;
+						++j;
+					}
+					++i;
+				}
+				vector_A = tmp_A;
+				matrix_B = tmp_B;
+			}
+			/**
+			 * @brief 获取光斑中心
+			 * @param x0
+			 * @param y0
+			 * @param vector_A
+			 * @param matrix_B
+			 * @return
+			*/
+			bool getCentrePoint(float& x0, float& y0, const Eigen::VectorXf vector_A, const Eigen::MatrixXf matrix_B) {
+				//QR分解
+				Eigen::HouseholderQR<Eigen::MatrixXf> qr;
+				qr.compute(matrix_B);
+				Eigen::MatrixXf R = qr.matrixQR().triangularView<Eigen::Upper>();
+				Eigen::MatrixXf Q = qr.householderQ();
+
+				//块操作，获取向量或矩阵的局部
+				Eigen::VectorXf S;
+				S = (Q.transpose() * vector_A).head(5);
+				Eigen::MatrixXf R1;
+				R1 = R.block(0, 0, 5, 5);
+
+				Eigen::VectorXf C;
+				C = R1.inverse() * S;
+
+				x0 = -0.5 * C[1] / C[3];
+				y0 = -0.5 * C[2] / C[4];
+				return true;
+			}
+
+			/**
+			 * @brief 高斯拟合求光斑,求光斑的中心，测试函数
+			 * @param src
+			*/
+			void gauss_spot_center(const cv::Mat src, std::vector<cv::Point2f> & dst_pt) {
+				//cv::Mat src = cv::imread("1650.bmp", 0);
+				cv::Mat img = src.clone();
+				cv::Mat dis_img;
+				cv::cvtColor(img, dis_img, cv::COLOR_GRAY2BGR);
+
+				cv::Mat thresh_img;
+
+				//二值化
+				double dCurdwTh = 200;
+				cv::threshold(img, thresh_img, dCurdwTh, 255, cv::THRESH_BINARY);
+				//cv::Mat element = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(3, 3));;//X腐蚀
+				//cv::Mat elementP = cv::getStructuringElement(cv::MORPH_RECT, cv::Size(5, 5));//膨胀
+				//cv::erode(thresh_img, thresh_img, element);//腐蚀操作
+				//cv::dilate(thresh_img, thresh_img, elementP);//膨胀操作
+
+				std::vector<std::vector<cv::Point>> contours;
+				std::vector<cv::Vec4i> hierarchy;
+
+				cv::findContours(thresh_img, contours, hierarchy, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE);
+				std::vector<cv::Point2f> pt;
+				for (int i = 0; i < contours.size(); i++) {
+					cv::Rect rect = cv::boundingRect(contours.at(i));
+					if (rect.width < 4 || rect.width > 65 || rect.height < 4)
+						continue;
+
+					cv::Mat tmp = img(cv::Rect(rect.x - 5, rect.y - 5, rect.width + 10, rect.height + 10)).clone();
+					tmp.convertTo(tmp, CV_32F);
+					Eigen::VectorXf vector_A;
+					Eigen::MatrixXf matrix_B;
+
+					initData(tmp, vector_A, matrix_B);
+					float x0 = 0;
+					float y0 = 0;
+					getCentrePoint(x0, y0, vector_A, matrix_B);
+					cv::Point2f p;
+
+					if (x0 != 0 && y0 != 0) {
+						p.x = x0 + rect.tl().x - 5;
+						p.y = y0 + rect.tl().y - 5;
+						pt.emplace_back(p);
+						cv::circle(dis_img, p, 1, cv::Scalar(0, 0, 255), -1);
+					}
+				}
+				for (int i = 0; i < pt.size();i++) {
+					dst_pt.emplace_back(pt[i]);
+				}
+				cv::waitKey(0);
+			}
+		}//namespace gauss_spot
+	}//algorithm
+}//namespace nao
+#endif // !__GAUSS_SPOT__H__
+
+```
+
+## 海森矩阵求光斑
+
+```c++
+#include <iostream>
+#include "opencv2/opencv.hpp"
+#include "opencv2/highgui.hpp"
+
+namespace nao {
+	namespace algorithm {
+		namespace hessen_light {
+
+			/**
+			 * @brief https://blog.csdn.net/dangkie/article/details/78996761
+			*/
+			void StegerLine(const cv::Mat src, std::vector<cv::Point2f>& dst_pt) {
+				//cv::Mat src = cv::imread("1650.bmp", 0);
+				cv::Mat img = src.clone();
+
+				//高斯滤波
+				img.convertTo(img, CV_32FC1);
+				cv::GaussianBlur(img, img, cv::Size(0, 0), 2.5, 2.5);
+
+				cv::Mat dx, dy;
+				cv::Mat dxx, dyy, dxy;
+
+				//一阶偏导数
+				cv::Mat mDx, mDy;
+				//二阶偏导数
+				cv::Mat mDxx, mDyy, mDxy;
+
+				mDx = (cv::Mat_<float>(1, 2) << 1, -1);//x偏导
+				mDy = (cv::Mat_<float>(2, 1) << 1, -1);//y偏导
+				mDxx = (cv::Mat_<float>(1, 3) << 1, -2, 1);//二阶x偏导
+				mDyy = (cv::Mat_<float>(3, 1) << 1, -2, 1);//二阶y偏导
+				mDxy = (cv::Mat_<float>(2, 2) << 1, -1, -1, 1);//二阶xy偏导
+
+				cv::filter2D(img, dx, CV_32FC1, mDx);
+				cv::filter2D(img, dy, CV_32FC1, mDy);
+				cv::filter2D(img, dxx, CV_32FC1, mDxx);
+				cv::filter2D(img, dyy, CV_32FC1, mDyy);
+				cv::filter2D(img, dxy, CV_32FC1, mDxy);
+
+				//hessian矩阵
+				int cols = src.cols;
+				int rows = src.rows;
+				std::vector<cv::Point2f> pts;
+
+				for (int col = 0; col < cols; ++col)
+				{
+					for (int row = rows - 1; row != -1; --row)
+					{
+						if (src.at<uchar>(row, col) < 210) continue;
+
+						cv::Mat hessian(2, 2, CV_32FC1);
+						hessian.at<float>(0, 0) = dxx.at<float>(row, col);
+						hessian.at<float>(0, 1) = dxy.at<float>(row, col);
+						hessian.at<float>(1, 0) = dxy.at<float>(row, col);
+						hessian.at<float>(1, 1) = dyy.at<float>(row, col);
+						cv::Mat eValue;
+						cv::Mat eVectors;
+						cv::eigen(hessian, eValue, eVectors);
+						double nx, ny;
+						double fmaxD = 0;
+
+						if (std::fabs(eValue.at<float>(0, 0)) >= std::fabs(eValue.at<float>(1, 0)))  //求特征值最大时对应的特征向量
+						{
+							nx = eVectors.at<float>(0, 0);
+							ny = eVectors.at<float>(0, 1);
+							fmaxD = eValue.at<float>(0, 0);
+						}
+						else
+						{
+							nx = eVectors.at<float>(1, 0);
+							ny = eVectors.at<float>(1, 1);
+							fmaxD = eValue.at<float>(1, 0);
+						}
+
+						float t = -(nx * dx.at<float>(row, col) + ny * dy.at<float>(row, col))
+							/ (nx * nx * dxx.at<float>(row, col) + 2 * nx * ny * dxy.at<float>(row, col) + ny * ny * dyy.at<float>(row, col));
+						float tnx = t * nx;
+						float tny = t * ny;
+
+						if (std::fabs(tnx) <= 0.25 && std::fabs(tny) <= 0.25)
+						{
+							float x = col + /*.5*/tnx;
+							float y = row + /*.5*/tny;
+							pts.push_back({ x, y });
+							break;
+						}
+					}
+				}
+
+				cv::Mat display;
+				cv::cvtColor(src, display, cv::COLOR_GRAY2BGR);
+
+				for (int k = 0; k < pts.size(); k++)
+				{
+					cv::Point rpt;
+					rpt.x = pts[k].x;
+					rpt.y = pts[k].y;
+					cv::circle(display, rpt, 1, cv::Scalar(0, 0, 255));
+					dst_pt.emplace_back(rpt);
+
+				}
+				cv::imshow("result", display);
+				cv::waitKey(0);
+			}
+
+		}//namespace hessen_light
+	}//namespace algorithm
+}//namespace nao
+
+
+```
+## 傅里叶变化
+
+```c++
+#include "opencv2/opencv.hpp"
+#include "opencv2/highgui.hpp"
+
+namespace nao {
+    namespace algorithm {
+        namespace fuliy {
+
+			//傅里叶变换
+			//https://blog.csdn.net/weixin_45875105/article/details/106917609
+			//https://blog.csdn.net/cyf15238622067/article/details/87917766
+			void FuLiY(const cv::Mat src, cv::Mat& dst) {
+				int w = cv::getOptimalDFTSize(src.cols);
+				int h = cv::getOptimalDFTSize(src.rows);
+				cv::Mat padded;
+				cv::copyMakeBorder(src, padded, 0, h - src.rows, 0, w - src.cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
+				cv::Mat plane[] = { cv::Mat_<float>(padded),cv::Mat::zeros(padded.size(),CV_32F) };
+				cv::Mat complexIm;
+				cv::merge(plane, 2, complexIm);//为延扩后的图像增添一个初始化为0的通道
+				cv::dft(complexIm, complexIm);
+				cv::split(complexIm, plane);
+				cv::magnitude(plane[0], plane[1], plane[0]);
+				cv::Mat magnitudeImage = plane[0];
+
+				magnitudeImage += cv::Scalar::all(1);
+				cv::log(magnitudeImage, magnitudeImage);  //自然对数
+
+				magnitudeImage = magnitudeImage(cv::Rect(0, 0, magnitudeImage.cols & -2, magnitudeImage.rows & -2));
+				int cx = magnitudeImage.cols / 2;
+				int cy = magnitudeImage.rows / 2;
+
+				cv::Mat q0(magnitudeImage, cv::Rect(0, 0, cx, cy));
+				cv::Mat q1(magnitudeImage, cv::Rect(cx, 0, cx, cy));
+				cv::Mat q2(magnitudeImage, cv::Rect(0, cy, cx, cy));
+				cv::Mat q3(magnitudeImage, cv::Rect(cx, cy, cx, cy));
+
+
+				cv::Mat temp;
+				q0.copyTo(temp);
+				q3.copyTo(q0);
+				temp.copyTo(q3);
+
+				q1.copyTo(temp);
+				q2.copyTo(q1);
+				temp.copyTo(q2);
+
+				cv::normalize(magnitudeImage, magnitudeImage, 0, 1, cv::NORM_MINMAX);
+				dst = magnitudeImage.clone();
+			}
+        }//namespace fuliy
+    }//namespace algorithm
+}//namespace nao
+
+
+```
 ## 霍夫变换
 
 参考链接：
@@ -591,6 +1258,59 @@ double reget_angle(std::vector<cv::Point2f> pts, int min_points_in_line)
 
 ```
 
+## 直方图匹配
+
+```c++
+	std::optional<cv::Mat> get_equal_img(const cv::Mat& hist_img, const cv::Rect& hist_rect, const cv::Mat& template_img, const cv::Rect& template_rect) {
+		cv::Mat hist1, hist2;
+		const int channels[1] = { 0 };
+		float inRanges[2] = { 0,255 };
+		const float* ranges[1] = { inRanges };
+		const int bins[1] = { 256 };
+
+		//保留ROI 区域的直方图
+		cv::Mat img_1 = hist_img(hist_rect).clone();
+		cv::Mat img_2 = template_img(template_rect).clone();
+		cv::calcHist(&img_1, 1, channels, cv::Mat(), hist1, 1, bins, ranges, true, false);
+		cv::calcHist(&img_2, 1, channels, cv::Mat(), hist2, 1, bins, ranges, true, false);
+
+		float hist1_cdf[256] = { hist1.at<float>(0) };
+		float hist2_cdf[256] = { hist2.at<float>(0) };
+		for (int i = 1; i < 256; ++i) {
+			hist1_cdf[i] = hist1_cdf[i - 1] + hist1.at<float>(i);
+			hist2_cdf[i] = hist2_cdf[i - 1] + hist2.at<float>(i);
+		}
+		//归一化，两幅图像大小可能不一致
+		for (int i = 0; i < 256; i++)
+		{
+			hist1_cdf[i] = hist1_cdf[i] / (img_1.rows * img_1.cols);
+			hist2_cdf[i] = hist2_cdf[i] / (img_1.rows * img_1.cols);
+		}
+
+		float diff_cdf[256][256];
+		for (int i = 0; i < 256; ++i) {
+			for (int j = 0; j < 256; ++j) {
+				diff_cdf[i][j] = fabs(hist1_cdf[i] - hist2_cdf[j]);
+			}
+		}
+		cv::Mat lut(1, 256, CV_8U);
+		for (int i = 0; i < 256; ++i) {
+			float min = diff_cdf[i][0];
+			int index = 0;
+			for (int j = 1; j < 256; ++j) {
+				if (min > diff_cdf[i][j]) {
+					min = diff_cdf[i][j];
+					index = j;
+				}
+			}
+			lut.at<uchar>(i) = (uchar)index;
+		}
+		cv::Mat result, hist3;
+		cv::LUT(hist_img, lut, result);
+		return result;
+	}
+
+```
 ## lineMod 匹配算法
 
 参考链接

@@ -44,6 +44,41 @@ double dist_p2p(const cv::Point2f& a, const cv::Point2f& b)
      return result;
  }
 
+/**
+* @brief 判断p3是否在 p1,p2所组成的线上。
+* @param p1
+* @param p2
+* @param p3
+* @return 在线上返回1，在线外返回0
+*/
+int on_line(const point p1, const point p2, const point p3) {
+    if ((p3.get_x() - p1.get_x()) * (p2.get_y() - p1.get_y()) == (p2.get_y() - p1.get_x()) * (p3.get_y() - p1.get_y()) &&
+        std::min(p1.get_x(), p2.get_x())<=p3.get_x()&&
+        p3.get_x()<=std::max(p1.get_x(),p2.get_x())&&
+        std::min(p1.get_y(),p2.get_y()) <= p3.get_y() &&
+        p3.get_y() <=std::max(p1.get_y(), p2.get_y())
+        ) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
+}
+
+//求直线角度
+double get_angle(cv::Point p1, cv::Point p2, cv::Point p3, cv::Point p4) {
+    double dx1 = p1.x - p2.x;
+    double dy1 = p1.y - p2.y;
+    double dx2 = p3.x - p4.x;
+    double dy2 = p3.y - p4.y;
+    double m1 = dy1 / dx1;
+    double m2 = dy2 / dx2;
+    double in_side_angle = std::atan(std::abs((m2 - m1) / (1 + (m1 * m2))));
+    double angle = in_side_angle / CV_PI * 180;
+    if (angle > -370 and angle < 370)
+        angle = int(angle);
+    return angle;
+}
 //点到直线的距离
 float dist_p2l(cv::Point pointP, cv::Point pointA, cv::Point pointB) {
 	//求直线方程
@@ -1255,7 +1290,9 @@ void cv::transform(
 	cv::InputArray mtx // Transform matrix (Ds-by-Dd) 变换矩阵是Ds * Dd矩阵
 );
 ```
-
+## 概率论
+### 二项分布
+### 伯努利分布
 ## PCL
 
 ## SLAM
