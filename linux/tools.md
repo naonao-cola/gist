@@ -11,6 +11,9 @@ locate filename
 ldd
 #将文件打包为二进制文件，譬如将图片转为c++ 头文件
 xdd
+
+# 查找文件，查找范围 类型 名字
+find ./ -type f -name "*.c"
 #文件复制拷贝
 rsync -a source destination
 #排除文件
@@ -22,6 +25,23 @@ rsync -av --exclude={'file1.txt','dir1/*'} source/ destination
 rsync -av username@remote_host:source/ destination
 #断点续传
 rsync -avP -e 'ssh -p 4321'  /dataA username@B:/dataB/
+
+# 切换用户
+su backend
+# grep 使用
+ps -ef | grep sshd | grep -v grep
+cat /etc/init.d/sshd | grep -v '^#' | grep -v '^$'
+
+```
+
+### awk
+```bash
+# awk 是对文本一行一行进行处理，每一行的多个字段分别是$1 $2 $3 $4 ... $0表示改行的整条数据
+# -F 表示分隔符，默认为空格，NF表示每行字符有多少个字段，NR表示当前处理的是第几行， ~ 表示启用正则匹配， 正则表达式用一对 / 包含起来
+cat /etc/passwd | awk -F ':' '{if ($NF ~ /bash/) print $1}'
+
+cat /etc/passwd | awk -F ':' 'BEGIN{print "user\tshell\n-------"} {print $1"\t"$NF} END{print "--------"}'
+
 ```
 ## fzf安装
 
@@ -34,6 +54,7 @@ source /usr/share/doc/fzf/examples/key-bindings.zsh
 export FZF_DEFAULT_OPTS="--height 40% --layout=reverse --preview '(highlight -O ansi {} || cat {}) 2> /dev/null | head -500'"
 export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200'"
 ```
+如果omz的话，需要加到 插件里面启用。
 
 ## oh my zsh
 
@@ -254,6 +275,8 @@ ssh -o Port=6000 test@x.x.x.x
 chmod u+x **.sh
 # 添加到path
 export PATH=$PATH:/home/ay2021/scripts
+# 修改文件归属， 冒号前面是用户，冒号后面是所属组
+chown  backend:backend  ./test.sh
 ```
 
 ## 进程 内存
