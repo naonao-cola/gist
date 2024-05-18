@@ -317,3 +317,4 @@ nvprof --devices 0 --metrics gld_efficiency,gst_efficiency
 ncu --metrics
 ```
 
+## 理论
