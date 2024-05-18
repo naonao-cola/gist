@@ -59,7 +59,19 @@ export FZF_CTRL_T_OPTS="--preview '(highlight -O ansi -l {} 2> /dev/null || cat 
 ## oh my zsh
 
 ```bash
+##首先全部拷贝下网址中的代码，并在本地创建叫做install.sh的文件，将代码复制进该文件。
+# https://gitee.com/mirrors/oh-my-zsh/blob/master/tools/install.sh
 
+# 替换以下内容
+ZSH=${ZSH:-~/.oh-my-zsh}
+REPO=${REPO:-ohmyzsh/ohmyzsh}
+REMOTE=${REMOTE:-https://github.com/${REPO}.git}
+BRANCH=${BRANCH:-master}
+#替换成
+ZSH=${ZSH:-~/.oh-my-zsh}
+REPO=${REPO:-mirrors/oh-my-zsh}
+REMOTE=${REMOTE:-https://gitee.com/${REPO}.git}
+BRANCH=${BRANCH:-master}
 ```
 
 ## the fuck
@@ -148,6 +160,8 @@ u 键能一直撤销到文件打开时的状态，ctrl + r 能一直反撤销到
     :g/^\s*$/d : 删除包含空格的空行
     :%g!/pattern/d : 删除不包含关键词pattern的所有行
     ：%s/\s+/ /g 删除行中间的空格
+
+
 
 ## tldr
 
