@@ -321,7 +321,7 @@ ncu --metrics
 ### 理论
 
 #### grid与block
-
+![](./images/nvi_0.png)
 #### 内存
 
 全局内存
