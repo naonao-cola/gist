@@ -338,24 +338,104 @@ checkGlobalVariable<<<1, 1>>>();
 CHECK(cudaMemcpyFromSymbol(&value, devData, sizeof(float)));
 ```
 
+静态共享内存
 
+```c++
+__global__ void setColReadCol(int *out)
+{
+    // static shared memory
+    __shared__ int tile[BDIMX][BDIMY];
+    // mapping from thread index to global memory index
+    unsigned int idx = threadIdx.y * blockDim.x + threadIdx.x;
+    // shared memory store operation
+    tile[threadIdx.x][threadIdx.y] = idx;
+    // wait for all threads to complete
+    __syncthreads();
+    // shared memory load operation
+    out[idx] = tile[threadIdx.x][threadIdx.y];
+}
+
+//核函数调用
+setColReadCol<<<grid, block>>>(d_C);
+```
+
+动态共享内存
+
+```c++
+__global__ void setRowReadColDyn(int *out)
+{
+    // dynamic shared memory
+    extern  __shared__ int tile[];
+    // mapping from thread index to global memory index
+    unsigned int idx = threadIdx.y * blockDim.x + threadIdx.x;
+    // convert idx to transposed (row, col)
+    unsigned int irow = idx / blockDim.y;
+    unsigned int icol = idx % blockDim.y;
+    // convert back to smem idx to access the transposed element
+    unsigned int col_idx = icol * blockDim.x + irow;
+    // shared memory store operation
+    tile[idx] = idx;
+    // wait for all threads to complete
+    __syncthreads();
+    // shared memory load operation
+    out[idx] = tile[col_idx];
+}
+
+//核函数调用，第三个参数是动态共享内存的大小
+setRowReadColDyn<<<grid, block, BDIMX*BDIMY*sizeof(int)>>>(d_C);
+```
+
+常量内存
+
+```c++
+#define RADIUS 4
+#define BDIM 32
+// constant memory
+__constant__ float coef[RADIUS + 1];
+
+// FD coeffecient
+#define a0     0.00000f
+#define a1     0.80000f
+#define a2    -0.20000f
+#define a3     0.03809f
+#define a4    -0.00357f
+//设置常量内存
+void setup_coef_constant (void)
+{
+    const float h_coef[] = {a0, a1, a2, a3, a4};
+    CHECK(cudaMemcpyToSymbol( coef, h_coef, (RADIUS + 1) * sizeof(float)));
+}
+
+```
 #### 复制方式
 
 申请的方式
-cudaMalloc：
-cudaFree：
 
-cudaMallocHost：
-cudaFreeHost：
+cudaMalloc：   普通内存的时候有在使用
 
+cudaFree：     普通内存的时候有在使用
+
+cudaMallocHost：锁页内存的时候有在使用
+
+cudaFreeHost：  锁页内存的时候有在使用
+
+cudaMallocManaged:   nvidia自己管理内存的时候使用
+
+cudaMemcpyToSymbol：全局内存与常量内存的时候有在使用
+
+cudaHostAlloc：    零拷贝内存的时候有在使用
 
 cudaMemcpy的方向：
-cudaMemcpyHostToDevice：
-cudaMemcpyDeviceToHost：
-cudaHostAllocMapped：
+
+cudaMemcpyHostToDevice： 主机到设备
+
+cudaMemcpyDeviceToHost： 设备到主机
+
+cudaHostAllocMapped： 零拷贝内存的时候有在使用
 
 
 从主机到设备，设备到主机
+
 ```c++
 float *h_a = (float *)malloc(nbytes);
 float *d_a;
@@ -369,6 +449,7 @@ free(h_a);
 
 
 锁页内存
+
 ```c++
 //查询是否支持锁页内存
 cudaDeviceProp deviceProp;
@@ -384,7 +465,6 @@ printf("%s starting at ", argv[0]);
 printf("device %d: %s memory size %d nbyte %5.2fMB canMap %d\n", dev,
         deviceProp.name, isize, nbytes / (1024.0f * 1024.0f),
         deviceProp.canMapHostMemory);
-
 
 // allocate pinned host memory
 float *h_a;
@@ -405,6 +485,7 @@ CHECK(cudaFreeHost(h_a));
 ```
 
 零拷贝复制
+
 ```c++
 float *h_A, *h_B;
 float *d_A, *d_B;
@@ -428,7 +509,35 @@ CHECK(cudaFreeHost(h_A));
 CHECK(cudaFreeHost(h_B));
 ```
 
+cudaMallocManaged管理内存
+
+```c++
+
+// malloc host memory
+float *A, *B, *hostRef, *gpuRef;
+CHECK(cudaMallocManaged((void **)&A, nBytes));
+CHECK(cudaMallocManaged((void **)&B, nBytes));
+CHECK(cudaMallocManaged((void **)&gpuRef,  nBytes);  );
+CHECK(cudaMallocManaged((void **)&hostRef, nBytes););
+
+// initialize data at host side
+initialData(A, nxy);
+initialData(B, nxy);
+memset(hostRef, 0, nBytes);
+//invoke kernel func
+sumMatrixGPU<<<grid, block>>>(A, B, gpuRef, nx, ny);
+
+// free device global memory
+CHECK(cudaFree(A));
+CHECK(cudaFree(B));
+CHECK(cudaFree(hostRef));
+CHECK(cudaFree(gpuRef));
+```
+
+
 #### 同步
+
+同步主要可以通过流与事件同步
 
 ```c++
 //在主机端同步函数
@@ -437,14 +546,162 @@ CHECK(cudaDeviceSynchronize());
 // synchronize within threadblock
 __syncthreads();
 ```
+
+使用流来同步
+
+```c++
+cudaStreamSynchronize()
+```
+
+```c++
+//回调函数
+void CUDART_CB my_callback(cudaStream_t stream, cudaError_t status, void *data)
+{
+    printf("callback from stream %d\n", *((int *)data));
+}
+
+//主函数里面，
+// Allocate and initialize an array of stream handles
+int n_streams=4;
+//流数组
+cudaStream_t *streams = (cudaStream_t *) malloc(n_streams * sizeof(cudaStream_t));
+//流在创建的时候可以指定优先级
+for (int i = 0 ; i < n_streams ; i++)
+{
+    CHECK(cudaStreamCreate(&(streams[i])));
+}
+
+dim3 block (1);
+dim3 grid  (1);
+//事件
+cudaEvent_t start_event, stop_event;
+CHECK(cudaEventCreate(&start_event));
+CHECK(cudaEventCreate(&stop_event));
+
+int stream_ids[n_streams];
+
+CHECK(cudaEventRecord(start_event, 0));
+
+for (int i = 0; i < n_streams; i++)
+{
+    stream_ids[i] = i;
+    kernel_1<<<grid, block, 0, streams[i]>>>();
+    kernel_2<<<grid, block, 0, streams[i]>>>();
+    kernel_3<<<grid, block, 0, streams[i]>>>();
+    kernel_4<<<grid, block, 0, streams[i]>>>();
+    //第三个参数是回调函数的参数
+    CHECK(cudaStreamAddCallback(streams[i], my_callback,(void *)(stream_ids + i), 0));
+}
+CHECK(cudaEventRecord(stop_event, 0));
+CHECK(cudaEventSynchronize(stop_event));
+float elapsed_time;
+CHECK(cudaEventElapsedTime(&elapsed_time, start_event, stop_event));
+
+ // release all stream
+for (int i = 0 ; i < n_streams ; i++)
+{
+    CHECK(cudaStreamDestroy(streams[i]));
+}
+free(streams);
+
+// destroy events
+CHECK(cudaEventDestroy(start_event));
+CHECK(cudaEventDestroy(stop_event));
+```
+
+事件同步
+
+```c++
+ // Allocate and initialize an array of stream handles
+int n_streams=4;
+cudaStream_t *streams = (cudaStream_t *) malloc(n_streams * sizeof(cudaStream_t));
+for (int i = 0 ; i < n_streams ; i++)
+{
+    CHECK(cudaStreamCreate(&(streams[i])));
+}
+
+ // creat events
+cudaEvent_t start, stop;
+CHECK(cudaEventCreate(&start));
+CHECK(cudaEventCreate(&stop));
+
+cudaEvent_t *kernelEvent;
+kernelEvent = (cudaEvent_t *) malloc(n_streams * sizeof(cudaEvent_t));
+for (int i = 0; i < n_streams; i++)
+{
+    CHECK(cudaEventCreateWithFlags(&(kernelEvent[i]),cudaEventDisableTiming));
+}
+
+ // record start event
+CHECK(cudaEventRecord(start, 0));
+
+// dispatch job with depth first ordering
+for (int i = 0; i < n_streams; i++)
+{
+    kernel_1<<<grid, block, 0, streams[i]>>>();
+    kernel_2<<<grid, block, 0, streams[i]>>>();
+    kernel_3<<<grid, block, 0, streams[i]>>>();
+    kernel_4<<<grid, block, 0, streams[i]>>>();
+
+    CHECK(cudaEventRecord(kernelEvent[i], streams[i]));
+    //在最后一个流中插入其他流的事件，最后一个流必须等到其他流的事件执行之后才开始执行
+    CHECK(cudaStreamWaitEvent(streams[n_streams - 1], kernelEvent[i], 0));
+}
+
+// record stop event
+CHECK(cudaEventRecord(stop, 0));
+//阻塞stop
+CHECK(cudaEventSynchronize(stop));
+
+// calculate elapsed time
+CHECK(cudaEventElapsedTime(&elapsed_time, start, stop));
+printf("Measured time for parallel execution = %.3fs\n",elapsed_time / 1000.0f);
+// release all stream
+for (int i = 0 ; i < n_streams ; i++)
+{
+    CHECK(cudaStreamDestroy(streams[i]));
+    CHECK(cudaEventDestroy(kernelEvent[i]));
+}
+free(streams);
+free(kernelEvent);
+
+```
+
 #### 计时
 
+使用事件计时
+
+```c++
+cudaEvent_t     start, stop;
+cudaEventCreate( &start );
+cudaEventCreate( &stop ) ;
+cudaEventRecord( start, 0 ) ;
+
+//在GPU上执行的一些操作
+
+cudaEventRecord( stop, 0 ) ;
+//很幸运，有一种事件API函数，告诉CPU在某个事件上同步
+cudaEventSynchronize( stop );
+
+float   elapsedTime;
+cudaEventElapsedTime( &elapsedTime,start, stop ) );
+printf( "Time to generate:  %3.1f ms\n", elapsedTime );
+
+cudaEventDestroy( start );
+cudaEventDestroy( stop );
+
+```
+
 #### 优化案列
+
+memory padding
+
 
 
 ### 代码
 
 common.h 获取错误信息
+
 ```c++
  /**
  * @FilePath     : /cuda-learn/src/common/common.h
