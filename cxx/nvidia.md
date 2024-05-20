@@ -230,8 +230,8 @@ for (int i = vecLoopSize; i < n; i++) {
 }
 // ...
 ```
-
-## 资料
+## CUDA
+### 资料
 
 GPU编程  谭升的博客
 
@@ -271,7 +271,8 @@ https://zhuanlan.zhihu.com/p/53773183
 资源小集合
 
 https://zhuanlan.zhihu.com/p/346910129
-## 常用命令
+
+### 常用命令
 
 ```bash
 //代码简单时，编译器会进行优化
@@ -317,4 +318,409 @@ nvprof --devices 0 --metrics gld_efficiency,gst_efficiency
 ncu --metrics
 ```
 
-## 理论
+### 理论
+
+#### grid与block
+
+#### 内存
+
+全局内存
+
+```c++
+//全局声明
+__device__ float devData;
+// initialize the global variable
+float value = 3.14f;
+CHECK(cudaMemcpyToSymbol(devData, &value, sizeof(float)));
+// invoke the kernel
+checkGlobalVariable<<<1, 1>>>();
+// copy the global variable back to the host
+CHECK(cudaMemcpyFromSymbol(&value, devData, sizeof(float)));
+```
+
+
+#### 复制方式
+
+申请的方式
+cudaMalloc：
+cudaFree：
+
+cudaMallocHost：
+cudaFreeHost：
+
+
+cudaMemcpy的方向：
+cudaMemcpyHostToDevice：
+cudaMemcpyDeviceToHost：
+cudaHostAllocMapped：
+
+
+从主机到设备，设备到主机
+```c++
+float *h_a = (float *)malloc(nbytes);
+float *d_a;
+CHECK(cudaMalloc((float **)&d_a, nbytes));
+for(unsigned int i = 0; i < isize; i++) h_a[i] = 0.5f;
+CHECK(cudaMemcpy(d_a, h_a, nbytes, cudaMemcpyHostToDevice));
+CHECK(cudaMemcpy(h_a, d_a, nbytes, cudaMemcpyDeviceToHost));
+CHECK(cudaFree(d_a));
+free(h_a);
+```
+
+
+锁页内存
+```c++
+//查询是否支持锁页内存
+cudaDeviceProp deviceProp;
+CHECK(cudaGetDeviceProperties(&deviceProp, dev));
+if (!deviceProp.canMapHostMemory)
+{
+    printf("Device %d does not support mapping CPU host memory!\n", dev);
+    CHECK(cudaDeviceReset());
+    exit(EXIT_SUCCESS);
+}
+
+printf("%s starting at ", argv[0]);
+printf("device %d: %s memory size %d nbyte %5.2fMB canMap %d\n", dev,
+        deviceProp.name, isize, nbytes / (1024.0f * 1024.0f),
+        deviceProp.canMapHostMemory);
+
+
+// allocate pinned host memory
+float *h_a;
+CHECK(cudaMallocHost ((float **)&h_a, nbytes));
+// allocate device memory
+float *d_a;
+CHECK(cudaMalloc((float **)&d_a, nbytes));
+// initialize host memory
+memset(h_a, 0, nbytes);
+for (int i = 0; i < isize; i++) h_a[i] = 100.10f;
+// transfer data from the host to the device
+CHECK(cudaMemcpy(d_a, h_a, nbytes, cudaMemcpyHostToDevice));
+// transfer data from the device to the host
+CHECK(cudaMemcpy(h_a, d_a, nbytes, cudaMemcpyDeviceToHost));
+// free memory
+CHECK(cudaFree(d_a));
+CHECK(cudaFreeHost(h_a));
+```
+
+零拷贝复制
+```c++
+float *h_A, *h_B;
+float *d_A, *d_B;
+CHECK(cudaHostAlloc((void **)&h_A, nBytes, cudaHostAllocMapped));
+CHECK(cudaHostAlloc((void **)&h_B, nBytes, cudaHostAllocMapped));
+// initialize data at host side
+initialData(h_A, nElem);
+initialData(h_B, nElem);
+memset(hostRef, 0, nBytes);
+memset(gpuRef,  0, nBytes);
+// pass the pointer to device
+//相当于将指针给了设备的数据
+CHECK(cudaHostGetDevicePointer((void **)&d_A, (void *)h_A, 0));
+CHECK(cudaHostGetDevicePointer((void **)&d_B, (void *)h_B, 0));
+// execute kernel with zero copy memory
+sumArraysZeroCopy<<<grid, block>>>(d_A, d_B, d_C, nElem);
+// copy kernel result back to host side
+CHECK(cudaMemcpy(gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost));
+CHECK(cudaFree(d_C));
+CHECK(cudaFreeHost(h_A));
+CHECK(cudaFreeHost(h_B));
+```
+
+#### 同步
+
+```c++
+//在主机端同步函数
+CHECK(cudaDeviceSynchronize());
+//在设备端同步的函数
+// synchronize within threadblock
+__syncthreads();
+```
+#### 计时
+
+#### 优化案列
+
+
+### 代码
+
+common.h 获取错误信息
+```c++
+ /**
+ * @FilePath     : /cuda-learn/src/common/common.h
+ * @Description  :
+ * @Author       : naonao 1319144981@qq.com
+ * @Version      : 0.0.1
+ * @LastEditors  : naonao 1319144981@qq.com
+ * @LastEditTime : 2024-02-27 17:34:56
+ * @Copyright    : G AUTOMOBILE RESEARCH INSTITUTE CO.,LTD Copyright (c) 2024.
+ **/
+
+#ifndef COMMON_COMMON_H
+#define COMMON_COMMON_H
+
+#define CHECK(call)                                                \
+    {                                                              \
+        const cudaError_t error = call;                            \
+        if (error != cudaSuccess) {                                \
+            fprintf(stderr, "Error: %s:%d, ", __FILE__, __LINE__); \
+            fprintf(stderr, "code: %d, reason: %s\n", error,       \
+                cudaGetErrorString(error));                        \
+        }                                                          \
+    }
+
+#define CHECK_CUBLAS(call)                                                   \
+    {                                                                        \
+        cublasStatus_t err;                                                  \
+        if ((err = (call)) != CUBLAS_STATUS_SUCCESS) {                       \
+            fprintf(stderr, "Got CUBLAS error %d at %s:%d\n", err, __FILE__, \
+                __LINE__);                                                   \
+            exit(1);                                                         \
+        }                                                                    \
+    }
+
+#define CHECK_CURAND(call)                                                   \
+    {                                                                        \
+        curandStatus_t err;                                                  \
+        if ((err = (call)) != CURAND_STATUS_SUCCESS) {                       \
+            fprintf(stderr, "Got CURAND error %d at %s:%d\n", err, __FILE__, \
+                __LINE__);                                                   \
+            exit(1);                                                         \
+        }                                                                    \
+    }
+
+#define CHECK_CUFFT(call)                                                   \
+    {                                                                       \
+        cufftResult err;                                                    \
+        if ((err = (call)) != CUFFT_SUCCESS) {                              \
+            fprintf(stderr, "Got CUFFT error %d at %s:%d\n", err, __FILE__, \
+                __LINE__);                                                  \
+            exit(1);                                                        \
+        }                                                                   \
+    }
+
+#define CHECK_CUSPARSE(call)                                                     \
+    {                                                                            \
+        cusparseStatus_t err;                                                    \
+        if ((err = (call)) != CUSPARSE_STATUS_SUCCESS) {                         \
+            fprintf(stderr, "Got error %d at %s:%d\n", err, __FILE__, __LINE__); \
+            cudaError_t cuda_err = cudaGetLastError();                           \
+            if (cuda_err != cudaSuccess) {                                       \
+                fprintf(stderr, "  CUDA error \"%s\" also detected\n",           \
+                    cudaGetErrorString(cuda_err));                               \
+            }                                                                    \
+            exit(1);                                                             \
+        }                                                                        \
+    }
+
+#include <chrono>
+#include <iostream>
+#include <string>
+#define TICK(x) auto bench_##x = std::chrono::high_resolution_clock::now();
+#define TOCK(x) std::cout << #x ": " << std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - bench_##x).count() << "us" << std::endl;
+inline double seconds(void)
+{
+    auto epoch_time = std::chrono::system_clock::now().time_since_epoch();
+    auto ret = std::chrono::duration_cast<std::chrono::microseconds>(epoch_time).count();
+    return ret;
+}
+#endif
+```
+
+check_device_info.cuh, 获取cuda设备信息
+```c++
+//check_device_info.cuh
+#include "../common/common.h"
+#include <cuda_runtime.h>
+#include <stdio.h>
+/*
+ * Display a variety of information on the first CUDA device in this system,
+ * including driver version, runtime version, compute capability, bytes of
+ * global memory, etc.
+ */
+int get_device_info();
+/*
+ * Display the dimensionality of a thread block and grid from the host and
+ * device.
+ */
+void check_dimensions() ;
+/*
+ * This example helps to visualize the relationship between thread/block IDs and
+ * offsets into data. For each CUDA thread, this example displays the
+ * intra-block thread ID, the inter-block block ID, the global coordinate of a
+ * thread, the calculated offset into input data, and the input data at that
+ * offset.
+ */
+ void check_thread_idx();
+ /*
+ * Demonstrate defining the dimensions of a block of threads and a grid of
+ * blocks from the host.
+ */
+ void def_grid_block();
+
+//check_device_info.cu
+#include "./check_device_info.cuh"
+int get_device_info()
+{
+    int deviceCount = 0;
+    cudaGetDeviceCount(&deviceCount);
+
+    if (deviceCount == 0)
+    {
+        printf("There are no available device(s) that support CUDA\n");
+    }
+    else
+    {
+        printf("Detected %d CUDA Capable device(s)\n", deviceCount);
+    }
+
+
+    int dev = 0, driverVersion = 0, runtimeVersion = 0;
+    CHECK(cudaSetDevice(dev));
+    cudaDeviceProp deviceProp;
+    CHECK(cudaGetDeviceProperties(&deviceProp, dev));
+    printf("Device %d: \"%s\"\n", dev, deviceProp.name);
+
+    cudaDriverGetVersion(&driverVersion);
+    cudaRuntimeGetVersion(&runtimeVersion);
+    printf("  CUDA Driver Version / Runtime Version          %d.%d / %d.%d\n",driverVersion / 1000, (driverVersion % 100) / 10,runtimeVersion / 1000, (runtimeVersion % 100) / 10);
+    printf("  CUDA Capability Major/Minor version number:    %d.%d\n",deviceProp.major, deviceProp.minor);
+    printf("  Total amount of global memory:                 %.2f MBytes (%llu ""bytes)\n", (float)deviceProp.totalGlobalMem / pow(1024.0, 3),(unsigned long long)deviceProp.totalGlobalMem);
+    printf("  GPU Clock rate:                                %.0f MHz (%0.2f ""GHz)\n", deviceProp.clockRate * 1e-3f,deviceProp.clockRate * 1e-6f);
+    printf("  Memory Clock rate:                             %.0f Mhz\n",deviceProp.memoryClockRate * 1e-3f);
+    printf("  Memory Bus Width:                              %d-bit\n",deviceProp.memoryBusWidth);
+
+    if (deviceProp.l2CacheSize)
+    {
+        printf("  L2 Cache Size:                                 %d bytes\n",deviceProp.l2CacheSize);
+    }
+
+    printf("  Max Texture Dimension Size (x,y,z)             1D=(%d), ""2D=(%d,%d), 3D=(%d,%d,%d)\n", deviceProp.maxTexture1D,deviceProp.maxTexture2D[0], deviceProp.maxTexture2D[1],
+           deviceProp.maxTexture3D[0], deviceProp.maxTexture3D[1],
+           deviceProp.maxTexture3D[2]);
+    printf("  Max Layered Texture Size (dim) x layers        1D=(%d) x %d, ""2D=(%d,%d) x %d\n", deviceProp.maxTexture1DLayered[0],deviceProp.maxTexture1DLayered[1], deviceProp.maxTexture2DLayered[0],
+           deviceProp.maxTexture2DLayered[1],
+           deviceProp.maxTexture2DLayered[2]);
+    printf("  Total amount of constant memory:               %lu bytes\n",deviceProp.totalConstMem);
+    printf("  Total amount of shared memory per block:       %lu bytes\n",deviceProp.sharedMemPerBlock);
+    printf("  Total number of registers available per block: %d\n",deviceProp.regsPerBlock);
+    printf("  Warp size:                                     %d\n",deviceProp.warpSize);
+    printf("  Maximum number of threads per multiprocessor:  %d\n",deviceProp.maxThreadsPerMultiProcessor);
+    printf("  Maximum number of threads per block:           %d\n",deviceProp.maxThreadsPerBlock);
+    printf("  Maximum sizes of each dimension of a block:    %d x %d x %d\n",deviceProp.maxThreadsDim[0],deviceProp.maxThreadsDim[1],deviceProp.maxThreadsDim[2]);
+    printf("  Maximum sizes of each dimension of a grid:     %d x %d x %d\n",
+           deviceProp.maxGridSize[0],
+           deviceProp.maxGridSize[1],
+           deviceProp.maxGridSize[2]);
+    printf("  Maximum memory pitch:                          %lu bytes\n",deviceProp.memPitch);
+    exit(EXIT_SUCCESS);
+}
+
+__global__ void checkIndex(void)
+{
+    printf("threadIdx:(%d, %d, %d)\n", threadIdx.x, threadIdx.y, threadIdx.z);
+    printf("blockIdx:(%d, %d, %d)\n", blockIdx.x, blockIdx.y, blockIdx.z);
+    printf("blockDim:(%d, %d, %d)\n", blockDim.x, blockDim.y, blockDim.z);
+    printf("gridDim:(%d, %d, %d)\n", gridDim.x, gridDim.y, gridDim.z);
+}
+
+void check_dimensions() {
+    int nElem = 6;
+    // define grid and block structure
+    dim3 block(3);
+    dim3 grid((nElem + block.x - 1) / block.x);
+    // check grid and block dimension from host side
+    printf("grid.x %d grid.y %d grid.z %d\n", grid.x, grid.y, grid.z);
+    printf("block.x %d block.y %d block.z %d\n", block.x, block.y, block.z);
+    // check grid and block dimension from device side
+    checkIndex<<<grid, block>>>();
+    // reset device before you leave
+    CHECK(cudaDeviceReset());
+}
+void printMatrix(int *C, const int nx, const int ny)
+{
+    int *ic = C;
+    printf("\nMatrix: (%d.%d)\n", nx, ny);
+    for (int iy = 0; iy < ny; iy++)
+    {
+        for (int ix = 0; ix < nx; ix++)
+        {
+            printf("%3d", ic[ix]);
+        }
+        ic += nx;
+        printf("\n");
+    }
+    printf("\n");
+    return;
+}
+__global__ void printThreadIndex(int *A, const int nx, const int ny)
+{
+    int ix = threadIdx.x + blockIdx.x * blockDim.x;
+    int iy = threadIdx.y + blockIdx.y * blockDim.y;
+    unsigned int idx = iy * nx + ix;
+    printf("thread_id (%d,%d) block_id (%d,%d) coordinate (%d,%d) global index"" %2d ival %2d\n", threadIdx.x, threadIdx.y, blockIdx.x, blockIdx.y,ix, iy, idx, A[idx]);
+}
+ void check_thread_idx(){
+    // get device information
+    int dev = 0;
+    cudaDeviceProp deviceProp;
+    CHECK(cudaGetDeviceProperties(&deviceProp, dev));
+    printf("Using Device %d: %s\n", dev, deviceProp.name);
+    CHECK(cudaSetDevice(dev));
+    // set matrix dimension
+    int nx = 8;
+    int ny = 6;
+    int nxy = nx * ny;
+    int nBytes = nxy * sizeof(float);
+    // malloc host memory
+    int *h_A;
+    h_A = (int *)malloc(nBytes);
+    // iniitialize host matrix with integer
+    for (int i = 0; i < nxy; i++)
+        h_A[i] = i;
+    printMatrix(h_A, nx, ny);
+
+    // malloc device memory
+    int *d_MatA;
+    CHECK(cudaMalloc((void **)&d_MatA, nBytes));
+    // transfer data from host to device
+    CHECK(cudaMemcpy(d_MatA, h_A, nBytes, cudaMemcpyHostToDevice));
+    // set up execution configuration
+    dim3 block(4, 2);
+    dim3 grid((nx + block.x - 1) / block.x, (ny + block.y - 1) / block.y);
+    // invoke the kernel
+    printThreadIndex<<<grid, block>>>(d_MatA, nx, ny);
+    CHECK(cudaGetLastError());
+    // free host and devide memory
+    CHECK(cudaFree(d_MatA));
+    free(h_A);
+    // reset device
+    CHECK(cudaDeviceReset());
+
+ }
+
+
+  void def_grid_block(){
+  // define total data element
+    int nElem = 1024;
+    // define grid and block structure
+    dim3 block (1024);
+    dim3 grid  ((nElem + block.x - 1) / block.x);
+    printf("grid.x %d block.x %d \n", grid.x, block.x);
+    // reset block
+    block.x = 512;
+    grid.x  = (nElem + block.x - 1) / block.x;
+    printf("grid.x %d block.x %d \n", grid.x, block.x);
+    // reset block
+    block.x = 256;
+    grid.x  = (nElem + block.x - 1) / block.x;
+    printf("grid.x %d block.x %d \n", grid.x, block.x);
+
+    // reset block
+    block.x = 128;
+    grid.x  = (nElem + block.x - 1) / block.x;
+    printf("grid.x %d block.x %d \n", grid.x, block.x);
+    // reset device before you leave
+    CHECK(cudaDeviceReset());
+  }
+```
