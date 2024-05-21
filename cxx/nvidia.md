@@ -322,6 +322,9 @@ ncu --metrics
 
 #### grid与block
 ![](./images/nvi_0.png)
+![](./images/nvi_6.png)
+![](./images/nvi_2.png)
+![](./images/nvi_3.png)
 #### 内存
 
 全局内存
@@ -510,6 +513,7 @@ CHECK(cudaFreeHost(h_B));
 ```
 
 cudaMallocManaged管理内存
+统一内存寻址
 
 ```c++
 
@@ -694,6 +698,12 @@ cudaEventDestroy( stop );
 
 #### 优化案列
 
+相邻配对：元素与他们相邻的元素配对
+
+![](./images/nvi_4.png)
+
+交错配对：元素与一定距离的元素配对
+![](./images/nvi_5.png)
 memory padding
 
 
