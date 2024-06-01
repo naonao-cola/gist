@@ -1118,6 +1118,106 @@ int a=x[threadIdx.y][threadIdx.x]; //红色框访问访问
 int a=x[threadIdx.x][threadIdx.y]; //绿色框访问访问
 ```
 
+
+#### CudaGraph
+
+参考链接：
+
+https://developer.nvidia.com/blog/cuda-graphs/
+
+https://codingbyexample.com/2020/09/25/cuda-graph-usage/
+
+```c++
+#include <iostream>
+#include <cuda_runtime.h>
+
+__global__ void kernel1(float* out, const float* in, int numElements) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < numElements) {
+        out[idx] = in[idx] + 1.0f;
+    }
+}
+
+__global__ void kernel2(float* out, const float* in, int numElements) {
+    int idx = blockIdx.x * blockDim.x + threadIdx.x;
+    if (idx < numElements) {
+        out[idx] = in[idx] * 2.0f;
+    }
+}
+
+int main() {
+    const int numElements = 1024;
+    const size_t size = numElements * sizeof(float);
+
+    float* h_in = new float[numElements];
+    float* h_out = new float[numElements];
+
+    for (int i = 0; i < numElements; ++i) {
+        h_in[i] = static_cast<float>(i);
+    }
+
+    float* d_in;
+    float* d_out;
+    cudaMalloc(&d_in, size);
+    cudaMalloc(&d_out, size);
+
+    cudaStream_t stream;
+    cudaStreamCreate(&stream);
+
+    // 捕获CUDA图
+    cudaGraph_t graph;
+    cudaGraphExec_t instance;
+    cudaStreamBeginCapture(stream, cudaStreamCaptureModeGlobal);
+
+    cudaMemcpyAsync(d_in, h_in, size, cudaMemcpyHostToDevice, stream);
+    kernel1<<<1, numElements, 0, stream>>>(d_out, d_in, numElements);
+    kernel2<<<1, numElements, 0, stream>>>(d_in, d_out, numElements);
+    cudaMemcpyAsync(h_out, d_in, size, cudaMemcpyDeviceToHost, stream);
+
+    cudaStreamEndCapture(stream, &graph);
+
+    // 实例化CUDA图
+    cudaGraphInstantiate(&instance, graph, NULL, NULL, 0);
+
+    // 执行CUDA图
+    for (int i = 0; i < 10; ++i) {
+        cudaMemcpyAsync(d_in, h_in, size, cudaMemcpyHostToDevice, stream);
+        cudaGraphLaunch(instance, stream);
+        cudaMemcpyAsync(h_out, d_in, size, cudaMemcpyDeviceToHost, stream);
+        cudaStreamSynchronize(stream);
+    }
+
+    // 清理资源
+    cudaGraphDestroy(graph);
+    cudaGraphExecDestroy(instance);
+    cudaStreamDestroy(stream);
+    cudaFree(d_in);
+    cudaFree(d_out);
+    delete[] h_in;
+    delete[] h_out;
+
+    return 0;
+}
+
+```
+```c++
+bool graphCreated=false;
+cudaGraph_t graph;
+cudaGraphExec_t instance;
+for(int istep=0; istep<NSTEP; istep++){
+  if(!graphCreated){
+    cudaStreamBeginCapture(stream, cudaStreamCaptureModeGlobal);
+    for(int ikrnl=0; ikrnl<NKERNEL; ikrnl++){
+      shortKernel<<<blocks, threads, 0, stream>>>(out_d, in_d);
+    }
+    cudaStreamEndCapture(stream, &graph);
+    cudaGraphInstantiate(&instance, graph, NULL, NULL, 0);
+    graphCreated=true;
+  }
+  cudaGraphLaunch(instance, stream);
+  cudaStreamSynchronize(stream);
+}
+```
 ### 代码
 
 common.h 获取错误信息

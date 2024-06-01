@@ -66,9 +66,17 @@ add_packages("opencv")
 add_ldflags("$(shell pkg-config --libs --cflags opencv)")
 
 cuda 源文件中的 device 函数需要被 device-link 且只 device-link 一次。在 shared 或 binary 的 target 上 xmake 会自动进行 device-link ，这时它们依赖的 static target 也会同时被 device-link ，因此默认情况下 static target 不会被 device-link。然而，如果最终的 shared 或 binary 的 target 不包含任何 cuda 源文件，则不会发生 device-link 阶段，导致出现 undefined reference 错误。这种情况下，需要手动为 static target 指定
+
 add_values("cuda.build.devlink", true).
 
+# 查看内置规则
+xmake show -l rules
+
+#添加cuda
+add_rules("cuda")
+add_cugencodes("native")
 ```
+
 ### lua脚本
 ```bash
 # 编译模式选择
@@ -89,7 +97,32 @@ option("tensorrt")
     end)
 
 target("deploy")
-    #添加TensorRT链接目录和链接库
+    set_languages("cxx17")
+    -- add_packages("opencv")
+    set_targetdir("$(projectdir)/lib")
+
+    -- 添加库目录
+    add_includedirs("$(projectdir)/include", {public = true})
+
+    -- 添加文件
+    add_files("$(projectdir)/source/**.cpp", "$(projectdir)/source/**.cu")
+
+    -- 设置目标类型
+    set_kind("$(kind)")
+
+    -- 如果目标类型是静态库
+    if is_kind("static") then
+        -- 设置 CUDA 开发链接为 true
+        set_policy("build.cuda.devlink", true)
+    else
+        add_defines("ENABLE_DEPLOY_BUILDING_DLL")
+    end
+
+    -- 添加 cuda
+    add_rules("cuda")
+    add_cugencodes("native")
+
+    -- 添加TensorRT链接目录和链接库
     if has_config("tensorrt") then
         add_includedirs(path.join("$(tensorrt)", "include"))
         add_linkdirs(path.join("$(tensorrt)", "lib"))
