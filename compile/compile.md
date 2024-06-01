@@ -78,6 +78,10 @@ add_cugencodes("native")
 ```
 ### 调试
 
+参考链接：
+
+https://xmake.io/mirror/zh-cn/guide/faq.html
+
 首先，我们需要在 VSCode 的插件市场安装 VSCode-EmmyLua 插件，然后执行下面的命令更新下 xmake-repo 仓库保持最新。`xrepo update-repo`, Xmake 也需要保持最新版本。
 
 然后，在自己的工程目录下执行以下命令
