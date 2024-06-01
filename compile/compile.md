@@ -76,6 +76,28 @@ xmake show -l rules
 add_rules("cuda")
 add_cugencodes("native")
 ```
+其他命令
+```bash
+# 命令行执行脚本
+xmake lua .\env.lua
+# 查看内置脚本
+xmake lua -l
+
+#进入交互式命令行
+xmake lua
+# 显示内置编译规则列表
+xmake show -l rules
+# 显示内置编译模式列表
+xmake show -l buildmodes
+
+# 显示指定 target 配置信息
+xmake show -t tbox
+
+# 显示工具链列表
+xmake show -l toolchains
+# 显示xmake自身和当前项目的基础信息
+xmake show
+```
 ### 调试
 
 参考链接：
