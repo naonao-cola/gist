@@ -55,6 +55,13 @@ git checkout -- FileName
 //3、已经提交到仓库,提交到本地仓库的变更都会被撤销，回到指定提交状态。
 git reset --hard commit_id
 
+//在删除远程分支的时候，有可能会提示。remote ref does not exist。
+// 先清除远程分支的本地缓存
+git fetch -p origin
+
+//使用git 管理项目的时候，编译过程中出现了很多中间文件
+git clean -f
+
 
 
 //代码review
@@ -70,6 +77,143 @@ git push origin xiaobo_dev
 git remote prune origin
 //  - 强制将临时分支代码回退到master HEAD
 git reset --hard master
+```
+
+常用命令
+
+```bash
+初始化仓库：
+git init
+
+查看仓库状态：
+git status
+
+查看历史提交记录：
+git log
+
+如果历史记录太多，可以加如下参数：
+git log --pretty=oneline
+
+添加一个文件：
+git add 文件名1 文件名2
+
+提交添加的文件：
+git commit -m '注释内容'
+
+回退上一个版本：
+(HEAD代表当前版本,^代表当前版本的上一个版本,回退到N个之前的版本可以使用:HEAD~100)
+git reset --hard HEAD^
+git reset --hard HEAD~100
+
+记录使用过的历史命令：
+git reflog
+
+回退到任意版本(无论是之前，还是将来)：
+git reset --hard commit_id
+
+强制推送到远程
+git push origin HEAD --force
+
+用版本库里的版本替换工作区的版本：
+git checkout -- test.txt
+
+从版本库中删除文件：
+git rm 文件名
+
+生成SSH密钥：
+ssh-keygen -t rsa -C "youremail@example.com"
+
+添加一个远程仓库(可以使用多种协议,此处使用GIT协议)：
+git remote add origin git@github.com:michaelliao/learngit.git
+
+将本地仓库内容推送到远程仓库：
+(我们第一次推送master分支时，加上了-u参数，
+Git不但会把本地的master分支内容推送的远程新的master分支，
+还会把本地的master分支和远程的master分支关联起来，
+在以后的推送或者拉取时就可以简化命令)
+git push -u origin master
+
+从远程仓库获取内容到本地仓库：
+git pull origin master
+git pull提示“no tracking information”，则说明本地分支和远程分支的链接关系没有创建，
+用命令git branch --set-upstream branch-name origin/branch-name
+
+
+克隆远程仓库到本地：
+git clone git@github.com:michaelliao/gitskills.git
+
+创建并切换分支：
+git checkout -b dev
+
+创建分支：
+git branch dev
+
+切换分支：
+git checkout dev
+
+查看分支状态：
+git branch
+
+将当前分支和指定分支合并：
+git merge dev
+git merge --no-ff -m "merge with no-ff" dev
+
+
+删除本地分支(英文大写-D参数)：
+git branch -D dev
+
+删除远程分支：
+git push origin --delete dev
+
+比较差异：
+git diff -- filename 文件
+
+查看分支合并图：
+git log --graph
+
+隐藏当前工作分区：
+git stash
+
+查看隐藏工作分区：
+git stash list
+
+恢复工作分区：
+git stash apply
+
+删除stash内容：
+git stash drop
+
+恢复并删除工作分区：
+git stash pop
+
+从远程仓库剪切分支：
+git checkout -b dev origin/dev
+
+打一个新标签
+git tag v1.0
+
+查看标签
+git tag
+
+在指定commit的时候打标签，比如它对应的commit id是f52c633：
+$ git tag v0.9 f52c633
+
+创建带有说明的标签，用-a指定标签名，-m指定说明文字：
+git tag -a v0.1 -m "version 0.1 released" 1094adb
+
+
+标签打错了，也可以删除：
+git tag -d v0.1
+
+推送某个标签到远程：
+git push origin v1.0
+
+一次性推送全部尚未推送到远程的本地标签：
+git push origin --tags
+
+远程删除，删除命令也是push：
+git push origin :refs/tags/v0.9
+
 ```
 
     Git常见报错：Updates were rejected because the tip of your current branch is behind
