@@ -423,7 +423,15 @@ Ctrl+o        # 顺时针旋转当前窗口的面板
 # Ctrl + win + t
 # 鼠标光标移到到目标函数的上一行，再按快捷键.函数注释
 ```
+### Bookmarks插件
 
+```bash
+#快捷键	功能
+Ctrl+alt+K	#创建或消除书签
+Ctrl+alt+J	#跳转到前一个书签
+Ctrl+alt+L	#跳转到后一个书签
+
+```
 ## trt工具
 
 ```bash
