@@ -44,6 +44,12 @@ git rm --cached FileName
 //删除名为FileName的文件
 git rm FileName
 
+//查看日志
+// https://www.cnblogs.com/wutou/p/17490984.html
+//按图表，画出一个ASCII图展示commit历史的分支结构
+git log  --oneline --decorate --graph
+//长路径显示
+git log --stat=200 -1
 
 // 回退变更
 //1、变更已经提交到工作区，将文件恢复到最近一次提交的状态，撤销工作区的变动
@@ -77,6 +83,136 @@ git push origin xiaobo_dev
 git remote prune origin
 //  - 强制将临时分支代码回退到master HEAD
 git reset --hard master
+```
+
+git stash 命令
+
+https://blog.csdn.net/cj_eryue/article/details/126631973
+
+应用场景：
+
+1 、临时存储已修改的代码：比如正在分支A上开发某个功能，还未完成，突然要切换到B分支上去修复一个bug。这时就可以用git stash命令将本地修改的内容保存至堆栈区，再切换到B分支修改bug，修复完成后，再切回到A分支，从堆栈中恢复刚刚保存的内容。
+
+2 、同步代码：由于不小心，本来要在A分支上开发的功能代码，却写在了B分支上，这时就可以用git stash将本地代码保存至堆栈中，切回到A分支后，再次恢复内容即可。
+
+
+```bash
+# 保存当前工作进度，会把暂存区和工作区的改动保存起来
+git stash save '备注'
+# 显示保存进度的列表,git stash命令可以多次执行。
+git stash list
+# 恢复最新的进度到工作区。git默认会把工作区和暂存区的改动都恢复到工作区。
+git stash pop
+# 恢复指定的进度到工作区。通过git stash pop命令恢复进度后，会删除当前进度。
+git stash pop stash@{1}
+#除了不删除恢复的进度之外，其余和git stash pop 命令一样。
+git stash apply stash@{stash_id}
+#删除一个存储的进度。如果不指定stash_id，则默认删除最新的存储进度。
+git stash drop
+#删除所有存储的进度。
+git stash clear
+# 显示与当前分支差异 如：git stash show stash@{stash_id} 加上 -p 可以看详细差异
+git stash show
+#保存特定文件
+# 方式一 (适合少数指定文件）
+git stash -- filename
+#方式二（适合大量指定文件）
+git stash -p
+```
+
+git format-patch 打补丁
+
+参考链接：
+
+https://www.cnblogs.com/ArsenalfanInECNU/p/8931377.html
+```bash
+#生成最近的1次commit的patch
+git format-patch HEAD^ 　
+#生成最近的2次commit的patch
+git format-patch HEAD^^　　
+#生成最近的3次commit的patch　　　　　　　　　　　　
+git format-patch HEAD^^^
+#生成最近的4次commit的patch　　　　　　　　　　　　　
+git format-patch HEAD^^^^ 　
+#生成两个commit间的修改的patch（包含两个commit. <r1>和<r2>都是具体的commit号)　　　　　　　　　　
+git format-patch <r1>..<r2>
+#生成单个commit的patch
+git format-patch -1 <r1>
+#生成某commit以来的修改patch（不包含该commit）
+git format-patch <r1>
+#生成从根到r1提交的所有patch
+git format-patch --root <r1>　
+
+
+git am
+# 查看patch的情况
+git apply --stat 0001-limit-log-function.patch
+# 检查patch是否能够打上，如果没有任何输出，则说明无冲突，可以打上 　　　　
+git apply --check 0001-limit-log-function.patch   　　　
+#git apply是另外一种打patch的命令，其与git am的区别是，git apply并不会将commit message等打上去，
+#打完patch后需要重新git add和git commit，而git am会直接将patch的所有信息打上去，而且不用重新
+#git add和git commit,author也是patch的author而不是打patch的人)
+# 将名字为0001-limit-log-function.patch的patch打上
+git am 0001-limit-log-function.patch
+ # 添加-s或者--signoff，还可以把自己的名字添加为signed off by信息，作用是注明打patch的人是谁，因为有时打patch的人并不是patch的作者
+git am --signoff 0001-limit-log-function.patch
+# 将路径~/patch-set/*.patch 按照先后顺序打上
+git am ~/patch-set/*.patch　
+# 当git am失败时，用以将已经在am过程中打上的patch废弃掉(比如有三个patch，打到第三个patch时有冲突，那么这条命令会把打上的前两个patch丢弃掉，返回没有打patch的状　　　　　　　　
+$ git am --abort
+ #当git am失败，解决完冲突后，这条命令会接着打patch　　　　
+$ git am --resolved                                                            　　　　　　　
+```
+
+git cherry-pick
+
+参考： https://blog.csdn.net/weixin_44799217/article/details/128279250
+
+应用场景：
+  需要将某一个分支的所有代码变动，那么就采用合并（git merge）
+  只需要某一个分支的部分代码变动（某几个提交），这时可以采用 Cherry pick
+```bash
+#上面命令会将指定提交的commitHash应用于当前分支。此时在当前分支产生一个新的提交，新提交代码的哈希值会和之前的不一样。
+git cherry-pick <commitHash>
+# 比如下面两个分支：
+a - b - c - d   Master
+    \
+      e - f - g Feature
+# 将提交f应用到master分支：
+# 切换到 master 分支
+git checkout master
+# Cherry pick 操作
+git cherry-pick f
+# 上面的操作完成以后，代码库就变成了下面的样子。
+a - b - c - d - f   Master
+    \
+      e - f - g Feature
+
+# git cherry-pick命令的参数，不一定是提交的哈希值，分支名也是可以的，表示转移该分支的最新提交。
+git cherry-pick feature
+```
+git diff 配置
+
+参考：https://stackoverflow.com/questions/1881594/use-winmerge-inside-of-git-to-file-diff
+
+  - 设置gitconfig
+
+```
+C:\myGitRepo>git config --replace --global diff.tool winmerge
+C:\myGitRepo>git config --replace --global difftool.winmerge.cmd "winmerge.sh \"$LOCAL\" \"$REMOTE\""
+C:\myGitRepo>git config --replace --global difftool.prompt false
+```
+  - winmerge.sh
+  放在 system32 统计目录下
+```
+#!/bin/sh
+echo Launching WinMergeU.exe: $1 $2
+"$PROGRAMFILES/WinMerge/WinMergeU.exe" -e -u -dl "Remote" -dr "Local" "$2" "$1"
+```
+
+  - 设置环境变量
+```
+set GIT_EXTERNAL_DIFF=winmerge.sh
 ```
 
 常用命令
