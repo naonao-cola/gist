@@ -233,6 +233,10 @@ for (int i = vecLoopSize; i < n; i++) {
 ## CUDA
 ### 资料
 
+nvidia-smi
+
+https://blog.csdn.net/C_chuxin/article/details/82993350#:~:text=nvidia-smi
+
 GPU编程  谭升的博客
 
 https://face2ai.com/program-blog/#GPU%E7%BC%96%E7%A8%8B%EF%BC%88CUDA%EF%BC%89
