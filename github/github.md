@@ -550,3 +550,11 @@ jobs:
     smid 仓库包
     https://github.com/xtensor-stack/xsimd
     https://github.com/aff3ct/MIPP
+
+
+    异常检测仓库
+    https://github.com/Markin-Wang/MGANet
+
+    https://github.com/cnulab/RealNet
+
+    https://github.com/openvinotoolkit/anomalib
