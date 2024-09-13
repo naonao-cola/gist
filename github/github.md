@@ -25,6 +25,22 @@ https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
 *.inl text eol=native
 ```
 
+windows 终端设置代理
+
+set https_proxy=http://127.0.0.1:33210 http_proxy=http://127.0.0.1:33210 all_proxy=socks5://127.0.0.1:33210
+
+linux 终端设置代理
+
+export https_proxy=http://127.0.0.1:33210 http_proxy=http://127.0.0.1:33210 all_proxy=socks5://127.0.0.1:33210
+
+git 代理
+
+git config --global http.proxy 'http://127.0.0.1:1080'
+git config --global http.proxy 'socks5://127.0.0.1:1080'
+
+取消代理
+git config --global --unset http.proxy
+
 ```cpp
 //第一种方式，忽略本地修改，强拉远程,master为远程分支名字
 git fetch --all

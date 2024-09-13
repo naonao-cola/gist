@@ -75,6 +75,12 @@ xmake show -l rules
 #添加cuda
 add_rules("cuda")
 add_cugencodes("native")
+
+#查看库的可选配置
+xmake require --info boost
+# 删除库, 加引号
+xrepo remove "opencv 4.8.0"
+
 ```
 其他命令
 ```bash
