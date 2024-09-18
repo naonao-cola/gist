@@ -574,3 +574,11 @@ jobs:
     https://github.com/cnulab/RealNet
 
     https://github.com/openvinotoolkit/anomalib
+
+    ppq 代码示例仓库
+
+    https://github.com/naonao-cola/model_deployment
+
+    腾讯 ncnn 的库，包含pnnx库
+
+    https://github.com/Tencent/ncnn
