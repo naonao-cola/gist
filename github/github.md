@@ -566,6 +566,7 @@ jobs:
     smid 仓库包
     https://github.com/xtensor-stack/xsimd
     https://github.com/aff3ct/MIPP
+    https://github.com/google/highway
 
 
     异常检测仓库

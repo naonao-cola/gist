@@ -648,6 +648,131 @@ void Detector::matchClass(const LinearMemoryPyramid &lm_pyramid,
 
 }
 ```
+```c++
+cv::Mat duplicate_remove(cv::Mat data,double remain) {
+	int length = data.rows;
+	cv::Mat matrix = cv::Mat::zeros(length,length,CV_32FC1);
+	double min_value = std::numeric_limits<double>::max();
+	double max_value = 0.f;
+	Timer t1;
+
+#pragma omp parallel for reduction(min:min_value) reduction(max:max_value)
+	for (int i = 0; i < data.rows;i++) {
+		cv::Mat p1 = data.rowRange(i, i + 1);
+		for (int j = 0; j < data.rows;j++) {
+			cv::Mat p2 = data.rowRange(j,j+1);
+			double diff = cv::norm((p1-p2))/(p1.cols *1.f);
+			matrix.ptr<float>(i)[j] = diff;
+			if (diff < min_value && diff >0.0000001) {
+				min_value = diff;
+			}
+			if (diff > max_value) {
+				max_value = diff;
+			}
+		}
+	}
+	t1.out("duplicate_remove 计算差值");
+	double remain_max = max_value  - (max_value - min_value) * remain;
+	cv::Mat remain_mat = matrix > remain_max;
+	std::vector<std::pair<int, int>> d1;
+	std::vector<std::vector<std::pair<int, int>>> local_d1(omp_get_max_threads());
+#pragma omp parallel for
+	for (int i = 0; i < remain_mat.rows; ++i) {
+		uchar* p = remain_mat.ptr<uchar>(i);
+		int thread_id = omp_get_thread_num(); // 获取当前线程的 ID
+		for (int j = 0; j < remain_mat.cols; ++j) {
+			if (i == j) continue;
+			int value = p[j];
+			if (value < 127) {
+				local_d1[thread_id].push_back(std::make_pair(i, j));
+			}
+		}
+	}
+	// 合并所有线程的局部结果
+	for (auto& local_vector : local_d1) {
+		d1.insert(d1.end(), local_vector.begin(), local_vector.end());
+	}
+	t1.out("duplicate_remove 选择特征图");
+
+	std::set<int> duploc;
+	for (int i = 0; i < d1.size();i++) {
+		duploc.insert(d1[i].first);
+		duploc.insert(d1[i].second);
+	}
+	cv::Mat ret;
+	for (int i = 0; i < length;i++) {
+		if (duploc.count(i) > 0) {
+			continue;
+		}
+		cv::Mat p1 = data.rowRange(i, i + 1);
+		ret.push_back(p1);
+	}
+	return ret;
+}
+
+double work( double *a, double *b, size_t n )
+{
+    using batch_type = xsimd::batch<double, xsimd::default_arch>;
+	std::size_t inc  = batch_type::size;
+    std::size_t vec_size = n - n % inc;
+    double sum = 0.0;
+#pragma omp parallel for reduction(+:sum)
+    for (long i=0; i < vec_size; i += inc) {
+        batch_type v1 = xsimd::load_unaligned(a + i);
+        batch_type v2 = xsimd::load_unaligned(b + i);
+        batch_type batch_c = v1 + v2;
+        sum += xsimd::reduce_add(batch_c);
+    }
+#pragma omp parallel for reduction(+:sum)
+    for (long i = vec_size; i < n; ++i)
+    {
+        sum += (a[i] + b[i]);
+    }
+
+   return sum;
+}
+
+double sum_xsimd(const double* data, std::size_t size) {
+    using batch_type = xsimd::batch<double>;
+    constexpr std::size_t batch_size = batch_type::size;
+    double sum = 0.0;
+
+    // 处理整数倍于 batch_size 的部分
+#pragma omp parallel for reduction(+:sum)
+    for (long i = 0; i <= size - batch_size; i += batch_size) {
+        auto batch = xsimd::load_unaligned(data + i);
+        sum += xsimd::reduce_add(batch);
+    }
+
+    // 处理剩余的部分
+#pragma omp parallel for reduction(+:sum)
+    for (long i = (size / batch_size) * batch_size; i < size; ++i) {
+        sum += data[i];
+    }
+
+    return sum;
+}
+
+```
+
+使用openmp 的一些测评
+
+https://zhuanlan.zhihu.com/p/685435667
+
+https://blog.csdn.net/10km/article/details/84579465
+
+```bash
+# -fopenmp 打开OpenMP预处理指令支持开关，使用此选项，代码中的#pragma omp simd预处理指令才有效。
+#-mavx2 指定使用intel AVX2指令集。如果目标CPU不支持AVX，也可以根据目标CPU的类型改为低版本的-msse4.1 -msse4.2 -msse4 -mavx
+$ gcc -O3 -fopt-info  -fopenmp  -mavx2 -o test_simd test_simd.c
+# 对于mips平台，编译方式是这样的,与x86平台唯一的不同就是-mavx2改为-mmsa
+$ mips-linux-gnu-gcc  -O3 -fopt-info  -fopenmp  -mmsa -o test_simd_msa test_simd.c
+# 如果是arm平台，编译方式应该是这样的
+$ arm-none-linux-gnueabi-gcc -mfpu=neon -ftree-vectorize -ftree-vectorizer-verbose=1 -c test_simd.c
+
+# 编译选项 https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html#Option-Summary
+```
+
 ### 自旋锁
 ```c++
 #include <atomic>
