@@ -75,6 +75,7 @@ xmake show -l rules
 #添加cuda
 add_rules("cuda")
 add_cugencodes("native")
+add_cuflags("-allow-unsupported-compiler")
 
 #查看库的可选配置
 xmake require --info boost
