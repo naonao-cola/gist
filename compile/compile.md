@@ -76,6 +76,13 @@ xmake show -l rules
 add_rules("cuda")
 add_cugencodes("native")
 add_cuflags("-allow-unsupported-compiler")
+# 如果目标类型是静态库
+if is_kind("static") then
+    #-- 设置 CUDA 开发链接为 true
+    set_policy("build.cuda.devlink", true)
+else
+    add_defines("ENABLE_DEPLOY_BUILDING_DLL")
+end
 
 #查看库的可选配置
 xmake require --info boost
