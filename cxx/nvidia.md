@@ -550,9 +550,25 @@ CHECK(cudaFree(gpuRef));
 ```c++
 //在主机端同步函数
 CHECK(cudaDeviceSynchronize());
-//在设备端同步的函数
+//在设备端同步的函数，实现了在线程块内的同步，一个wrap内的线程不用同步
 // synchronize within threadblock
 __syncthreads();
+
+//一个线程调用完之后，该线程在该语句前对全局存储器或者共享存储器访问已经全部完成，对grid中所有线程可见
+__threadfence();
+//一个线程调用完之后，该线程在该语句前对全局存储器或者共享存储器访问已经全部完成，对block中所有线程可见
+__threadfence_block();
+//使其他线程能够安全的消费当前线程生产的数据，
+
+//原子操作
+atomicAdd()
+atomicMax()
+atomicInc()
+
+//位原子操作
+atomicAnd()
+atomicOr()
+atomicXor()
 ```
 
 使用流来同步
