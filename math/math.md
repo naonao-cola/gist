@@ -1290,6 +1290,31 @@ void cv::transform(
 	cv::InputArray mtx // Transform matrix (Ds-by-Dd) 变换矩阵是Ds * Dd矩阵
 );
 ```
+如何避免大数吃小数的
+
+https://blog.csdn.net/aqzwss/article/details/53959570#:~:text=kahan%E6%B1%82%E5%92%8C%E7%AE%97%E6%B3%95%E8%83%BD
+
+    首先，这个算法就是用来求和的，求a1+a2+a3+...为什么不直接相加呢，而要用Kahan求和公式呢，这个算法的用武之地在哪呢，一一道来,kahan求和算法能避免大数吃小数的情况。
+
+    大数吃小数是什么意思呢？举个例子，我们用两个float相加，float是32位，它的精度是小数点后6-7位，设有a=123456;b=2.189；a+b应该是123458.189但是由于float的精度只有小数点后6-7位，所以必然得不到123458.189，后面的89可能会截掉，8不一定，9是必然会截掉的。好的，才做一个加法就产生至少了0.009的误差，做1000个这样的加法，误差就是9了，这显然不是我们想要的。
+
+    kahan求和算法可以避免这种情况，它有一个数用来记住那个被截断的小数，同样做下面的计算，设有a=123456;b=2.189；计算a+b。kahan求和算法是这样做的：sum=a+b（不准确）; temp= (a+b)-a-b;temp等于多少呢，初看这不就是0吗？不是的，计算机此时算的可不是0，而是等于-0.009，就是被截断的那个小数。通过一个临时变量我们就记住了这个误差，当计算下一个加法的时候，可以把这个误差补上，并且更新误差到sum。
+
+    其实也可以这样理解，sum不是由于数太大，占用了小数的精度吗，而这个小数在当前一步看似是可以忽略的，但是由于，迭代的次数旁道，小数会累积成大误差，那么我们另外用的float专门记住这个误差小数不就得了吗。
+
+```python
+function KahanSum(input)
+    var sum = 0.0
+    var c = 0.0          #A running compensation for lost low-order bits.
+    for i = 1 to input.length do
+        y = input[i] - c     #So far, so good: c is zero.
+        t = sum + y          #Alas, sum is big, y small, so low-order digits of y are lost.
+        c = (t - sum) - y    #(t - sum) recovers the high-order part of y; subtracting y recovers -(low part of y)
+        sum = t              #Algebraically, c should always be zero. Beware eagerly optimising compilers!
+         #Next time around, the lost low part will be added to y in a fresh attempt.
+    return sum
+
+```
 ## 概率论
 ### 二项分布
 ### 伯努利分布
