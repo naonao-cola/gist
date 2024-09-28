@@ -2,34 +2,36 @@
     - [**math**](./math/math.md)
     - [**图解线性代数**](./math/linear.md)
 
-- **c++**
+- **C++**
   - [**cxx**](./cxx/cxx.md)
   - [**杂记**](./cxx/tips.md)
 
-- **compile**
+- **Compile**
   - [**示例**](./compile/compile.md)
   - [**xmake手册**](./compile/xmake.md)
   - [**cmake手册**](./compile/cmake.md)
 
 
-- [**opencv**](./cxx/opencv.md)
-- [**cuda**](./cxx/nvidia.md)
+- [**Opencv**](./opencv/opencv.md)
 
-- **python**
+- [**Nvidia**](./nvidia/nvidia.md)
+
+- **Python**
     - [**py**](./py/py.md)
     - [**DeepLearning**](./py/DeepLearning.md)
     - [**prompt**](./py/prompt.md)
     - [**杂记**](./py/tips.md)
 
 
-- **camera**
+- **Camera**
     - [**camera**](./camera/camera.md)
     - [**halcon**](./camera/halcon.md)
 
-- **TOOLS**
-  - [**linux**](./linux/tools.md)
-  - [**docker**](./linux/docker.md)
-  - [**github**](./github/github.md)
+- [**Linux**](./linux/tools.md)
+
+- [**Docker**](./docker/docker.md)
+
+- [**Github**](./github/github.md)
 
 
  

@@ -537,6 +537,7 @@ jobs:
     https://github.com/Codesire-Deng/co_context
 
     TensorRTx aims to implement popular deep learning networks with TensorRT network definition API.
+    主要包含了YOLO各大版本的代码
     https://github.com/wang-xinyu/tensorrtx
 
     C++ library based on tensorrt integration
@@ -583,3 +584,9 @@ jobs:
     腾讯 ncnn 的库，包含pnnx库
 
     https://github.com/Tencent/ncnn
+
+## 知识库
+
+  Linux kernel (Arm64 嵌入式方向)知识过程中的自我积累
+
+  https://github.com/zongxin1993/KernelExplorer
