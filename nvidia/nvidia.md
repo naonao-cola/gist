@@ -278,37 +278,16 @@ https://zhuanlan.zhihu.com/p/346910129
 
 ### 常用命令
 
+
 ```bash
-//代码简单时，编译器会进行优化
-nvprof --metrics branch_efficiency
+// https://zhuanlan.zhihu.com/p/666242337#:~:text=%E7%9B%AE%E5%89%8D%E4%B8%BB%E6%B5%81%E7%9A%84%20CU
 
-// 每个SM在每个cycle能够达到的最大active warp数目占总warp的比例
-nvprof --metrics achieved_occupancy
-
-//带宽  全局内存加载事务数
-nvprof --metrics gld_throughput
-
-//带宽比值
-nvprof --metrics gld_efficiency
+// 代码简单时，编译器会进行优化 原 branch_efficiency
+ncu  --metrics smsp__sass_average_branch_targets_threads_uniform.pct
 
 
-nvprof --metrics gst_efficiency
-
-//每个warp上执行的指令数目的平均值
-nvprof --metrics inst_per_warp
-
-//同一个thread中如果能有更多的独立的load/store操作
-nvprof --metrics dram_read_throughput
-
-
-//用来验证由于__syncthreads导致更少的warp
-nvprof --metrics stall_sync
-
-//图表
-nvvp
-
-//设备 主机 调用情况
-nvprof
+// 用来验证由于__syncthreads导致更少的warp, 原 stall_sync
+ncu --metrics smsp__warp_issue_stalled_barrier_per_warp_active.pct + smsp__warp_issue_stalled_membar_per_warp_active.pct
 
 //
 nvprof --devices 0 --metrics gld_efficiency
@@ -323,6 +302,26 @@ ncu --metrics
 
 //生成ncu-rep 文件
 ncu --set full -f -o 09 ./09
+
+// 每个SM在每个cycle能够达到的最大active warp数目占总warp的比例 ，原 achieved_occupancy
+ncu --metrics sm__warps_active.avg.pct_of_peak_sustained_active
+
+// 带宽  全局内存加载事务数，原 gld_throughput
+ncu --metrics l1tex__t_bytes_pipe_lsu_mem_global_op_ld.sum.per_second
+
+// 带宽比值 原 gld_efficiency
+ncu --metrics smsp__sass_average_data_bytes_per_sector_mem_global_op_ld.pct
+
+// 原 gst_efficiency
+ncu --metrics smsp__sass_average_data_bytes_per_sector_mem_global_op_st.pct
+
+// 每个warp上执行的指令数目的平均值， 原 inst_per_warp
+ncu --metrics smsp__average_inst_executed_per_warp.ratio
+
+// 同一个thread中如果能有更多的独立的load/store操作, 原 dram_read_throughput
+ncu --metrics dram__bytes_read.sum.per_second
+
+
 ```
 
 ### 理论
