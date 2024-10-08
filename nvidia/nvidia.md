@@ -320,6 +320,9 @@ nvprof --devices 0 --metrics gld_efficiency,gst_efficiency
 
 //功能被转移到ncu了
 ncu --metrics
+
+//生成ncu-rep 文件
+ncu --set full -f -o 09 ./09
 ```
 
 ### 理论
@@ -1046,6 +1049,8 @@ switch (blocksize) {
 ```
 
 #### bank冲突
+
+https://zhuanlan.zhihu.com/p/632244210
 
 如图黄色部分为共享内存，可以发现相对于DRAM(全局内存)，共享内存在物理上距离SM更近，所以共享内存更快。当每个线程块(注意共享内存是在Block内共享) 开始执行时，会分配给它一定数量的共享内存。所以共享内存被SM中所有常驻线程块划分，因此，共享内存是限制设备并行性的关键资源。一个核函数使用的共享内存越多，处于并发活跃状态的线程块就越少。
 
