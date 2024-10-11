@@ -280,47 +280,73 @@ https://zhuanlan.zhihu.com/p/346910129
 
 
 ```bash
-// https://zhuanlan.zhihu.com/p/666242337#:~:text=%E7%9B%AE%E5%89%8D%E4%B8%BB%E6%B5%81%E7%9A%84%20CU
+# https://zhuanlan.zhihu.com/p/666242337#:~:text=%E7%9B%AE%E5%89%8D%E4%B8%BB%E6%B5%81%E7%9A%84%20CU
+# https://zhuanlan.zhihu.com/p/666242337#:~:text=%E7%9B%AE%E5%89%8D%E4%B8%BB%E6%B5%81%E7%9A%84%20CU
 
-// 代码简单时，编译器会进行优化 原 branch_efficiency
+# https://blog.csdn.net/m0_67392409/article/details/123598464
+
+# https://zmurder.github.io/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/
+
+# 代码简单时，编译器会进行优化 原 branch_efficiency
+# 非发散分支与总分支的比率
 ncu  --metrics smsp__sass_average_branch_targets_threads_uniform.pct
 
 
-// 用来验证由于__syncthreads导致更少的warp, 原 stall_sync
-ncu --metrics smsp__warp_issue_stalled_barrier_per_warp_active.pct + smsp__warp_issue_stalled_membar_per_warp_active.pct
 
-//
-nvprof --devices 0 --metrics gld_efficiency
-
-//全局内存存储事务数
-nvprof --devices 0 --metrics gld_efficiency --metrics gst_efficiency
-
-nvprof --devices 0 --metrics gld_efficiency,gst_efficiency
-
-//功能被转移到ncu了
-ncu --metrics
-
-//生成ncu-rep 文件
-ncu --set full -f -o 09 ./09
-
-// 每个SM在每个cycle能够达到的最大active warp数目占总warp的比例 ，原 achieved_occupancy
+# 每个SM在每个cycle能够达到的最大active warp数目占总warp的比例 ，原 achieved_occupancy
+# 可以猜测的到的是，拥有更多的block并行性更好。这个猜测可以使用nvprof 的 achieved_occupancy这个metric参数来验证。
+# 每个SM在每个cycle能够达到的最大active warp数目占总warp的比例
 ncu --metrics sm__warps_active.avg.pct_of_peak_sustained_active
 
-// 带宽  全局内存加载事务数，原 gld_throughput
+
+# 带宽  全局内存加载事务数，原 gld_throughput
+# memory load和memory store,查看memory的throughput
+# 高load throughput有可能是一种假象，如果需要的数据在memory中存储格式未对齐不连续，会导致许多额外的不必要的load操作，
 ncu --metrics l1tex__t_bytes_pipe_lsu_mem_global_op_ld.sum.per_second
 
-// 带宽比值 原 gld_efficiency
+
+# 带宽比值 原 gld_efficiency
+# gld_efficiency来度量load efficiency, ，加载的效率
+# 该metric参数是指我们确切需要的 global load throughput与实际得到global load memory的比值。
+# 这个metric参数可以让我们知道，APP的 load操作利用device memory bandwidth的程度：
+#
 ncu --metrics smsp__sass_average_data_bytes_per_sector_mem_global_op_ld.pct
 
-// 原 gst_efficiency
+
+# 原 gst_efficiency，存储
+# 请求的全局内存存储吞吐量与所需的全局内存存储吞吐量的比率
 ncu --metrics smsp__sass_average_data_bytes_per_sector_mem_global_op_st.pct
 
-// 每个warp上执行的指令数目的平均值， 原 inst_per_warp
+
+
+# gld_transactions_per_request 被每个全局内存加载请求执行的全局内存加载事务的平均数
+# l1tex__average_t_sectors_per_request_pipe_lsu_mem_global_op_ld.ratio
+
+# gst_transactions_per_request 被每个全局内存存储请求执行的全局内存存储事务的平均数
+# l1tex__average_t_sectors_per_request_pipe_lsu_mem_global_op_st.ratio
+# 如果单一的全局加载或存储请求了很多事务，那么设备内存带宽可能就会被浪费
+
+
+# 每个warp上执行的指令数目的平均值， 原 inst_per_warp
+# 可以查看是否有许多不必要的操作也执行了
 ncu --metrics smsp__average_inst_executed_per_warp.ratio
 
-// 同一个thread中如果能有更多的独立的load/store操作, 原 dram_read_throughput
+
+# 原 dram_read_throughput
+# 同一个thread中如果能有更多的独立的load/store操作，会产生更好的性能，因为这样做memory latency能够更好的被隐藏。
+# device read throughtput和unrolling程度是正比的：
 ncu --metrics dram__bytes_read.sum.per_second
 
+
+# shared_load_transactions_per_request  每次共享内存加载时执行的平均共享内存加载事务数
+# shared_store_transactions_per_request 每次共享内存加载时执行的平均共享内存写入事务数
+# 两个参数来衡量相应的bank-conflict 。 ncu没有这个参数了。
+
+# 用来验证由于__syncthreads导致更少的warp, 原 stall_sync
+ncu --metrics smsp__warp_issue_stalled_barrier_per_warp_active.pct + smsp__warp_issue_stalled_membar_per_warp_active.pct
+
+# 生成ncu-rep 文件
+ncu --set full -f -o 09 ./09
 
 ```
 
