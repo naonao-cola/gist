@@ -1276,6 +1276,54 @@ public:
     string3 = string1;        // 这样也是不行的, 因为取消了隐式转换, 除非类实现操作符"="的重载
 ```
 
+### __restrict__
+
+restrict 用来定义指针变量，表明该变量没有别名，意思就是：除了该变量以外，没有别的方法可以访问其指向的地址空间。
+
+```c++
+/*
+mov eax val;
+add ptrA eax;
+mov eax val;
+add ptrB eax;
+*/
+void update(int *ptrA, int * ptrB, int * val)
+{
+          *ptrA +=*val;
+          *ptrB +=*val;
+}
+
+/*
+其中，变量val加载了两次。因为它不知道ptrA，ptrB是否与val有内存上的交叠，所以为了保险起见，只能每次用到val时都从内存里读。如果加上__restrict__:
+mov eax val;
+add ptrA eax;
+add ptrB eax;
+
+*/
+void update_restrict(int * __restrict ptrA, int * __restrictptrB, int * __restrict val);
+
+```
+
+### register
+
+为寄存器变量分配寄存器是动态完成的，因此，只有局部变量和形式参数才能定义为寄存器变量。寄存器的长度一般和机器的字长一致，所以，只有较短的类型如int、char、short等才适合定义为寄存器变量，诸如double等较大的类型，不推荐将其定义为寄存器类型。
+
+注意一般在多层循环用
+
+```c++
+void floyd(){
+	for(register int a=1;a<=v;a++){
+		for(register int b=1;b<=v;b++){
+			for(register int c=1;c<=v;c++){
+				if(G[b][a]+G[a][c]<G[b][c])G[b][c]=G[b][a]+G[a][c];
+			}
+		}
+	}
+	return;
+}
+```
+
+
 
 ## 构造函数
 
