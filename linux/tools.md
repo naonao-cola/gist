@@ -41,6 +41,28 @@ cat /etc/init.d/sshd | grep -v '^#' | grep -v '^$'
 cat /etc/passwd | awk -F ':' '{if ($NF ~ /bash/) print $1}'
 
 cat /etc/passwd | awk -F ':' 'BEGIN{print "user\tshell\n-------"} {print $1"\t"$NF} END{print "--------"}'
+```
+
+### cmake 升级
+
+打开cmake下载的官网：https://cmake.org/files/
+这里我们选择最高的子版本，cmake-3.20.6-linux-x86_64.sh，点击进行下载。（最小的子版本号可以自行更改，我选的是当时最高的6，因为它大概率拥有最全的补丁）
+
+```bash
+cd Downloads
+sudo bash cmake-3.20.6-inux-x86_64.sh --skip-licence --prefix=/usr
+
+# 安装过程中遇到：
+# 第一个选择时，输入y!!!
+Do you accept the license? [yn]:
+# 输入 y
+
+# 第二个选择时，输入n!!!
+By default the CMake will be installed in:
+  "/usr/cmake-3.23.0-linux-x86_64"
+Do you want to include the subdirectory cmake-3.23.0-linux-x86_64?
+Saying no will install in: "/usr" [Yn]:
+# 输入 n
 
 ```
 ## fzf安装
