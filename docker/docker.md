@@ -154,6 +154,8 @@ sudo chmod a+r /usr/local/cuda/lib64/libcudnn*
 ```
 
 可以参考下面的这个链接：https://blog.csdn.net/guoqingru0311/article/details/119532502
+https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html
+
 
 ```bash
 拉取镜像
