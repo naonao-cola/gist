@@ -12,6 +12,15 @@ ldd
 #将文件打包为二进制文件，譬如将图片转为c++ 头文件
 xdd
 
+# 删除文件
+find . -name "*.txt" | xargs rm -rf
+
+# 创建软连接
+ln -s [源文件或目录][目标文件或目录]
+
+# -h：与-l结合使用，以人类可读的方式显示文件大小（如K、M、G等）。
+ls -lh
+
 # 查找文件，查找范围 类型 名字
 find ./ -type f -name "*.c"
 #文件复制拷贝
@@ -32,7 +41,20 @@ su backend
 ps -ef | grep sshd | grep -v grep
 cat /etc/init.d/sshd | grep -v '^#' | grep -v '^$'
 
+# grep是一个强大的文本搜索工具。常用参数如下：
+# -i：忽略大小写进行搜索。
+# -v：反转匹配，即显示不匹配的行。
+# -n：显示行号。
+# -c：统计匹配的行数。
+
+# 增加文件内容，多行编辑
+cat << EOF >> /etc/profile.d/java.sh
+
 ```
+
+sed的操作
+
+https://www.runoob.com/linux/linux-comm-sed.html
 
 ### awk
 ```bash
@@ -41,6 +63,10 @@ cat /etc/init.d/sshd | grep -v '^#' | grep -v '^$'
 cat /etc/passwd | awk -F ':' '{if ($NF ~ /bash/) print $1}'
 
 cat /etc/passwd | awk -F ':' 'BEGIN{print "user\tshell\n-------"} {print $1"\t"$NF} END{print "--------"}'
+
+# 打印行数
+awk '{print NR, $0}' file
+
 ```
 
 ### cmake 升级
@@ -105,6 +131,10 @@ BRANCH=${BRANCH:-master}
 ![](../images/vim.png)
 
 ![](../images/vim_2.png)
+
+https://zhuanlan.zhihu.com/p/294938381?utm_medium=social&utm_psn=1819891349903785984&utm_source=wechat_session
+
+
 ### 命令模式
 1、移动光标
 1）上下左右移动光标
@@ -320,6 +350,7 @@ chown  backend:backend  ./test.sh
 ```bash
 ps -aux | grep **
 ps -ef | grep **
+kill -9 PID  # 强制杀死进程
 free -h
 #查看内存用量 交换区用量
 free -m
@@ -486,3 +517,25 @@ E:\demo\3rdparty\TensorRT-8.4.1.5\bin\trtexec.exe --minShapes=x:1x3x32x320 --opt
 ```bash
 nohup jupyter-notebook --no-browser --ip 0.0.0.0 --port 15000 --allow-root > nohup-jupyter.log &
 ```
+
+## nvidia-smi
+
+```bash
+# 显示 GPU 状态的摘要信息
+nvidia-smi
+# 显示详细的 GPU 状态信息 这个命令会每1秒更新一次状态信息
+nvidia-smi -l 1
+# 列出所有 GPU 并显示它们的 PID 和进程名称
+nvidia-smi pmon
+# 强制结束指定的 GPU 进程,这会强制结束 GPU ID 为 0 上的 PID 为 12345 的进程
+nvidia-smi --id=0 --ex_pid=12345
+# 设置 GPU 性能模式,第一个命令会为所有 GPU 设置为性能模式，第二个命令只针对 ID 为 0 的 GPU
+nvidia-smi -pm 1
+nvidia-smi -i 0 -pm 1
+# 重启 GPU
+nvidia-smi --id=0 -r
+
+
+```
+![](../images/nvidia.png)
+
