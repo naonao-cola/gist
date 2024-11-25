@@ -60,6 +60,12 @@ git rm --cached FileName
 //删除名为FileName的文件
 git rm FileName
 
+//选择性合并某些文件使用
+//git checkout 命令从 feature-b 检出您想要合并的文件。例如，如果您想合并 file1.txt 和 file2.txt：
+//这会将 feature-b 分支上这两个文件的最新版本检出到当前分支（即 temp-feature-a）
+git checkout feature-b -- file1.txt file2.txt
+
+
 //查看日志
 // https://www.cnblogs.com/wutou/p/17490984.html
 //按图表，画出一个ASCII图展示commit历史的分支结构
