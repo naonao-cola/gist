@@ -1,32 +1,23 @@
 ## Python程序打包
 
 ```python
-# import setuptools
+__all__ = ['__version__']
+__version__ = "1.0.0"
 
-# exec(open('/data/proj/echint/echint_algo/echint_algo/version.py', encoding='utf-8').read())
-# #__version__ = "1.0"
-# setuptools.setup(
-#     name="echint_algo",
-#     version=__version__,
-#     author="xiaobo",
-#     author_email="",
-#     description="echint_algo",
-#     long_description="Echint DeepLearning model interface for training, inference and package.",
-#     long_description_content_type="text/markdown",
-#     url="",
-#     packages=setuptools.find_packages(),
-#     package_data={
-#         "":["configs/*.yaml"],
-#     },
-#     classifiers=[
-#         "Programming Language :: Python :: 3",
-#         "License :: OSI Approved :: MIT License",
-#         "Operating System :: OS Independent",
-#     ],
-# )
+```
 
 
+```python
+from .algo import algo_base, algo_pro
+from .version import __version__
+__all__ = [
+    '__version__', 'algo_base', 'algo_pro'
+]
 
+```
+
+
+```python
 import os
 import os.path as osp
 import glob
@@ -42,9 +33,9 @@ def get_extensions():
     build_dir = osp.join(this_dir, 'build')
     os.makedirs(build_dir, exist_ok=True)
     # copy tvdl to build/tvdl_py
-    out_dir = osp.join(build_dir, 'src/echint_algo')
+    out_dir = osp.join(build_dir, 'src/algo_test')
     shutil.rmtree(out_dir, ignore_errors=True)
-    shutil.copytree(osp.join(this_dir, "echint_algo"), out_dir)
+    shutil.copytree(osp.join(this_dir, "algo_test"), out_dir)
     # get py list
     py_list = glob.glob(osp.join(out_dir, '**', '*.py'), recursive=True)
     # py_list = [py for py in py_list if 'license_hook' not in py and '__pycache__' not in py]
@@ -53,29 +44,49 @@ def get_extensions():
     # register_hook
     return code_py_list, init_py_list
 
+
 BSO = False
 for arg in sys.argv[:]:
     if 'BSO' in arg:
         BSO = True
         sys.argv.remove(arg)
 
-exec(open('echint_algo/version.py').read())
+
+exec(open('algo_test/version.py').read())
 
 
 def get_packages():
-    return []
+    impl_list = glob.glob('./algo_test/**/impl', recursive=True)
+    pkgs = ['algo_test'] + [p[2:].replace(osp.sep, '.') for p in impl_list]
+    print('pkgs:', pkgs)
+    return pkgs
+
 
 def get_package_data():
-    return {}
+    impl_list = glob.glob('./algo_test/**/impl', recursive=True)
+    init_list = glob.glob('./algo_test/**/', recursive=True)
+    print(f'@@ init_py_list: {init_list}')
+    for p in init_list:
+        print(p)
+    models_list = glob.glob('./algo_test/**/models', recursive=True)
+    pkg_data = {"algo_test": [osp.join(p[14:], '*.so') for p in impl_list] +
+                [osp.join(p[14:], '*.pyd') for p in impl_list] +
+                [osp.join(p[14:], '__init__.py') for p in init_list if '__pycache__' not in p] +
+                [osp.join(p[14:], '*.dll') for p in impl_list] +
+                [osp.join(p[14:], '*.pth') for p in models_list]
+                }
+    print('## pkg_data:', pkg_data)
+    return pkg_data
+
 
 if BSO:
     code_py_list, init_py_list = get_extensions()
     pkg_data = get_package_data()
     cython_ext_modules = cythonize(code_py_list,
-                              build_dir="build",
-                              compiler_directives={'language_level': 3})
+                                   build_dir="build",
+                                   compiler_directives={'language_level': 3})
     setuptools.setup(
-        name="echint_algo",
+        name="algo_test",
         version=__version__,
         author="Allen",
         author_email="allen@turingvision.com",
@@ -96,7 +107,7 @@ if BSO:
     )
 else:
     setuptools.setup(
-        name="echint_algo",
+        name="algo_test",
         version=__version__,
         author="Allen",
         author_email="allen@turingvision.com",
@@ -113,6 +124,7 @@ else:
         ],
         zip_safe=False,
     )
+
 ```
 
 ```bash
