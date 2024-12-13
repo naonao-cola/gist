@@ -25,7 +25,7 @@ https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
 *.inl text eol=native
 ```
 
-windows 终端设置代理
+windows  终端设置代理
 
 set https_proxy=http://127.0.0.1:33210 http_proxy=http://127.0.0.1:33210 all_proxy=socks5://127.0.0.1:33210
 
