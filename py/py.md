@@ -173,12 +173,16 @@ print(example_path.suffix)  # .txt
 # 返回目录中多个扩展名列表
 example_paths = Path("D:\IDEA\ipoad_ywk\test\demo_pathlib\abc.tar.gz")
 print(example_paths.suffixes)  # ['.tar', '.gz']
+
+
 # 返回目录中最后一部分文件名，但不包含后缀
 example_path = Path("D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.txt")
 print(example_path.stem)  # demo
 # 返回目录中最后一部分文件名
 example_path = Path(r'D:\IDEA\ipoad_ywk\test\demo_pathlib\demo.txt')
 print(example_path.name)  # demo.txt
+
+
 # 替换目录最后一部分的文件名并返回一个新的路径
 new_path1 = example_path.with_name('def.txt')
 print(new_path1)  # D:\IDEA\ipoad_ywk\test\demo_pathlib\def.txt
@@ -203,6 +207,8 @@ print(example_path2)  # \Users\dongh\Documents\python_learn\pathlib_\file1.txt
 # 也可以利用Path.joinpath()
 example_path3 = Path('/Users/Anders/Documents/').joinpath('python_learn')
 print(example_path3)  # \Users\Anders\Documents\python_learn
+
+
 # #利用 / 可以创建子路径
 example_path4 = Path('/Users/Anders/Documents')
 print(example_path4)  # \Users\Anders\Documents
