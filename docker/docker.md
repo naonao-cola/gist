@@ -25,6 +25,45 @@ sudo service docker restart
 newgrp - docker
 ```
 
+## 配置nvidia-docker指南
+
+```bash
+##### https://blog.csdn.net/yiqiedouhao11/article/details/141392752
+
+# 1 运行 nvidia-smi 命令来检查 NVIDIA 驱动程序是否正确安装。
+
+# 2 对于 Docker 版本 19.03 及以上，使用 nvidia-container-toolkit 替代旧的 nvidia-docker2。
+distribution=$(. /etc/os-release;echo $ID$VERSION_ID)
+curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | sudo apt-key add -
+curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | sudo tee /etc/apt/sources.list.d/nvidia-docker.list
+sudo apt-get update
+sudo apt-get install -y nvidia-container-toolkit
+sudo systemctl restart docker
+
+# 3 编辑 Docker 的配置文件 daemon.json，通常位于 /etc/docker/ 目录。
+
+{
+  "default-runtime": "nvidia",
+  "runtimes": {
+    "nvidia": {
+      "path": "nvidia-container-runtime",
+      "runtimeArgs": []
+    }
+  }
+}
+
+# 4 每次修改 daemon.json 后，都需要重启 Docker 服务。
+
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+# 5 运行 docker info 命令，检查输出中是否有 NVIDIA GPU 支持的信息
+docker info | grep -i nvidia
+
+
+```
+
+
 ---
 
 ## docker
