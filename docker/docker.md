@@ -29,6 +29,7 @@ newgrp - docker
 
 ```bash
 ##### https://blog.csdn.net/yiqiedouhao11/article/details/141392752
+##### https://www.cnblogs.com/li508q/p/18444582
 
 # 1 运行 nvidia-smi 命令来检查 NVIDIA 驱动程序是否正确安装。
 
