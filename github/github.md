@@ -591,6 +591,59 @@ jobs:
 
     https://github.com/Tencent/ncnn
 
+    形态学库Clipper2
+    https://github.com/AngusJohnson/Clipper2.git
+
+    co_async协程库
+    https://github.com/archibate/co_async.git
+
+    cpp hhtplib库
+    https://github.com/yhirose/cpp-httplib
+
+    CUDA 学习
+    https://github.com/Tony-Tan/CUDA_Freshman.git
+
+    https://github.com/NVIDIA/cuda-samples
+
+    Imggui的python版本
+    https://github.com/hoffstadt/DearPyGui.git
+
+    dlib图像处理库
+    https://github.com/davisking/dlib.git
+
+    fastai的文档
+    https://github.com/fastai/fastbook.git
+
+    glm的仓库
+    https://github.com/THUDM/GLM-4.git
+
+    lightning-hydra-template 模板仓库
+    https://github.com/ashleve/lightning-hydra-template.git
+
+    hydra仓库
+    https://gitee.com/mirrors_trending/hydra.git
+
+    yolo v8 c++示例
+    https://github.com/UNeedCryDear/yolov8-opencv-onnxruntime-cpp
+
+    特征提取库
+    https://github.com/vlfeat/vlfeat.git
+
+    协程库c++20
+    https://github.com/avplayer/ucoro
+
+    yolo tensorrt
+    https://github.com/laugh12321/TensorRT-YOLO.git
+
+
+    从头构建神经网络
+    https://github.com/wang-xinyu/tensorrtx
+
+    pytorch 学习
+    https://github.com/labmlai/annotated_deep_learning_paper_implementations.git
+    https://github.com/mrdbourke/pytorch-deep-learning.git
+
+    https://github.com/liufei65536/mrdbourke_pytorch-deep-learning_cn.git
 ## 知识库
 
   Linux kernel (Arm64 嵌入式方向)知识过程中的自我积累
