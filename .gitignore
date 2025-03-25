@@ -2,6 +2,7 @@
 .xmake/
 build/
 ./history
+./obsidian
 # MacOS Cache
 .DS_Store
 

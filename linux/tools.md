@@ -225,6 +225,8 @@ sudo tldr --update
 
 ## frp 部署
 
+
+
 1、从github 下载，解压下载的压缩包。
 
 2、将frpc 复制到内网服务所在的机器上。
@@ -239,6 +241,7 @@ sudo tldr --update
 使用systemd来操作
 
 ```bash
+## 参考链接 https://www.xbfast.com/22/
 # 创建服务文件
 sudo vim /etc/systemd/system/frps.service
 ```
@@ -464,6 +467,532 @@ o            # 在当前窗口中选择下一面板
 Alt+o        # 逆时针旋转当前窗口的面板
 Ctrl+o        # 顺时针旋转当前窗口的面板
 ```
+
+
+## 字符及文件处理 grep/find/awk/xargs
+### 1 grep
+`grepgrep [选项] 'pattern' 文件...`
+1.1 常用选项-I：用于排除grep中的二进制文件
+-i：忽略大小写。
+-r：递归搜索目录及其子目录。
+-n：显示匹配行的行号。
+-v：显示不匹配的行。
+-l：只显示匹配的文件名，而不显示匹配的行。
+-w：只匹配整个单词，而不是部分单词。
+-E：使用扩展正则表达式。
+-F：将模式视为固定字符串，而不是正则表达式。
+-A: 显示匹配行之后的几行。
+-B：显示匹配行之前的几行。
+-C：显示匹配行前后各几行。
+-c: 统计所有每个文件匹配的行数；–不好用，实际用处不大；
+-a：将二进制文件视为文本文件进行搜索
+–color=auto: 高亮显示该字符串；一般常用：alias grep ‘grep --color=auto’
+–exclude: 排除特定文件。
+–exclude-dir 排除特定目录。个人对我来说最常用的就是：grep -Inr “pattern”
+
+1.2 常见用法demo
+```bash
+# 1 在文件中基本查找
+grep "pattern" file.txt
+# 2 递归搜索目录中的所有文件
+grep -r "pattern" directory/
+# 3 忽略大小写
+grep -i "pattern" file.txt
+# 4 显示匹配的行号：
+grep -n "pattern" file.txt
+# 5 显示不匹配的行
+grep -v "pattern" file.txt
+# 6 只显示匹配的文件名
+grep -l "pattern" file.txt
+# 7 使用扩展正则表达式
+grep -E "pattern1|pattern2" file.txt
+# 8 将pattern看为固定字符串
+grep -F "pattern" file.txt
+# 9 统计匹配行数
+grep -c 'pattern' filename.txt
+# 10 高亮显示该字符串
+grep --color=auto 'pattern' filename.txt
+# 11 匹配整个单词
+grep -w 'word' filename.txt
+# 12 排除特定文件
+grep -r --exclude='*.log' 'pattern' 
+# 13 排除特定目录
+grep -r --exclude-dir={dir1,dir2} 'pattern' /path/to/directory/
+# 14 搜素匹配并显示之后几行
+grep -A 3 'pattern' filename.txt
+grep -B 3 'pattern' filename.txt
+grep -C 3 'pattern' filename.txt
+```
+### 2 find
+`find [路径] [选项] [表达式]`
+
+2.1 常用选项-name：按文件名搜索。
+-type：按文件类型搜索（如 f 表示普通文件，d 表示目录）。
+-size：按文件大小搜索（如 +10M 表示大于10MB的文件）。
+-mtime：按文件修改时间搜索（如 -5 表示5天内修改过的文件）。
+-exec：对搜索到的文件执行指定的命令。
+2.2 常见用法demo
+
+```bash
+# 1 按文件名搜索
+find ./ -name "filename.txt"
+find ./ -iname "filename.txt" # 忽略大小写文件名
+# 2 按文件类型搜素
+find ./ -type f # 仅搜索文件
+find ./ -type d # 仅搜素目录
+find ./ -type l # 仅搜素符号链接
+# 3 按文件大小搜素
+find ./ -size +10M
+find ./ -size -1k
+# 4 按文件修改时间搜索
+find ./ -mtime -5
+find ./ -mtime +30
+# 5 按文件权限模式搜索
+find ./ -perm /644
+# 6 按用户名搜素
+find ./ -user username
+find ./ -group groupname
+
+
+#!/bin/bash
+
+# 查找并打印所有 .txt 文件
+echo "Finding all .txt files:"
+find . -name "*.txt"
+
+# 查找并删除所有 .tmp 文件
+echo "Deleting all .tmp files:"
+find . -name "*.tmp" -delete
+
+# 查找并压缩所有 .log 文件
+echo "Compressing all .log files into logs.tar.gz:"
+find . -name "*.log" -exec tar -czvf logs.tar.gz {} +
+
+# 查找并重命名所有 .bak 文件为 .bak.old
+echo "Renaming all .bak files to .bak.old:"
+find . -name "*.bak" -exec mv {} {}.old \;
+
+# 查找并统计大于 1MB 的文件数量
+echo "Counting files larger than 1MB:"
+find . -size +1M | wc -l
+
+# 查找并列出最近一周内修改过的文件
+echo "Listing files modified in the last week:"
+find . -mtime -7
+
+```
+2.3 组合用法
+```bash
+# -exec: 对找到的文件执行命令
+find . -name "*.txt" -exec cat {} \;
+# -delete: 删除找到的文件
+find . -name "*.tmp" -delete
+
+# 组合条件
+find . -type f -and -name "*.txt"
+find . -type f -or -type d
+find . -type f -not -name "*.log"
+
+```
+### 3 xargs
+用于将标准输入转换为命令行参数。
+`command | xargs [选项] [命令]`
+command：产生标准输出的命令。
+[选项]：控制 xargs 的行为。
+命令：要执行的命令及其参数。3.1 常用选项-I：指定一个替换字符串，用于在命令中替换输入的参数。
+-n：指定每次传递给命令的参数数量。
+-P：指定并行执行的进程数。
+-r：如果输入为空，则不执行命令。
+-t：在执行命令之前，先打印出命令
+-p；执行命令前询问
+-t: 显示即将执行的命令
+
+3.2 常见用法demo
+
+```bash
+# 1 -p：在执行每个命令前提示用户确认
+find . -name "*.txt" | xargs -p rm
+
+# 2 -a file：从文件中读取输入，而不是标准输入
+xargs -a filename.txt command
+
+# 3 -t：显示即将执行的命令
+find . -name "*.txt" | xargs -t rm
+
+# 4 -I replace-str：将输入中的每一行替换为 replace-str 中的 {}
+find . -name "*.txt" | xargs -I {} cp {} /backup/{}
+
+# 5 -n max-args：每次传递的最大参数数量
+find . -name "*.txt" | xargs -n 5 rm
+
+# 6 使用 -r 选项避免在输入为空时执行命令
+echo "" | xargs -r rm
+
+# 7 使用 -t 选项在执行命令之前打印命令
+echo "file1.txt file2.txt file3.txt" | xargs -t rm
+
+# 8 -d delim：指定输入项之间的分隔符（默认为空白字符
+echo "file1.txt|file2.txt" | xargs -d '|' rm
+
+# 9 -0：输入项之间用 NUL 字符分隔（通常与 find -print0 结合使用
+find . -name "*.txt" -print0 | xargs -0 rm
+
+# 10 -P max-procs：同时运行的最大进程数
+find . -name "*.txt" | xargs -P 4 gzip
+
+# 11 -E eof-str：指定输入结束字符串
+echo "file1.txt\nfile2.txt\nEOF" | xargs -E EOF rm
+
+# 12 -r 或 --no-run-if-empty：如果没有输入，则不执行命令
+find . -name "*.log" | xargs -r rm
+
+示例1：基本搜索并删除文件
+find . -name "*.tmp" | xargs rm
+这将删除所有 .tmp 文件。
+
+示例2：查找并复制文件到另一个目录
+find . -name "*.jpg" | xargs -I {} cp {} /backup/pictures/
+这将把所有 .jpg 文件复制到 /backup/pictures/ 目录中。
+
+示例3：查找并压缩文件
+find . -name "*.log" | xargs tar -czvf logs.tar.gz
+这将把所有 .log 文件压缩成 logs.tar.gz。
+
+示例4：限制每次传递的参数数量
+find . -name "*.txt" | xargs -n 2 rm
+这将每次传递两个 .txt 文件给 rm 命令。
+
+示例5：使用 -I 替换占位符
+find . -name "*.bak" | xargs -I {} mv {} {}.old
+这将把所有 .bak 文件重命名为 .bak.old。
+
+示例6：并发执行命令
+find . -name "*.jpg" | xargs -P 4 gzip
+这将并发地对所有 .jpg 文件进行压缩，最多同时运行 4 个 gzip 进程。
+
+示例7：使用 -0 处理包含空格的文件名
+find . -name "*.txt" -print0 | xargs -0 rm
+这将正确处理包含空格或特殊字符的文件名。
+
+示例8：使用 -p 提示用户确认
+find . -name "*.log" | xargs -p rm
+这将在删除每个 .log 文件前提示用户确认。
+
+示例9：使用 -t 显示即将执行的命令
+find . -name "*.txt" | xargs -t rm
+这将显示即将执行的 rm 命令。
+
+#综合示例
+
+#!/bin/bash
+
+# 查找并删除所有 .tmp 文件
+echo "Deleting all .tmp files:"
+find . -name "*.tmp" | xargs -p rm
+
+# 查找并复制所有 .jpg 文件到 backup 目录
+echo "Copying all .jpg files to /backup/pictures/"
+find . -name "*.jpg" | xargs -I {} cp {} /backup/pictures/
+
+# 查找并压缩所有 .log 文件
+echo "Compressing all .log files into logs.tar.gz:"
+find . -name "*.log" | xargs tar -czvf logs.tar.gz
+
+# 查找并重命名所有 .bak 文件为 .bak.old
+echo "Renaming all .bak files to .bak.old:"
+find . -name "*.bak" | xargs -I {} mv {} {}.old
+
+# 查找并限制每次传递 2 个参数给 rm 命令
+echo "Removing .txt files in batches of 2:"
+find . -name "*.txt" | xargs -n 2 rm
+
+# 查找并处理包含空格的文件名
+echo "Handling filenames with spaces:"
+find . -name "* *" -print0 | xargs -0 rm
+
+# 查找并显示即将执行的命令
+echo "Displaying commands before execution:"
+find . -name "*.log" | xargs -t rm
+
+```
+### 4 awk
+`awk [选项] '模式 { 操作 }' 文件名`
+[选项]：控制 awk 的行为。
+模式：定义要处理的行。
+操作：对匹配的行执行的操作。
+文件…：要处理的文件列表。常用选项
+-F：指定字段分隔符。
+-v：定义变量。
+-f：从文件中读取 awk 脚本
+
+```bash
+# 4.1 基本选项
+# -F fs 或 --field-separator=fs：指定字段分隔符。
+awk -F, '{print $1}' file.csv
+
+# -v var=value：设置 awk 变量。
+awk -v name="John" '{print "Hello, " name}' file.txt
+
+# -f scriptfile：从文件中读取 awk 脚本。
+awk -f script.awk file.txt
+
+# 使用条件判断
+awk '$3 > 100 { print $1 }' file.txt
+
+# 使用变量
+awk -v var="pattern" '$0 ~ var { print $0 }' file.txt
+
+# 从文件中读取 awk 脚本
+awk -f script.awk file.txt
+
+# 4.2 内置函数
+# print：打印内容。
+awk '{print $1, $2}' file.txt
+
+# length(s)：返回字符串 s 的长度。
+awk '{print length($0)}' file.txt
+
+# substr(s, m, n)：返回字符串 s 从位置 m 开始的 n 个字符。
+awk '{print substr($1, 1, 3)}' file.txt
+
+# split(s, a, fs)：将字符串 s 按分隔符 fs 分割到数组 a 中。
+awk '{split($1, a, "-"); print a[1], a[2]}' file.txt
+
+#match(s, r)：在字符串 s 中匹配正则表达式 r。
+awk '{if (match($1, /pattern/)) print $0}' file.txt
+
+# 4.3 内置变量
+#     FS：字段分隔符（默认为空白字符）。
+#     OFS：输出字段分隔符（默认为空白字符）。
+#     RS：记录分隔符（默认为换行符）。
+#     ORS：输出记录分隔符（默认为换行符）。
+#     NF：当前记录中的字段数。
+#     NR：已处理的记录数（行号）。
+#     FILENAME：当前处理的文件名
+# 按字段分隔符分割并打印特定字段
+awk -F, '{print $1, $3}' data.txt
+
+# 使用内置变量
+awk '{print NR, FILENAME, NF, $0}' data.txt
+
+#计算总和
+awk '{print NR, FILENAME, NF, $0}' data.txt
+
+# 过滤特定条件
+awk -F, '$2 > 30 {print $1}' data.txt
+
+# 使用正则表达式
+awk '/Eng/' data.txt
+
+# 使用自定义变量
+awk -v prefix="Name:" '{print prefix, $1}' data.txt
+
+# 使用内置函数
+awk -F, '{print substr($1, 1, 3), length($1)}' data.txt
+
+# 处理多文件
+awk -F, '{print $1, $2}' data.txt more_data.txt
+
+# 使用脚本文件
+BEGIN {
+    FS=","
+    OFS="\t"
+    print "Name\tAge\tOccupation"
+}
+{
+    print $1, $2, $3
+}
+END {
+    print "Total records processed:", NR
+}
+
+# 4.4 综合示例
+#!/bin/bash
+
+# 打印每个员工的姓名和职业
+echo "Employee Names and Occupations:"
+awk -F, '{print $1, $3}' data.txt
+
+# 计算所有员工的平均年龄
+echo "Average Age:"
+awk -F, '{sum += $2; count++} END {print sum/count}' data.txt
+
+# 过滤出年龄大于30岁的员工
+echo "Employees older than 30:"
+awk -F, '$2 > 30 {print $1}' data.txt
+
+# 使用正则表达式查找包含 "Dev" 的职业
+echo "Employees with 'Dev' in their occupation:"
+awk '/Dev/' data.txt
+
+# 使用自定义变量前缀
+echo "Employees with custom prefix:"
+awk -v prefix="Name:" '{print prefix, $1}' data.txt
+
+# 使用内置函数处理字符串
+echo "First three letters of names and their lengths:"
+awk -F, '{print substr($1, 1, 3), length($1)}' data.txt
+
+# 处理多个文件
+echo "Data from multiple files:"
+awk -F, '{print $1, $2}' data.txt more_data.txt
+
+# 使用脚本文件进行复杂处理
+echo "Processed data using script.awk:"
+awk -f script.awk data.txt
+
+```
+### 5 sed 
+
+sed，全称 Stream Editor（流编辑器），它的核心思想是不打开文件，直接在命令行中修改、删除、替换文本，并且可以把修改后的结果输出到终端或保存到文件。
+`sed '指令' 文件`
+
+```bash
+# 1 替换文本（相当于 Ctrl+H）
+sed 's/旧内容/新内容/' 文件名
+s：表示 substitute（替换）
+/旧内容/新内容/：表示 将“旧内容”替换成“新内容”
+
+# 把 hello 替换成 hi,输出 hi world
+echo "hello world" | sed 's/hello/hi/'
+
+# 假设 file.txt 里有
+hello Alice，hello Alice's sister
+hello Bob, hello Bob's brother
+hello Charlie
+# 执行
+sed 's/hello/hi/' file.txt
+# 输出
+hi Alice，hello Alice's sister
+hi Bob, hello Bob's brother
+hi Charlie
+#这里只是打印出修改后的结果，但不会真正修改 file.txt 的内容。你只是看到终端里 hello 被替换成了 hi，但 file.txt本身没有发生任何变化。
+
+
+
+
+# 2️全局替换
+# 默认情况下，sed只替换每一行的第一个匹配项，如果想替换所有，要加 g（global）
+# 记住 g，否则只会替换每行的第一个匹配项！
+sed 's/hello/hi/g' file.txt
+# 输出
+hi Alice，hi Alice's sister
+hi Bob, hi Bob's brother
+hi Charlie
+
+
+
+# 3 直接修改文件
+# 默认 sed 不会改动原文件，只是把修改结果输出到终端 ,如果想真正改文件，需要加 -i
+# -i直接修改文件，没有撤销功能，误操作可能会导致数据丢失！
+sed -i 's/hello/hi/g' file.txt
+# 为了避免误操作导致数据丢失，推荐使用 -i.bak先创建文件备份，然后再修改
+sed -i.bak 's/hello/hi/g' file.txt
+
+
+
+# 4 删除某一行
+# N 代表 行号  d 代表 删除
+sed 'Nd' 文件名
+# 删除第 2 行
+sed '2d' file.txt
+# 删除最后一行 $ : 代表最后一行
+sed '$d' file.txt
+# 删除所有包含 Bob 的行
+sed '/Bob/d' file.txt
+# 删除所有空行 ^$ 代表空行，所以这条命令能删掉所有空白行！
+sed '/^$/d' file.txt
+# 删除前 N 行
+sed '1,5d' file.txt
+# 删除第 N 行到最后一行
+sed '2,$d' file.txt
+# 删除包含多个关键词的行  /error\|fail/ 👉 匹配 error 或 fail
+sed '/error\|fail/d' file.txt
+# 删除所有以字母开头的行
+sed '/^[a-zA-Z]/d' file.txt
+
+
+
+
+# 5 只显示某些行
+# N 代表 行号 p 代表 打印
+sed -n 'Np' 文件名
+# 打印第 2 行
+sed -n '2p' file.txt
+# 显示 2-4 行
+sed -n '2,4p' file.txt
+# 只显示匹配的行
+# -n 选项的作用是 关闭默认输出，只显示 p（print）匹配的内容。
+sed -n '/Bob/p' file.txt
+
+
+
+
+# 6 在指定行前/后插入文本
+# i 代表 insert，在某行前插入内容；a 代表 append，在某行后追加内容。
+#在第 2 行前插入 "Henry is comming"
+sed '2i\ Henry is comming' file.txt
+# 在第 3 行后插入 "David is comming"
+sed '3a\ David is comming' file.txt
+
+
+
+# 7 sed 其他常见操作
+# 修改某一行
+# 3c\ 表示修改第 3 行
+sed '3c\ This is a new line' file.txt
+# 提取包含数字的行
+sed -n '/[0-9]/p' file.txt
+#删除空格（去除所有行首和行尾空格）
+# ^[ \t]*// 👉 删除行首的空格和 Tab
+# [ \t]*$// 👉 删除行尾的空格和 Tab
+sed 's/^[ \t]*//;s/[ \t]*$//' file.txt
+# 删除 HTML 标签
+# <[^>]*> 👉 匹配 HTML 标签
+# s/...//g 👉 替换为空
+sed 's/<[^>]*>//g' file.html
+# 删除注释（# 或 // 开头的行）
+sed '/^#/d' config.txt   # 删除 # 开头的注释
+sed '/^\/\//d' code.cpp  # 删除 // 开头的注释
+
+
+
+# 8 sed -e 命令的使用
+# -e 选项的作用是在同一条 sed 命令中执行多个操作，可以替换、删除、插入等多种操作同时进行。
+# 依次执行多个替换
+sed -e 's/Alice/Jane/' -e 's/Bob/John/' file.txt
+#依次执行“删除 + 替换”
+sed -e '/^#/d' -e 's/error/ERROR/g' file.txt
+#结合 -e 实现多行插入
+sed -e '2i\ --- Start ---' -e '4a\ --- End ---' file.txt
+# -e 结合 -i 直接修改文件
+sed -i -e 's/foo/bar/g' -e 's/old/new/g' file.txt
+# -e 结合 -n 只显示匹配的结果
+sed -n -e '/error/p' -e '/fail/p' file.txt
+
+
+
+#9 sed 结合 find、grep、awk 等常见组合命令
+# 批量替换某个目录下所有 .txt 文件中的 hello为 hi
+# + 👉 批量执行，提高效率（比 \; 更快）
+find /path -type f -name "*.txt" -exec sed -i 's/hello/hi/g' {} +
+# sed + grep：只修改包含特定内容的行
+#只修改包含 "error" 的行，把 "failed" 替换为 "FAILED"
+grep "error" file.txt | sed 's/failed/FAILED/g'
+# sed + awk：精准修改特定列
+# 批量修改 CSV 文件的第 2 列，把 low 改成 LOW
+awk -F, '{ $2=gensub(/low/, "LOW", "g", $2); print }' OFS=, file.csv
+# sed + xargs：批量修改多个文件
+# 在多个 .log 文件里批量替换 "DEBUG" 为 "INFO"
+find /var/log -type f -name "*.log" | xargs sed -i 's/DEBUG/INFO/g'
+# sed + tee：边修改边输出
+# 把 config.conf 里的 "8080" 端口改成 "9090"，同时保存到 new_config.conf
+sed 's/8080/9090/g' config.conf | tee new_config.conf
+# sed + diff：对比修改前后的差异
+diff <(cat file.txt) <(sed 's/error/ERROR/g' file.txt)
+
+```
+
 
 ## vscode插件
 
