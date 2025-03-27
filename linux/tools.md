@@ -1054,7 +1054,40 @@ diff <(cat file.txt) <(sed 's/error/ERROR/g' file.txt)
 
 
 ## vscode插件
+### 快捷键
+```bash
 
+
+查找：Ctrl + F
+替换：Ctrl + H
+
+选定多个相同的单词：Ctrl+D 取消选择：Ctrl+U
+
+多行光标 - Ctrl + Alt + 方向键(上下左右)
+
+删除当前行 - Ctrl + Shift + K
+
+快速复杂一行：shift+alt+ 下箭头(上箭头）
+
+上下移动代码行：Alt + Up，Alt + Down
+
+单行注释 ：Ctrl + /
+
+块注释：Alt + Shift + A
+
+打开关闭侧边栏 - Ctrl + B
+
+关闭文件 - Ctrl + W
+
+使用Ctrl + Tab或Ctrl + Shift + Tab：按下Ctrl 键不放，连续按Tab键可以快速切换到下一个或上一个文件。
+
+打开VS Code搜索栏：使用Ctrl+P打开VS Code搜索栏，可快速查找文件并导航项目, 搜索文件
+
+打开新终端：Ctrl+Shift+` 创建一个新的命令框
+
+打开终端：Ctrl+` 只是打开命令框，不创建新的命令框，可以操作git等
+
+```
 ### koroFileHeader注释插件
 
 ```bash
