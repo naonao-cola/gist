@@ -428,6 +428,18 @@ sudo apt-get --purge remove "*cuda*" "*cublas*" "*cufft*" "*cufile*" "*curand*" 
 sudo apt-get --purge remove "*nvidia*" "libxnvctrl*"
 #To clean up the uninstall:
 sudo apt-get autoremove
+
+## 驱动更新
+# https://cn.linux-console.net/?p=13571
+#要查找 Ubuntu 计算机当前安装的 NVIDIA GPU 驱动程序的版本号
+nvidia-smi
+apt list --installed nvidia-driver-*
+#检查是否有较新版本的 NVIDIA 驱动程序可用
+sudo apt search '^nvidia-driver-*'
+#从命令行更新到最新版本的 NVIDIA 驱动程序
+sudo apt install nvidia-driver-530
+#为了使更改生效，请使用以下命令重新启动计算机
+nvidia-smi
 ```
 
 ## tmux
