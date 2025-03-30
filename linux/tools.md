@@ -314,8 +314,8 @@ Group=service-group                    # 指定运行组（可选）
 WorkingDirectory=/path/to/working_dir  # 工作目录（可选）
 ExecStart=/path/to/your/command        # 启动命令（绝对路径）
 Restart=always                         # 自动重启策略
-RestartSec=5s                          # 重启间隔（默认100ms）
-StartLimitInterval=0                   # 禁用重启频率限制
+RestartSec=5                          # 重启间隔（默认100ms）
+StartLimitIntervalSec=0                   # 禁用重启频率限制
 Environment="KEY=value"                # 环境变量（可选）
 StandardOutput=file:/var/log/your-service.log  # 日志输出到文件
 StandardError=inherit                  # 错误输出继承（可选）
@@ -335,7 +335,13 @@ systemctl status your-service.service
 sudo systemctl stop your-service.service
 systemctl status your-service.service  # 5秒后应显示 active (running)
 
+### 注意事项
 
+##输入 systemctl stop frps时服务是不会重启的，所以如果有参数需要修改，直接运行stop指令改完再start就可以了
+systemctl status frps | grep PID
+sudo kill 44532
+systemctl status rot13 | grep PID
+通过杀掉进程的方法，测试可以自动重启。
 ```
 Cron 定时任务 + Shell 脚本
 
