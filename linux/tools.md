@@ -296,9 +296,100 @@ remotePort = 6000
 连接方式
 
 ```bash
+#服务完整版，自动重启，这个貌似不太灵敏
 # 需要在服务器端开启 7000  6000 的端口，在防火墙里设置
 # x.x.x.x 表示服务器公网IP ， test 表示内网用户名
 ssh -o Port=6000 test@x.x.x.x
+```
+```bash
+[Unit]
+Description=Your Service Description   # 服务描述
+After=network.target                   # 定义启动依赖（如需要网络）
+Requires=network.target                # 强制依赖项（若依赖失败，服务不会启动）
+
+[Service]
+Type=simple                            # 服务类型（simple/forking等）
+User=service-user                      # 指定运行用户（可选）
+Group=service-group                    # 指定运行组（可选）
+WorkingDirectory=/path/to/working_dir  # 工作目录（可选）
+ExecStart=/path/to/your/command        # 启动命令（绝对路径）
+Restart=always                         # 自动重启策略
+RestartSec=5s                          # 重启间隔（默认100ms）
+StartLimitInterval=0                   # 禁用重启频率限制
+Environment="KEY=value"                # 环境变量（可选）
+StandardOutput=file:/var/log/your-service.log  # 日志输出到文件
+StandardError=inherit                  # 错误输出继承（可选）
+
+[Install]
+WantedBy=multi-user.target             # 系统启动时自动运行
+
+```
+```bash
+# 重新加载 Systemd 配置
+sudo systemctl daemon-reload
+# 启动服务并设置开机自启
+sudo systemctl enable --now your-service.service
+# 检查服务状态
+systemctl status your-service.service
+# 停止服务
+sudo systemctl stop your-service.service
+systemctl status your-service.service  # 5秒后应显示 active (running)
+
+
+```
+Cron 定时任务 + Shell 脚本
+
+```bash
+# 新建脚本文件（例如 /opt/scripts/check_service.sh
+sudo mkdir -p /opt/scripts
+sudo nano /opt/scripts/check_service.sh
+# 脚本内容
+#!/bin/bash
+
+SERVICE_NAME="your-service"      # 要监控的服务名称
+LOG_FILE="/var/log/service_monitor.log"  # 日志文件路径
+
+# 检查服务是否活动（running）
+if ! systemctl is-active --quiet "$SERVICE_NAME"; then
+  # 记录日志并尝试启动服务
+  echo "[$(date '+%Y-%m-%d %H:%M:%S')] 服务未运行，正在启动..." >> "$LOG_FILE"
+  sudo systemctl start "$SERVICE_NAME" >> "$LOG_FILE" 2>&1
+
+  # 检查启动是否成功
+  if systemctl is-active --quiet "$SERVICE_NAME"; then
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] 服务启动成功" >> "$LOG_FILE"
+  else
+    echo "[$(date '+%Y-%m-%d %H:%M:%S')] 服务启动失败！" >> "$LOG_FILE"
+  fi
+fi
+# 赋予脚本执行权限
+sudo chmod +x /opt/scripts/check_service.sh
+# Cron 定时任务
+# 编辑当前用户的 Cron
+crontab -e
+#添加以下行
+* * * * * /opt/scripts/check_service.sh
+# 每 5 分钟检查一次：*/5 * * * *
+# 每小时检查一次：0 * * * *
+# 保存并退出编辑器
+
+# 配置免密执行 systemctl
+# 安全编辑 sudoers 文件
+sudo visudo
+# 添加以下行（替换 your_username 为实际用户名和 your-service）
+your_username ALL=(ALL) NOPASSWD: /bin/systemctl start your-service
+your_username ALL=(ALL) NOPASSWD: /bin/systemctl is-active your-service
+# 保存并退出
+# 测试：手动触发脚本
+/opt/scripts/check_service.sh
+#查看日志
+tail -f /var/log/service_monitor.log
+#测试服务崩溃场景
+sudo systemctl stop your-service
+# 等待 1 分钟后检查服务是否自动启动
+systemctl status your-service
+
+
 ```
 
 ## marktext
