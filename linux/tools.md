@@ -374,10 +374,12 @@ sudo chmod +x /opt/scripts/check_service.sh
 # 编辑当前用户的 Cron
 crontab -e
 #添加以下行
-* * * * * /opt/scripts/check_service.sh
+* * * * * bash /opt/scripts/check_service.sh
 # 每 5 分钟检查一次：*/5 * * * *
 # 每小时检查一次：0 * * * *
 # 保存并退出编辑器
+# 重新载入
+sudo service cron reload
 
 # 配置免密执行 systemctl
 # 安全编辑 sudoers 文件
