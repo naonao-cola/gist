@@ -42,15 +42,30 @@ sudo apt-get install -y nvidia-container-toolkit
 sudo systemctl restart docker
 
 # 3 编辑 Docker 的配置文件 daemon.json，通常位于 /etc/docker/ 目录。
+# docker 镜像
+# https://docker.xuanyuan.me/
+# https://www.cnproxy.top/docker
 
 {
   "default-runtime": "nvidia",
-  "runtimes": {
-    "nvidia": {
-      "path": "nvidia-container-runtime",
-      "runtimeArgs": []
+    "experimental": true,
+    "registry-mirrors": [
+        "https://docker.rainbond.cc",
+        "https://docker.1panel.live",
+        "https://docker.m.daocloud.io",
+        "https://docker.xuanyuan.me",
+        "https://docker.1ms.run",
+        "https://docker.m.daocloud.io",
+        "https://xdark.top",
+        "https://docker.1ms.run",
+        "https://docker.xuanyuan.me"
+    ],
+    "runtimes": {
+        "nvidia": {
+            "args": [],
+            "path": "nvidia-container-runtime"
+        }
     }
-  }
 }
 
 # 4 每次修改 daemon.json 后，都需要重启 Docker 服务。
