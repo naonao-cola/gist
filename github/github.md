@@ -386,6 +386,19 @@ git push origin :refs/tags/v0.9
     git push 远程仓库名 远程分支名 --force
 
 ---
+
+## github 代理
+
+```bash
+https://github.moeyy.xyz/
+
+https://gh-proxy.com/
+
+
+https://docker.xuanyuan.me/
+```
+
+
 ## 提pr
 
 先fork别人的项目，本地修改上传到自己的仓库，再向原始仓库提pr,参考链接:
