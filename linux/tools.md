@@ -257,6 +257,9 @@ Wants = network.target
 Type = simple
 # 启动frps的命令，需修改为您的frps的安装路径
 ExecStart = /path/to/frps -c /path/to/frps.toml
+Restart=always
+RestartSec=5
+StartLimitInterval=0
 
 [Install]
 WantedBy = multi-user.target
