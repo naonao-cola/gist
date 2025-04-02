@@ -389,13 +389,31 @@ git push origin :refs/tags/v0.9
 
 ## github 代理
 
-```bash
+```
 https://github.moeyy.xyz/
+
+#在前面加入  https://github.moeyy.xyz/
+分支源码：https://github.moeyy.xyz/https://github.com/moeyy/project/archive/master.zip
+release源码：https://github.moeyy.xyz/https://github.com/moeyy/project/archive/v0.1.0.tar.gz
+release文件：https://github.moeyy.xyz/https://github.com/moeyy/project/releases/download/v0.1.0/example.zip
+分支文件：https://github.moeyy.xyz/https://github.com/moeyy/project/blob/master/filename
+Raw：https://github.moeyy.xyz/https://raw.githubusercontent.com/moeyy/project/archive/master.zip
+使用Git: git clone https://github.moeyy.xyz/https://github.com/moeyy/project
+
+
 
 https://gh-proxy.com/
 
+# 原始链接 https://raw.githubusercontent.com/username/repo/main/file.txt
+# 代理链接 https://gh-proxy.com/raw.githubusercontent.com/username/repo/main/file.txt
+# 代理链接 https://gh-proxy.com/https://raw.githubusercontent.com/username/repo/main/file.txt
 
 https://docker.xuanyuan.me/
+
+# 原始链接 https://raw.githubusercontent.com/username/repo/main/file.txt
+# 代理链接 (方法 1) https://github-file-download-proxy.hacks.tools/raw.githubusercontent.com/username/repo/main/file.txt
+# 代理链接 (方法 2) https://github-file-download-proxy.hacks.tools/https://raw.githubusercontent.com/username/repo/main/file.txt
+
 ```
 
 
