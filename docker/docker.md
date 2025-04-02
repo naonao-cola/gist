@@ -78,7 +78,23 @@ docker info | grep -i nvidia
 
 
 ```
+```bash
+## 小笔记
 
+docker run -itd  --gpus all --name ubuntu_x86 -v /home/y/proj/:/home/proj/ -v /usr/bin/qemu-aarch64-static:/usr/bin/qemu-aarch64-static -p 31222:22 -p 31230-31299:31230-31299 -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all ubuntu
+
+docker run -itd  --gpus all --name pytorch25 -v /home/y/proj/:/home/proj/  -v /opt/:/data/ -v /home/y/ALG/lf/:/home/y/ALG/lf/ -p 10000:10000  -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all pytorch/pytorch:2.5.0-cuda12.4-cudnn9-devel
+
+docker run -itd  --gpus all --privileged --name rknn_test -v /home/y/proj/:/home/proj/  -v /opt/:/data/ -v /home/y/ALG/lf/:/home/y/ALG/lf/ -p 10001:10001  -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all rknn_toolkit2_cp38:v1
+
+docker run -itd   --name net_test --net=host -v /home/y/proj/:/home/proj/   -p 10003:10003   ubuntu
+
+docker run -itd  --gpus all --name pytorch25 --network=host -v /home/y/proj/:/home/proj/  -v /opt/:/data/ -v /home/y/ALG/lf/:/home/y/ALG/lf/  -e NVIDIA_DRIVER_CAPABILITIES=compute,utility -e NVIDIA_VISIBLE_DEVICES=all pytorch/pytorch:2.5.0-cuda12.4-cudnn9-devel
+
+#pull 镜像
+docker pull pytorch/pytorch:2.6.0-cuda12.6-cudnn9-devel
+
+```
 
 ---
 
