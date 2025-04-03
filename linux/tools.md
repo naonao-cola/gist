@@ -402,6 +402,27 @@ systemctl status your-service
 
 
 ```
+## 服务器
+
+```bash
+## 查看服务器公网 ip
+wget -qO- https://ipinfo.io/ip
+curl https://ipinfo.io/ip
+curl ifconfig.me
+# 查看服务器有几个网卡
+# 物理网卡通常以 enpXsY 或 ethX 开头，虚拟网卡（如 Docker 网桥）通常以 docker0 或其他名称开头。
+ip link show
+ifconfig -a
+
+# 物理网卡，每行表示一个物理网卡。
+# 逻辑网卡数量: 使用 ip link show 或 ifconfig -a
+# 物理网卡数量: 使用 lspci | grep -i ethernet 或 sudo lshw -class network
+lspci | grep -i ethernet
+sudo lshw -class network
+# 运行以下命令检查服务器是否能访问互联网
+ping 8.8.8.8
+```
+
 
 ## marktext
 
