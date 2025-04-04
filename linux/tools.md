@@ -421,6 +421,9 @@ lspci | grep -i ethernet
 sudo lshw -class network
 # 运行以下命令检查服务器是否能访问互联网
 ping 8.8.8.8
+
+ss -lntup|grep 1194    #检查端口
+ip a s tun0    #查看网段
 ```
 
 
