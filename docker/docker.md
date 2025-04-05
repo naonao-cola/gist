@@ -602,6 +602,7 @@ services:
     image: nvidia/cuda:11.7.1-base-ubuntu20.04
     command: /bin/bash
     restart: always
+    # restart: unless-stopped
     container_name: test
     environment:
       - TZ=Asia/Shanghai
@@ -613,10 +614,11 @@ services:
       resources:
         reservations:
           devices:
-          - driver: nvidia
-            count: all
-            capabilities: [gpu]
+          - driver: “nvidia”
+            count: ”all“
+            capabilities: [“gpu”]
     tty: true
+    stdin_open: true
     volumes:
       - "/home/snd/sbg_volume:/home/sbg_folder"
       - "/home/snd/sbg_volume/inspection/start.sh:/start.sh"
