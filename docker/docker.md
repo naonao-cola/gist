@@ -586,6 +586,8 @@ RUN rm -rf /tmp/CMake
 启用gpu 容器
 参考链接：  https://runebook.dev/zh/docs/docker/compose/gpu-support/index
 
+https://www.cnblogs.com/dan-baishucaizi/p/15503578.html
+
 docker-compose 需要升级
 避免自动退出，需要加 tty: true
 ```bash
