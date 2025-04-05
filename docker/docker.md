@@ -45,7 +45,7 @@ sudo systemctl restart docker
 # docker 镜像
 # https://docker.xuanyuan.me/
 # https://www.cnproxy.top/docker
-
+# https://www.cnblogs.com/dechinphy/p/18350332/docker-pull-continue
 {
   "default-runtime": "nvidia",
     "experimental": true,
@@ -65,7 +65,11 @@ sudo systemctl restart docker
             "args": [],
             "path": "nvidia-container-runtime"
         }
-    }
+    }，
+    "features": {
+    "buildkit": true,
+    "containerd-snapshotter": true
+  }
 }
 
 # 4 每次修改 daemon.json 后，都需要重启 Docker 服务。
