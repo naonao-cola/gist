@@ -414,6 +414,13 @@ https://docker.xuanyuan.me/
 # 代理链接 (方法 1) https://github-file-download-proxy.hacks.tools/raw.githubusercontent.com/username/repo/main/file.txt
 # 代理链接 (方法 2) https://github-file-download-proxy.hacks.tools/https://raw.githubusercontent.com/username/repo/main/file.txt
 
+# 参考  https://blog.csdn.net/weixin_42693941/article/details/143583673
+#查询配置
+git config --global --list
+#设置配置
+git config --global url."https://hub.nuaa.cf".insteadOf https://github.com
+#取消配置
+git config --global --unset url."https://hub.nuaa.cf".insteadOf
 ```
 
 
