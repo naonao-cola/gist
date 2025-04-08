@@ -45,7 +45,7 @@ sudo systemctl restart docker
 # docker 镜像
 # https://docker.xuanyuan.me/
 # https://www.cnproxy.top/docker
-
+# https://www.cnblogs.com/dechinphy/p/18350332/docker-pull-continue
 {
   "default-runtime": "nvidia",
     "experimental": true,
@@ -65,7 +65,11 @@ sudo systemctl restart docker
             "args": [],
             "path": "nvidia-container-runtime"
         }
-    }
+    }，
+    "features": {
+    "buildkit": true,
+    "containerd-snapshotter": true
+  }
 }
 
 # 4 每次修改 daemon.json 后，都需要重启 Docker 服务。
@@ -586,6 +590,8 @@ RUN rm -rf /tmp/CMake
 启用gpu 容器
 参考链接：  https://runebook.dev/zh/docs/docker/compose/gpu-support/index
 
+https://www.cnblogs.com/dan-baishucaizi/p/15503578.html
+
 docker-compose 需要升级
 避免自动退出，需要加 tty: true
 ```bash
@@ -596,6 +602,7 @@ services:
     image: nvidia/cuda:11.7.1-base-ubuntu20.04
     command: /bin/bash
     restart: always
+    # restart: unless-stopped
     container_name: test
     environment:
       - TZ=Asia/Shanghai
@@ -607,10 +614,11 @@ services:
       resources:
         reservations:
           devices:
-          - driver: nvidia
-            count: all
-            capabilities: [gpu]
+          - driver: “nvidia”
+            count: ”all“
+            capabilities: [“gpu”]
     tty: true
+    stdin_open: true
     volumes:
       - "/home/snd/sbg_volume:/home/sbg_folder"
       - "/home/snd/sbg_volume/inspection/start.sh:/start.sh"

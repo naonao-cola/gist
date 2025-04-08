@@ -402,6 +402,39 @@ systemctl status your-service
 
 
 ```
+## 服务器
+
+```bash
+## 查看服务器公网 ip
+wget -qO- https://ipinfo.io/ip
+curl https://ipinfo.io/ip
+curl ifconfig.me
+# 查看服务器有几个网卡
+# 物理网卡通常以 enpXsY 或 ethX 开头，虚拟网卡（如 Docker 网桥）通常以 docker0 或其他名称开头。
+ip link show
+ifconfig -a
+
+# 物理网卡，每行表示一个物理网卡。
+# 逻辑网卡数量: 使用 ip link show 或 ifconfig -a
+# 物理网卡数量: 使用 lspci | grep -i ethernet 或 sudo lshw -class network
+lspci | grep -i ethernet
+sudo lshw -class network
+# 运行以下命令检查服务器是否能访问互联网
+ping 8.8.8.8
+
+ss -lntup|grep 1194    #检查端口
+ip a s tun0    #查看网段
+
+## 将服务器端口映射到本地端口
+ssh -CNgv -L 6006:127.0.0.1:6006 用户名@服务器域名 -p 端口，
+ssh -CNgv -L 6006:127.0.0.1:6006 root@50.72.60.157 -p 22
+# 如果你希望SSH命令在后台运行，可以结合使用-f和-N参数：
+ssh -f -N -L 6006:127.0.0.1:6006 用户名@服务器域名 -p 端口
+-f 参数允许SSH在后台运行。
+
+-N 参数告诉SSH不要执行远程命令，仅设置端口映射。
+```
+
 
 ## marktext
 
