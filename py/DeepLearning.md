@@ -1439,4 +1439,12 @@ ubuntu 加速下载
 ```bash
 export OLLAMA_MIRROR="https://ghproxy.cn/https://github.com/ollama/ollama/releases/latest/download"
 curl -fsSL https://ollama.com/install.sh | sed "s|https://ollama.com/download|$OLLAMA_MIRROR|g" | sh
+
+## 后台运行
+nohup ollama run <model_name> > ollama.log 2>&1 &
+
+
+## Linux/macOS  修改端口
+export OLLAMA_HOST="0.0.0.0:新端口（如 8080）"
+ollama serve
 ```
