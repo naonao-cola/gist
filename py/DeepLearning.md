@@ -1432,3 +1432,11 @@ https://github.com/VainF/Torch-Pruning
 
 https://github.com/zhangkaifang/model_deployment
 
+
+### ollama
+ubuntu 加速下载
+#https://cloud.tencent.com/developer/article/2503867
+```bash
+export OLLAMA_MIRROR="https://ghproxy.cn/https://github.com/ollama/ollama/releases/latest/download"
+curl -fsSL https://ollama.com/install.sh | sed "s|https://ollama.com/download|$OLLAMA_MIRROR|g" | sh
+```
