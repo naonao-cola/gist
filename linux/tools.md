@@ -433,6 +433,14 @@ ssh -f -N -L 6006:127.0.0.1:6006 用户名@服务器域名 -p 端口
 -f 参数允许SSH在后台运行。
 
 -N 参数告诉SSH不要执行远程命令，仅设置端口映射。
+
+## 产看 动态库
+# nm -D 命令的输出可读性不好，通过比较其与 nm -C 命令的输出（同一地址的为同一个函数），可精确定位想要的函数。示例如下
+nm -D libcyusb.so | grep cyusb　　// 显示动态符号
+nm -C libcyusb.so | grep cyusb　　// 将低级符号名称解码成用户级名称
+
+## 方式二：通过 objdump -tT xxx.so 命令
+objdump -tT xxx.so
 ```
 
 
