@@ -93,11 +93,12 @@ xrepo remove "opencv 4.8.0"
 xmake g --pkg_searchdirs="/download/packages"
 
 # 设置代理
-xmake g-proxy pac=E:/demo/xmake/pac.lua
+xmake g --proxy_pac=E:/demo/xmake/pac.lua
 #pac.lua文件
 ``` lua
 function mirror(url)
-     return string.format("https://github.moeyy.xyz/%s", url)
+     --return string.format("https://github.moeyy.xyz/%s", url)
+	 return url:gsub("https://github.com", "https://github.moeyy.xyz/https://github.com")
 end
 ```
 
