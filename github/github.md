@@ -25,6 +25,18 @@ https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
 *.inl text eol=native
 ```
 
+git commit 规范
+|类型|用途|示例|
+|---------|---------|---------|
+| feat	| 新功能	|feat: 添加PDF导出功能|
+| fix	|Bug修复	|fix: 修复首页加载失败|
+|docs	|文档更新	|docs: 更新API接口说明|
+|style|	代码样式调整（不影响逻辑）	|style: 格式化用户模型代码|
+|refactor|	代码重构（非功能修改）	|refactor: 优化订单查询SQL|
+|test|	测试相关	|test: 增加登录单元测试|
+|chore	|构建/工具链改动	|chore: 更新webpack配置|
+
+
 windows  终端设置代理
 
 set https_proxy=http://127.0.0.1:33210 http_proxy=http://127.0.0.1:33210 all_proxy=socks5://127.0.0.1:33210
