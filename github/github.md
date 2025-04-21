@@ -26,7 +26,8 @@ https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
 ```
 
 git commit 规范
-|类型|用途|示例|
+
+|类型  |用途  |示例 |
 |---------|---------|---------|
 | feat	| 新功能	|feat: 添加PDF导出功能|
 | fix	|Bug修复	|fix: 修复首页加载失败|
