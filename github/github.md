@@ -25,17 +25,84 @@ https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
 *.inl text eol=native
 ```
 
+```editorconfig
+root = true
+
+[*]
+charset = utf-8-bom
+insert_final_newline = true
+end_of_line = lf
+
+
+```
+
+```bash
+
+git rebase --abort
+
+git rebase --continue
+
+git diff develop_am300_build.1 feature_pla --stat
+
+只合并指定目录
+将dev_new 的文件 合到当前分支
+# https://www.cnblogs.com/bky419/p/15190767.html
+git checkout dev_new src/main.js
+
+git checkout dev_new src/view/folderName
+
+git checkout develop_am300_build.1 src/view/folderName
+
+#拒绝提交包含混合换行符的文件
+git config --global core.safecrlf true
+#允许提交包含混合换行符的文件
+git config --global core.safecrlf false
+#提交包含混合换行符的文件时给出警告
+git config --global core.safecrlf warn
+
+
+#提交时转换为LF，检出时不转换
+$ git config --global core.autocrlf inpu
+#提交时转换为LF，检出时转换为CRLF
+$ git config --global core.autocrlf true
+
+
+## dos2unix是一个专门用于将Windows风格的换行符（\r\n）转换为Unix风格换行符（\n）的工具。使用方法如下：
+
+sudo apt-get install dos2unix
+
+dos2unix filename
+
+find /path/to/directory -type f -exec dos2unix {} \;
+
+find ./ -name "*.cc" -exec dos2unix {} \;
+find ./ -name "*.h" -exec dos2unix {} \;
+find ./ -name "*.cpp" -exec dos2unix {} \;
+find ./ -name "*.xml" -exec dos2unix {} \;
+find ./ -name "*.txt" -exec dos2unix {} \;
+find ./ -name "*.cl" -exec dos2unix {} \;
+find ./ -name "*.mk" -exec dos2unix {} \;
+find ./ -name "*.md" -exec dos2unix {} \;
+find ./ -name "*.lua" -exec dos2unix {} \;
+find ./ -name "Makefile*" -exec dos2unix {} \;
+find ./ -name "*.sh" -exec dos2unix {} \;
+
+find . \( -name "*.cc" -o -name "*.h" -o -name "*.cpp" -o -name "*.xml" -o -name "*.txt" -o -name "*.cl" -o -name "*.mk" -o -name "*.md" -o -name "*.lua" -o -name "Makefile*" -o -name "*.sh" \) -exec dos2unix {} \;
+
+```
+
+
 git commit 规范
 
 |类型  |用途  |示例 |
 |---------|---------|---------|
 | feat	| 新功能	|feat: 添加PDF导出功能|
-| fix	|Bug修复	|fix: 修复首页加载失败|
-|docs	|文档更新	|docs: 更新API接口说明|
-|style|	代码样式调整（不影响逻辑）	|style: 格式化用户模型代码|
-|refactor|	代码重构（非功能修改）	|refactor: 优化订单查询SQL|
-|test|	测试相关	|test: 增加登录单元测试|
-|chore	|构建/工具链改动	|chore: 更新webpack配置|
+| fix	  |Bug修复	|fix: 修复首页加载失败|
+| docs	|文档更新	|docs: 更新API接口说明|
+| style |代码样式调整（不影响逻辑）	|style: 格式化用户模型代码|
+| refactor|	代码重构（非功能修改）	|refactor: 优化订单查询SQL|
+| test  |	测试相关	|test: 增加登录单元测试|
+| chore	|构建/工具链改动	|chore: 更新webpack配置|
 
 
 windows  终端设置代理
