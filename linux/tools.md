@@ -443,7 +443,16 @@ nm -C libcyusb.so | grep cyusb　　// 将低级符号名称解码成用户级�
 objdump -tT xxx.so
 ```
 
+## ncdu
 
+```bash
+## 查找文件大小 找大文件
+sudo apt install ncdu
+
+ncdu
+ncdu --exclude /mnt // wsl下排除/mnt
+
+```
 ## marktext
 
 ```bash
