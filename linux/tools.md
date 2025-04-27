@@ -1352,4 +1352,5 @@ unhide
 # https://zhuanlan.zhihu.com/p/614024375
 nvitop  # pipx run nvitop
 nvitop -m auto
+clamav  # 杀毒软件
 ```
