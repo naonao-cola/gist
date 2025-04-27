@@ -452,7 +452,27 @@ sudo apt install ncdu
 ncdu
 ncdu --exclude /mnt // wsl下排除/mnt
 
+# 解决WSL ext4.vhdx文件过大的问题
+# https://blog.csdn.net/problc/article/details/80916109
+wsl --shutdown
+# 找到文件 C:\Users\myname\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu20.04onWindows_79rhkp1fndgsc\LocalState\ext4.vhdx
+Optimize-VHD -Path .\ext4.vhdx -Mode full
+# 命令不存在，使用 diskpart 工具来压缩 ext4.vhdx 文件
+diskpart
+## 新窗口
+select vdisk file="C:\Users\myname\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu20.04onWindows_79rhkp1fndgsc\LocalState\ext4.vhdx"
+attach vdisk readonly
+compact vdisk
+detach vdisk
+exit
+
+## 转移到别的目录
+## https://blog.csdn.net/ljfrocky/article/details/145040735
+ext4.vhdx  文件比较大 ，拷贝可以直接拷贝，导入的时候 比较慢
+
 ```
+
+
 ## marktext
 
 ```bash
@@ -1324,3 +1344,12 @@ nvidia-smi --id=0 -r
 ```
 ![](../images/nvidia.png)
 
+
+## 其他工具
+```bash
+htop
+unhide
+# https://zhuanlan.zhihu.com/p/614024375
+nvitop  # pipx run nvitop
+nvitop -m auto
+```
