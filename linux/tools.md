@@ -7,6 +7,7 @@ uname -r
 uname -m
 # 快速定位文件
 locate filename
+
 #查看so文件的以来
 ldd
 #将文件打包为二进制文件，譬如将图片转为c++ 头文件
@@ -68,7 +69,81 @@ cat /etc/passwd | awk -F ':' 'BEGIN{print "user\tshell\n-------"} {print $1"\t"$
 awk '{print NR, $0}' file
 
 ```
+## linux 动态库问题
 
+```bash
+
+#查看so文件的依赖
+ldd
+# --help 获取指令帮助信息；
+# --version 打印指令版本号；
+# -d,--data-relocs 执行重定位和报告任何丢失的对象；
+# -r,--function-relocs 执行数据对象和函数的重定位，并且报告任何丢失的对象和函数；
+# -u, --unused 打印未使用的直接依赖；
+# -v, --verbose 详细信息模式，打印所有相关信息；
+
+
+#将文件打包为二进制文件，譬如将图片转为c++ 头文件
+xdd
+
+
+# strings命令
+# -a	扫描整个文件，而不只是扫描目标文件初始化和装载段
+# -f	显示字符串前，先显示文件名
+# -t	输出字符的位置，基于八进制，十进制或十六进制
+# -d	只打印文件中初始化的、加载的数据节中的字符串。这可能会减少输出中的垃圾数量，但也会将字符串程序暴露给用于扫描和加载部分的BFD库中可能存在的任何安全缺陷。
+strings hello.so | grep VERSION  # 版本
+strings hello.so | grep GCC      # GCC版本
+
+# file命令
+# -b：仅显示文件类型，不显示文件名；
+# -i：显示MIME类型；
+# -z：对压缩文件也进行检测。
+# -c：详细显示指令执行过程，便于排错或分析程序执行的情形；
+# -f<名称文件>：指定名称文件，其内容有一个或多个文件名称时，让file依序辨识这些文件，格式为每列一个文件名称；
+# -L：直接显示符号链接所指向的文件类别；
+# -m<魔法数字文件>：指定魔法数字文件；
+# -v：显示版本信息；
+# -s: 查询（块/字符设备）文件信息
+file libalgLib.so
+libalgLib.so: ELF 64-bit LSB shared object, ARM aarch64, version 1 (SYSV), dynamically linked, with debug_info, not stripped
+
+
+# objdump命令
+# -f	显示文件头信息
+# -d	反汇编文件中需要执行指令的那些section
+# -D	与-d类似，但反汇编文件中中的所有section
+# -h	显示文件中的Section Header信息
+# -x	显示文件的全部Header信息
+# -s	除了显示文件的全部Header信息，还显示他们对应的十六进制文件代码
+
+objdump -f hello.so # 显示hello.so的文件头信息
+
+
+# nm命令
+# -A 在每个符号信息的前面打印所在对象文件名称；
+# -C 输出demangle过了的符号名称；
+# -D 打印动态符号；
+# -l 使用对象文件中的调试信息打印出所在源文件及行号；
+# -n 按照地址/符号值来排序；
+# -u 打印出那些未定义的符号。
+# 常见符号类型：
+# A 该符号的值在今后的链接中将不再改变；
+# B 该符号放在BSS段中，通常是那些未初始化的全局变量；
+# D 该符号放在普通的数据段中，通常是那些已经初始化的全局变量；
+# T 该符号放在代码段中，通常是那些全局非静态函数；
+# U 该符号未定义过，需要自其他对象文件中链接进来；
+# W 未明确指定的弱链接符号；同链接的其他对象文件中有它的定义就用上，否则就用一个系统特别指定的默认值。
+
+# 通常用于加载第三方so等库文件时，报错函数未定义时，可通过该方式搜索so中是否定义某函数
+nm –A hello.so | grep “T main”
+
+
+# 查看文件名 依赖库
+readelf -d libalgLib.so
+
+
+```
 ### cmake 升级
 
 打开cmake下载的官网：https://cmake.org/files/
