@@ -142,6 +142,10 @@ nm –A hello.so | grep “T main”
 # 查看文件名 依赖库
 readelf -d libalgLib.so
 
+# ldconfig命令
+/etc/ld.so.conf  文件保存，这个文件列出了系统需要搜索的动态链接库目录
+# -n :用此选项时,ldconfig仅扫描命令行指定的目录,不扫描默认目录(/lib,/usr/lib),也不扫描配置文件/etc/ld.so.conf所列的目录.
+# -v或--verbose:用此选项时,ldconfig将显示正在扫描的目录及搜索到的动态链接库,还有它所创建的连接的名字.
 
 ```
 ### cmake 升级
