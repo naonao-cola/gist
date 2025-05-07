@@ -98,6 +98,11 @@ docker run -itd  --gpus all --name pytorch25 --network=host -v /home/y/proj/:/ho
 #pull 镜像
 docker pull pytorch/pytorch:2.6.0-cuda12.6-cudnn9-devel
 
+# 导入导出的 镜像
+docker export -o my_pytorch24.tar  f7e4ac9eac95
+docker import busybox2.tar busybox2:test
+# 增加完全权限 选项
+--privileged
 ```
 
 ---
