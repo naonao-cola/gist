@@ -97,12 +97,19 @@ git commit 规范
 |类型  |用途  |示例 |
 |---------|---------|---------|
 | feat	| 新功能	|feat: 添加PDF导出功能|
-| fix	  |Bug修复	|fix: 修复首页加载失败|
+| fix	   |Bug修复	|fix: 修复首页加载失败|
 | docs	|文档更新	|docs: 更新API接口说明|
 | style |代码样式调整（不影响逻辑）	|style: 格式化用户模型代码|
 | refactor|	代码重构（非功能修改）	|refactor: 优化订单查询SQL|
 | test  |	测试相关	|test: 增加登录单元测试|
-| chore	|构建/工具链改动	|chore: 更新webpack配置|
+| chore	|构建/工具链改动,辅助工具的变动	|chore: 更新webpack配置|
+| perf  |	更改代码，以提高性能	|perf: 优化订单查询SQL|
+| build |	影响项目构建或依赖项修改	|build: 增加登录单元测试|
+| ci	  | 持续集成相关文件修改	|ci: 更新webpack配置|
+| merge	  | 用于合并分支的提交	|merge: 更新webpack配置|
+| revert	  | 恢复上一次提交	|revert: 更新webpack配置|
+| release	  | 发布新版本	|release: 更新webpack配置|
+| workflow	  | 工作流相关文件修改	|workflow: 更新webpack配置|
 
 
 windows  终端设置代理
