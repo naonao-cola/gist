@@ -108,7 +108,7 @@ git commit 规范
 | ci	  | 持续集成相关文件修改	|ci: 更新webpack配置|
 | merge	  | 用于合并分支的提交	|merge: 更新webpack配置|
 | revert	  | 恢复上一次提交	|revert: 更新webpack配置|
-| release	  | 发布新版本	|release: 更新webpack配置|
+
 
 
 
