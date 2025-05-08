@@ -109,7 +109,8 @@ git commit 规范
 | merge	  | 用于合并分支的提交	|merge: 更新webpack配置|
 | revert	  | 恢复上一次提交	|revert: 更新webpack配置|
 | release	  | 发布新版本	|release: 更新webpack配置|
-| workflow	  | 工作流相关文件修改	|workflow: 更新webpack配置|
+| improvement	  | 对现有功能进行增强或优化	|improvement: 更新webpack配置|
+
 
 
 windows  终端设置代理
