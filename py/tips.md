@@ -255,3 +255,36 @@ print(type(b))
 参考链接：  https://zhuanlan.zhihu.com/p/343747724
 提供了各类型数据结构
 
+
+## 回调函数
+
+```python
+def run(callback=None):
+    if callback is not None:
+        callback()
+    print("函数内部")
+
+run(lambda: print("插入函数"))
+
+
+def run(callback=None):
+    value = 1
+    if callback is not None:
+        callback(value)
+    print("函数内部")
+
+run(lambda x:print(f"插入函数{x}"))
+
+
+import inspect
+def run(callback=None):
+    if callback is not None:
+        if not inspect.isroutine(callback):
+            raise TypeError("callback must be a function or method")
+        callback()
+    print("函数内部")
+
+run("测试")
+
+
+```
