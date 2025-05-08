@@ -185,6 +185,13 @@ git push origin xiaobo_dev
 git remote prune origin
 //  - 强制将临时分支代码回退到master HEAD
 git reset --hard master
+
+
+
+// 合并提交信息
+git add <file>
+git commit --amend --no-edit
+git commit --amend -m "Added lines to README.md"
 ```
 
 git stash 命令
