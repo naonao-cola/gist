@@ -106,7 +106,6 @@ git commit 规范
 | perf  |	更改代码，以提高性能	|perf: 优化订单查询SQL|
 | build |	影响项目构建或依赖项修改	|build: 增加登录单元测试|
 | ci	  | 持续集成相关文件修改	|ci: 更新ci配置|
-| merge	  | 用于合并分支的提交	|merge: 更新webpack配置|
 | revert	  | 恢复上一次提交	|revert: 更新webpack配置|
 
 
