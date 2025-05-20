@@ -2601,3 +2601,9 @@ https://zhuanlan.zhihu.com/p/656377030
 现代C++性能优化
 
 https://zhuanlan.zhihu.com/p/663843832#showWechatShareTip
+
+
+
+CPU及内存调度（三） -- 内存问题定位工具和实验
+
+https://xiaodongq.github.io/2025/04/02/memory-profiling-tools/
