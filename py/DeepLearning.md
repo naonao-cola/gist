@@ -1414,9 +1414,13 @@ https://github.com/NVIDIA/TensorRT/tree/release/10.9/tools/Polygraphy
 https://blog.csdn.net/yitiaoxiaolu/article/details/136413877
 
 
-剪枝 蒸馏 在线文档
+### 剪枝 蒸馏 在线文档
+
+Awesome Compression
 
 https://datawhalechina.github.io/awesome-compression/#/README
+
+量化(Quantification)章节说明
 
 https://datawhalechina.github.io/llm-deploy/#/
 
@@ -1448,3 +1452,15 @@ nohup ollama run <model_name> > ollama.log 2>&1 &
 export OLLAMA_HOST="0.0.0.0:新端口（如 8080）"
 ollama serve
 ```
+
+## 大模型相关
+
+大模型训练技术介绍
+
+https://techdiylife.github.io/blog/blog.html?category1=c02&blogid=0005
+
+Softmax与交叉熵损失的实现及求导
+
+https://zhuanlan.zhihu.com/p/67759205
+
+

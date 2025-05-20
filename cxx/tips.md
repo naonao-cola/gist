@@ -2563,3 +2563,41 @@ const std::string& constStr = std::as_const(str);
 ![](./images/22.png)
 ![](./images/23.png)
 ![](./images/24.png)
+
+
+## 系列文章
+
+小鹏老师 系列
+
+https://parallel101.github.io/cppguidebook/
+
+小林coding
+
+https://xiaolincoding.com/
+
+c++编程指南
+
+https://chengxumiaodaren.com/
+
+spdlog 源码解析
+
+https://www.cnblogs.com/fortunely/p/17388565.html
+
+
+level DB 源码解析
+
+https://sf-zhou.github.io/#/LevelDB
+
+c++ 插件
+
+https://blog.csdn.net/zhouxuguang236/article/details/29365261
+
+https://cloud.tencent.com/developer/article/1979229
+
+
+https://zhuanlan.zhihu.com/p/656377030
+
+
+现代C++性能优化
+
+https://zhuanlan.zhihu.com/p/663843832#showWechatShareTip
