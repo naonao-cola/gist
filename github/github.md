@@ -198,7 +198,7 @@ git reset --hard master
 // 合并提交信息
 git add <file>
 git commit --amend --no-edit
-git commit --amend -m "Added lines to README.md" 
+git commit --amend -m "Added lines to README.md"
 ```
 
 git stash 命令
