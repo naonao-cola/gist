@@ -8,6 +8,10 @@ uname -m
 # 快速定位文件
 locate filename
 
+# 统计文件个数
+find . -type f | wc -l
+
+
 #查看so文件的以来
 ldd
 #将文件打包为二进制文件，譬如将图片转为c++ 头文件
