@@ -1437,6 +1437,14 @@ nvidia-smi --id=0 -r
 
 
 ```
+
+### RKNN nupu
+
+查看 NPU 使用率
+watch  cat /sys/kernel/debug/rknpu/load
+
+cat /sys/kernel/debug/rknpu/load
+
 ![](../images/nvidia.png)
 
 
