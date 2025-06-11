@@ -1318,6 +1318,18 @@ sed 's/8080/9090/g' config.conf | tee new_config.conf
 diff <(cat file.txt) <(sed 's/error/ERROR/g' file.txt)
 
 ```
+## slurm
+
+```bash
+
+slurm 配置
+https://zhuanlan.zhihu.com/p/643316538
+https://blog.csdn.net/TaTianZhuanShi/article/details/134448210
+
+git clone https://github.com/SchedMD/slurm.git
+apt-get install libcurl4-openssl-dev
+
+```
 
 
 ## vscode插件
