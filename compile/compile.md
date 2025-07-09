@@ -1432,6 +1432,10 @@ https://blog.csdn.net/peterwanye/article/details/129797789
 
 ```bash
 
+#生成工具链
+
+./build/tools/make-standalone-toolchain.sh --arch=arm64 --platform=android-26 --install-dir=/home/naonao/demo/3rdparty/my_toolchain
+
 # 下载安卓NDK  https://github.com/android/ndk/wiki/Unsupported-Downloads
 #设置环境变量
 export ANDROID_NDK=/path/to/android-ndk
@@ -1469,4 +1473,42 @@ Download is performed unsandboxed as root as file '/var/cache/apt/archives/parti
 
 sudo chown -Rv _apt:root /var/cache/apt/archives/partial/
 sudo chmod -Rv 700 /var/cache/apt/archives/partial/
+```
+
+CMakeLists的编写
+
+```CMakeLists
+
+cmake_minimum_required(VERSION 3.10)
+project(OpenCVExample)
+
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin)
+
+set(CMAKE_INSTALL_PREFIX "../install")
+set(OpenCV_DIR /home/naonao/demo/3rdparty/test/opencv410_android/sdk/native/jni) # xxxx目录包含OpenCVConfig.cmake
+find_package(OpenCV REQUIRED) # 找到opencv库
+message(${OpenCV_LIBRARIES})
+include_directories(${OpenCV_INCLUDE_DIRS})
+# aux_source_directory(./src SRCS)
+
+FILE(GLOB SRCS ./src/*.cpp)
+add_executable(${PROJECT_NAME} ${SRCS}) # *.cpp指要编译的那些源文件
+
+target_link_libraries(${PROJECT_NAME} ${OpenCV_LIBRARIES})
+install(TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin # 可执行文件安装路径
+)
+
+```
+
+```bash
+export ANDROID_NDK=/home/naonao/demo/3rdparty/android-ndk-r17c
+## 编译命令
+cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+    -DANDROID_ABI="arm64-v8a" \
+    -DANDROID_NDK=$ANDROID_NDK \
+    -DANDROID_PLATFORM=android-26 \
+	-DANDROID_STL=c++_shared \
+    ..
+
 ```
