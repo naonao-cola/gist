@@ -1417,3 +1417,56 @@ add_executable(main ./main.cpp)
 # 添加链接库，动态和静态都行
 target_link_libraries(main add sub mul)
 ```
+
+
+## opencv
+### 安卓交叉编译
+
+参考链接
+
+https://blog.csdn.net/manonggou/article/details/106105111
+
+https://blog.51cto.com/u_16213462/13137452
+
+https://blog.csdn.net/peterwanye/article/details/129797789
+
+```bash
+
+# 下载安卓NDK  https://github.com/android/ndk/wiki/Unsupported-Downloads
+#设置环境变量
+export ANDROID_NDK=/path/to/android-ndk
+
+# 进入opencv
+cd opencv
+mkdir build && cd build
+
+cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
+-DCMAKE_ANDROID_NDK=$ANDROID_NDK \
+-DANDROID_NATIVE_API_LEVEL=26 \
+-DBUILD_ANDROID_PROJECTS=OFF \
+-DBUILD_ANDROID_EXAMPLES=OFF \
+-DANDROID_STL=c++_shared \
+-DBUILD_SHARED_LIBS=ON \
+-DCMAKE_BUILD_TYPE=Release  \
+-DBUILD_JAVA=OFF  \
+-DANDROID_ABI=arm64-v8a \
+-DCMAKE_INSTALL_PREFIX=/home/naonao/demo/3rdparty/test/opencv410_android ..
+
+sudo make -j8
+
+sudo make install
+
+# 其他问题 libtinfo5 的问题
+# https://askubuntu.com/questions/1531760/how-to-install-libtinfo5-on-ubuntu24-04
+sudo apt update
+wget http://security.ubuntu.com/ubuntu/pool/universe/n/ncurses/libtinfo5_6.3-2ubuntu0.1_amd64.deb
+sudo apt install ./libtinfo5_6.3-2ubuntu0.1_amd64.deb
+
+
+# apt的问题
+# https://askubuntu.com/questions/908800/what-does-this-apt-error-message-download-is-performed-unsandboxed-as-root
+Download is performed unsandboxed as root as file '/var/cache/apt/archives/partial/samba-libs_2%3a4.5.8+dfsg-0ubuntu0.17.04.1_i386.deb' couldn't be accessed by user '_apt'. - pkgAcquire::Run (13: Permission denied)
+
+sudo chown -Rv _apt:root /var/cache/apt/archives/partial/
+sudo chmod -Rv 700 /var/cache/apt/archives/partial/
+```
