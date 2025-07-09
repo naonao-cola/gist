@@ -1436,9 +1436,11 @@ https://blog.csdn.net/peterwanye/article/details/129797789
 
 ./build/tools/make-standalone-toolchain.sh --arch=arm64 --platform=android-26 --install-dir=/home/naonao/demo/3rdparty/my_toolchain
 
+
 # 下载安卓NDK  https://github.com/android/ndk/wiki/Unsupported-Downloads
 #设置环境变量
 export ANDROID_NDK=/path/to/android-ndk
+
 
 # 进入opencv
 cd opencv
@@ -1511,4 +1513,12 @@ cmake -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK/build/cmake/android.toolchain.cmake \
 	-DANDROID_STL=c++_shared \
     ..
 
+# 将 libc++_shared.so push 到板子上
+
+adb push libc++_shared.so /data/www_test
+# 板子上执行需要 环境变量
+export LD_LIBRARY_PATH=/data/www_test/:$LD_LIBRARY_PATH
+
+#执行
+./OpenCVExample
 ```
