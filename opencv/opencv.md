@@ -1341,3 +1341,695 @@ https://github.com/meiqua/shape_based_matching
 6、 梯度拓展，使用二进制表示
 
 7、线性内存
+
+
+## 保存jpg png
+
+
+```c++
+//参考链接 https://create.stephan-brumme.com/toojpeg/
+
+/* Public Domain, Simple, Minimalistic JPEG writer - http://jonolick.com
+ *
+ * Quick Notes:
+ * 	Based on a javascript jpeg writer
+ * 	JPEG baseline (no JPEG progressive)
+ * 	Supports 1, 3 or 4 component input. (luminance, RGB or RGBX)
+ *
+ * Latest revisions:
+ *  1.61 (2025-02-25) Minor changes: C compatibility. reduced number of lines of code.
+ *  1.60 (2019-27-11) Added support for subsampling U,V so that it encodes smaller files. Enabled when quality <= 90.
+ *	1.52 (2012-22-11) Added support for specifying Luminance, RGB, or RGBA via comp(onents) argument (1, 3 and 4 respectively).
+ *	1.51 (2012-19-11) Fixed some warnings
+ *	1.50 (2012-18-11) MT safe. Simplified. Optimized. Reduced memory requirements. Zero allocations. No namespace polution. Approx 340 lines code.
+ *	1.10 (2012-16-11) compile fixes, added docs,
+ *		changed from .h to .cpp (simpler to bootstrap), etc
+ * 	1.00 (2012-02-02) initial release
+ *
+ * Basic usage:
+ *	char *foo = new char[128*128*4]; // 4 component. RGBX format, where X is unused
+ *	jo_write_jpg("foo.jpg", foo, 128, 128, 4, 90); // comp can be 1, 3, or 4. Lum, RGB, or RGBX respectively.
+ *
+ * */
+
+#ifndef JO_INCLUDE_JPEG_H
+#define JO_INCLUDE_JPEG_H
+
+// To get a header file for this, either cut and paste the header,
+// or create jo_jpeg.h, #define JO_JPEG_HEADER_FILE_ONLY, and
+// then include jo_jpeg.c from it.
+
+// Returns false on failure
+extern int jo_write_jpg(const char *filename, const void *data, int width, int height, int comp, int quality);
+
+#endif // JO_INCLUDE_JPEG_H
+
+#ifndef JO_JPEG_HEADER_FILE_ONLY
+
+#if defined(_MSC_VER) && _MSC_VER >= 0x1400
+#define _CRT_SECURE_NO_WARNINGS // suppress warnings about fopen()
+#endif
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+
+static const unsigned char s_jo_ZigZag[] = { 0,1,5,6,14,15,27,28,2,4,7,13,16,26,29,42,3,8,12,17,25,30,41,43,9,11,18,24,31,40,44,53,10,19,23,32,39,45,52,54,20,22,33,38,46,51,55,60,21,34,37,47,50,56,59,61,35,36,48,49,57,58,62,63 };
+
+static void jo_writeBits(FILE *fp, int *bitBuf, int *bitCnt, const unsigned short *bs) {
+	*bitCnt += bs[1];
+	*bitBuf |= bs[0] << (24 - *bitCnt);
+	while(*bitCnt >= 8) {
+		unsigned char c = (*bitBuf >> 16) & 255;
+		putc(c, fp);
+		if(c == 255) {
+			putc(0, fp);
+		}
+		*bitBuf <<= 8;
+		*bitCnt -= 8;
+	}
+}
+
+static void jo_DCT(float *d0, float *d1, float *d2, float *d3, float *d4, float *d5, float *d6, float *d7) {
+	float tmp0 = *d0 + *d7;
+	float tmp7 = *d0 - *d7;
+	float tmp1 = *d1 + *d6;
+	float tmp6 = *d1 - *d6;
+	float tmp2 = *d2 + *d5;
+	float tmp5 = *d2 - *d5;
+	float tmp3 = *d3 + *d4;
+	float tmp4 = *d3 - *d4;
+
+	// Even part
+	float tmp10 = tmp0 + tmp3;	// phase 2
+	float tmp13 = tmp0 - tmp3;
+	float tmp11 = tmp1 + tmp2;
+	float tmp12 = tmp1 - tmp2;
+
+	*d0 = tmp10 + tmp11; 		// phase 3
+	*d4 = tmp10 - tmp11;
+
+	float z1 = (tmp12 + tmp13) * 0.707106781f; // c4
+	*d2 = tmp13 + z1; 		// phase 5
+	*d6 = tmp13 - z1;
+
+	// Odd part
+	tmp10 = tmp4 + tmp5; 		// phase 2
+	tmp11 = tmp5 + tmp6;
+	tmp12 = tmp6 + tmp7;
+
+	// The rotator is modified from fig 4-8 to avoid extra negations.
+	float z5 = (tmp10 - tmp12) * 0.382683433f; // c6
+	float z2 = tmp10 * 0.541196100f + z5; // c2-c6
+	float z4 = tmp12 * 1.306562965f + z5; // c2+c6
+	float z3 = tmp11 * 0.707106781f; // c4
+
+	float z11 = tmp7 + z3;		// phase 5
+	float z13 = tmp7 - z3;
+
+	*d5 = z13 + z2;			// phase 6
+	*d3 = z13 - z2;
+	*d1 = z11 + z4;
+	*d7 = z11 - z4;
+}
+
+static void jo_calcBits(int val, unsigned short bits[2]) {
+	int tmp1 = val < 0 ? -val : val;
+	val = val < 0 ? val-1 : val;
+	bits[1] = 1;
+	while(tmp1 >>= 1) {
+		++bits[1];
+	}
+	bits[0] = val & ((1<<bits[1])-1);
+}
+
+static int jo_processDU(FILE *fp, int *bitBuf, int *bitCnt, float *CDU, int du_stride, float *fdtbl, int DC, const unsigned short HTDC[256][2], const unsigned short HTAC[256][2]) {
+	const unsigned short EOB[2] = { HTAC[0x00][0], HTAC[0x00][1] };
+	const unsigned short M16zeroes[2] = { HTAC[0xF0][0], HTAC[0xF0][1] };
+
+	// DCT rows
+	for(int i=0; i<du_stride*8; i+=du_stride) {
+		jo_DCT(&CDU[i], &CDU[i+1], &CDU[i+2], &CDU[i+3], &CDU[i+4], &CDU[i+5], &CDU[i+6], &CDU[i+7]);
+	}
+	// DCT columns
+	for(int i=0; i<8; ++i) {
+		jo_DCT(&CDU[i], &CDU[i+du_stride], &CDU[i+du_stride*2], &CDU[i+du_stride*3], &CDU[i+du_stride*4], &CDU[i+du_stride*5], &CDU[i+du_stride*6], &CDU[i+du_stride*7]);
+	}
+	// Quantize/descale/zigzag the coefficients
+	int DU[64];
+	for(int y = 0, j=0; y < 8; ++y) {
+		for(int x = 0; x < 8; ++x,++j) {
+			int i = y*du_stride+x;
+			float v = CDU[i]*fdtbl[j];
+			DU[s_jo_ZigZag[j]] = (int)(v < 0 ? ceilf(v - 0.5f) : floorf(v + 0.5f));
+		}
+	}
+
+	// Encode DC
+	int diff = DU[0] - DC;
+	if (diff == 0) {
+		jo_writeBits(fp, bitBuf, bitCnt, HTDC[0]);
+	} else {
+		unsigned short bits[2];
+		jo_calcBits(diff, bits);
+		jo_writeBits(fp, bitBuf, bitCnt, HTDC[bits[1]]);
+		jo_writeBits(fp, bitBuf, bitCnt, bits);
+	}
+	// Encode ACs
+	int end0pos = 63;
+	for(; (end0pos>0)&&(DU[end0pos]==0); --end0pos) {
+	}
+	// end0pos = first element in reverse order !=0
+	if(end0pos == 0) {
+		jo_writeBits(fp, bitBuf, bitCnt, EOB);
+		return DU[0];
+	}
+	for(int i = 1; i <= end0pos; ++i) {
+		int startpos = i;
+		for (; DU[i]==0 && i<=end0pos; ++i) {
+		}
+		int nrzeroes = i-startpos;
+		if ( nrzeroes >= 16 ) {
+			int lng = nrzeroes>>4;
+			int nrmarker;
+			for (nrmarker=1; nrmarker <= lng; ++nrmarker)
+				jo_writeBits(fp, bitBuf, bitCnt, M16zeroes);
+			nrzeroes &= 15;
+		}
+		unsigned short bits[2];
+		jo_calcBits(DU[i], bits);
+		jo_writeBits(fp, bitBuf, bitCnt, HTAC[(nrzeroes<<4)+bits[1]]);
+		jo_writeBits(fp, bitBuf, bitCnt, bits);
+	}
+	if(end0pos != 63) {
+		jo_writeBits(fp, bitBuf, bitCnt, EOB);
+	}
+	return DU[0];
+}
+
+static inline void jo_calcYUV(float* y, float* u, float* v, unsigned char r, unsigned char g, unsigned char b) {
+	*y = +0.29900f*r + 0.58700f*g + 0.11400f*b - 128;
+	*u = -0.16874f*r - 0.33126f*g + 0.50000f*b;
+	*v = +0.50000f*r - 0.41869f*g - 0.08131f*b;
+}
+
+int jo_write_jpg(const char *filename, const void *data, int width, int height, int comp, int quality) {
+	// Constants that don't pollute global namespace
+	static const unsigned char std_dc_luminance_nrcodes[] = {0,0,1,5,1,1,1,1,1,1,0,0,0,0,0,0,0};
+	static const unsigned char std_dc_luminance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+	static const unsigned char std_ac_luminance_nrcodes[] = {0,0,2,1,3,3,2,4,3,5,5,4,4,0,0,1,0x7d};
+	static const unsigned char std_ac_luminance_values[] = {
+		0x01,0x02,0x03,0x00,0x04,0x11,0x05,0x12,0x21,0x31,0x41,0x06,0x13,0x51,0x61,0x07,0x22,0x71,0x14,0x32,0x81,0x91,0xa1,0x08,
+		0x23,0x42,0xb1,0xc1,0x15,0x52,0xd1,0xf0,0x24,0x33,0x62,0x72,0x82,0x09,0x0a,0x16,0x17,0x18,0x19,0x1a,0x25,0x26,0x27,0x28,
+		0x29,0x2a,0x34,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,0x59,
+		0x5a,0x63,0x64,0x65,0x66,0x67,0x68,0x69,0x6a,0x73,0x74,0x75,0x76,0x77,0x78,0x79,0x7a,0x83,0x84,0x85,0x86,0x87,0x88,0x89,
+		0x8a,0x92,0x93,0x94,0x95,0x96,0x97,0x98,0x99,0x9a,0xa2,0xa3,0xa4,0xa5,0xa6,0xa7,0xa8,0xa9,0xaa,0xb2,0xb3,0xb4,0xb5,0xb6,
+		0xb7,0xb8,0xb9,0xba,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,0xe1,0xe2,
+		0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf1,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
+	};
+	static const unsigned char std_dc_chrominance_nrcodes[] = {0,0,3,1,1,1,1,1,1,1,1,1,0,0,0,0,0};
+	static const unsigned char std_dc_chrominance_values[] = {0,1,2,3,4,5,6,7,8,9,10,11};
+	static const unsigned char std_ac_chrominance_nrcodes[] = {0,0,2,1,2,4,4,3,4,7,5,4,4,0,1,2,0x77};
+	static const unsigned char std_ac_chrominance_values[] = {
+		0x00,0x01,0x02,0x03,0x11,0x04,0x05,0x21,0x31,0x06,0x12,0x41,0x51,0x07,0x61,0x71,0x13,0x22,0x32,0x81,0x08,0x14,0x42,0x91,
+		0xa1,0xb1,0xc1,0x09,0x23,0x33,0x52,0xf0,0x15,0x62,0x72,0xd1,0x0a,0x16,0x24,0x34,0xe1,0x25,0xf1,0x17,0x18,0x19,0x1a,0x26,
+		0x27,0x28,0x29,0x2a,0x35,0x36,0x37,0x38,0x39,0x3a,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4a,0x53,0x54,0x55,0x56,0x57,0x58,
+		0x59,0x5a,0x63,0x64,0x65,0x66,0x67,0x68,0x69,0x6a,0x73,0x74,0x75,0x76,0x77,0x78,0x79,0x7a,0x82,0x83,0x84,0x85,0x86,0x87,
+		0x88,0x89,0x8a,0x92,0x93,0x94,0x95,0x96,0x97,0x98,0x99,0x9a,0xa2,0xa3,0xa4,0xa5,0xa6,0xa7,0xa8,0xa9,0xaa,0xb2,0xb3,0xb4,
+		0xb5,0xb6,0xb7,0xb8,0xb9,0xba,0xc2,0xc3,0xc4,0xc5,0xc6,0xc7,0xc8,0xc9,0xca,0xd2,0xd3,0xd4,0xd5,0xd6,0xd7,0xd8,0xd9,0xda,
+		0xe2,0xe3,0xe4,0xe5,0xe6,0xe7,0xe8,0xe9,0xea,0xf2,0xf3,0xf4,0xf5,0xf6,0xf7,0xf8,0xf9,0xfa
+	};
+	// Huffman tables
+	static const unsigned short YDC_HT[256][2] = { {0,2},{2,3},{3,3},{4,3},{5,3},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9}};
+	static const unsigned short UVDC_HT[256][2] = { {0,2},{1,2},{2,2},{6,3},{14,4},{30,5},{62,6},{126,7},{254,8},{510,9},{1022,10},{2046,11}};
+	static const unsigned short YAC_HT[256][2] = {
+		{10,4},{0,2},{1,2},{4,3},{11,4},{26,5},{120,7},{248,8},{1014,10},{65410,16},{65411,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{12,4},{27,5},{121,7},{502,9},{2038,11},{65412,16},{65413,16},{65414,16},{65415,16},{65416,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{28,5},{249,8},{1015,10},{4084,12},{65417,16},{65418,16},{65419,16},{65420,16},{65421,16},{65422,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{58,6},{503,9},{4085,12},{65423,16},{65424,16},{65425,16},{65426,16},{65427,16},{65428,16},{65429,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{59,6},{1016,10},{65430,16},{65431,16},{65432,16},{65433,16},{65434,16},{65435,16},{65436,16},{65437,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{122,7},{2039,11},{65438,16},{65439,16},{65440,16},{65441,16},{65442,16},{65443,16},{65444,16},{65445,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{123,7},{4086,12},{65446,16},{65447,16},{65448,16},{65449,16},{65450,16},{65451,16},{65452,16},{65453,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{250,8},{4087,12},{65454,16},{65455,16},{65456,16},{65457,16},{65458,16},{65459,16},{65460,16},{65461,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{504,9},{32704,15},{65462,16},{65463,16},{65464,16},{65465,16},{65466,16},{65467,16},{65468,16},{65469,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{505,9},{65470,16},{65471,16},{65472,16},{65473,16},{65474,16},{65475,16},{65476,16},{65477,16},{65478,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{506,9},{65479,16},{65480,16},{65481,16},{65482,16},{65483,16},{65484,16},{65485,16},{65486,16},{65487,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{1017,10},{65488,16},{65489,16},{65490,16},{65491,16},{65492,16},{65493,16},{65494,16},{65495,16},{65496,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{1018,10},{65497,16},{65498,16},{65499,16},{65500,16},{65501,16},{65502,16},{65503,16},{65504,16},{65505,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{2040,11},{65506,16},{65507,16},{65508,16},{65509,16},{65510,16},{65511,16},{65512,16},{65513,16},{65514,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{65515,16},{65516,16},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{2041,11},{65525,16},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
+	};
+	static const unsigned short UVAC_HT[256][2] = {
+		{0,2},{1,2},{4,3},{10,4},{24,5},{25,5},{56,6},{120,7},{500,9},{1014,10},{4084,12},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{11,4},{57,6},{246,8},{501,9},{2038,11},{4085,12},{65416,16},{65417,16},{65418,16},{65419,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{26,5},{247,8},{1015,10},{4086,12},{32706,15},{65420,16},{65421,16},{65422,16},{65423,16},{65424,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{27,5},{248,8},{1016,10},{4087,12},{65425,16},{65426,16},{65427,16},{65428,16},{65429,16},{65430,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{58,6},{502,9},{65431,16},{65432,16},{65433,16},{65434,16},{65435,16},{65436,16},{65437,16},{65438,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{59,6},{1017,10},{65439,16},{65440,16},{65441,16},{65442,16},{65443,16},{65444,16},{65445,16},{65446,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{121,7},{2039,11},{65447,16},{65448,16},{65449,16},{65450,16},{65451,16},{65452,16},{65453,16},{65454,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{122,7},{2040,11},{65455,16},{65456,16},{65457,16},{65458,16},{65459,16},{65460,16},{65461,16},{65462,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{249,8},{65463,16},{65464,16},{65465,16},{65466,16},{65467,16},{65468,16},{65469,16},{65470,16},{65471,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{503,9},{65472,16},{65473,16},{65474,16},{65475,16},{65476,16},{65477,16},{65478,16},{65479,16},{65480,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{504,9},{65481,16},{65482,16},{65483,16},{65484,16},{65485,16},{65486,16},{65487,16},{65488,16},{65489,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{505,9},{65490,16},{65491,16},{65492,16},{65493,16},{65494,16},{65495,16},{65496,16},{65497,16},{65498,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{506,9},{65499,16},{65500,16},{65501,16},{65502,16},{65503,16},{65504,16},{65505,16},{65506,16},{65507,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{2041,11},{65508,16},{65509,16},{65510,16},{65511,16},{65512,16},{65513,16},{65514,16},{65515,16},{65516,16},{0,0},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{16352,14},{65517,16},{65518,16},{65519,16},{65520,16},{65521,16},{65522,16},{65523,16},{65524,16},{65525,16},{0,0},{0,0},{0,0},{0,0},{0,0},
+		{1018,10},{32707,15},{65526,16},{65527,16},{65528,16},{65529,16},{65530,16},{65531,16},{65532,16},{65533,16},{65534,16},{0,0},{0,0},{0,0},{0,0},{0,0}
+	};
+	static const int YQT[] = {16,11,10,16,24,40,51,61,12,12,14,19,26,58,60,55,14,13,16,24,40,57,69,56,14,17,22,29,51,87,80,62,18,22,37,56,68,109,103,77,24,35,55,64,81,104,113,92,49,64,78,87,103,121,120,101,72,92,95,98,112,100,103,99};
+	static const int UVQT[] = {17,18,24,47,99,99,99,99,18,21,26,66,99,99,99,99,24,26,56,99,99,99,99,99,47,66,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99,99};
+	static const float aasf[] = { 1.0f * 2.828427125f, 1.387039845f * 2.828427125f, 1.306562965f * 2.828427125f, 1.175875602f * 2.828427125f, 1.0f * 2.828427125f, 0.785694958f * 2.828427125f, 0.541196100f * 2.828427125f, 0.275899379f * 2.828427125f };
+
+	if(!data || !filename || !width || !height || comp > 4 || comp < 1 || comp == 2) {
+		return 0;
+	}
+
+	FILE *fp = fopen(filename, "wb");
+	if(!fp) {
+		return 0;
+	}
+
+	int quality_factor = quality ? quality : 90;
+	int subsample = quality_factor <= 90 ? 1 : 0;
+	quality_factor = quality_factor < 1 ? 1 : quality_factor > 100 ? 100 : quality_factor;
+	quality_factor = quality_factor < 50 ? 5000 / quality_factor : 200 - quality_factor * 2;
+
+	unsigned char YTable[64], UVTable[64];
+	for(int i = 0; i < 64; ++i) {
+		int yti = (YQT[i]*quality_factor+50)/100;
+		YTable[s_jo_ZigZag[i]] = yti < 1 ? 1 : yti > 255 ? 255 : yti;
+		int uvti  = (UVQT[i]*quality_factor+50)/100;
+		UVTable[s_jo_ZigZag[i]] = uvti < 1 ? 1 : uvti > 255 ? 255 : uvti;
+	}
+
+	float fdtbl_Y[64], fdtbl_UV[64];
+	for(int row = 0, k = 0; row < 8; ++row) {
+		for(int col = 0; col < 8; ++col, ++k) {
+			fdtbl_Y[k]  = 1 / (YTable [s_jo_ZigZag[k]] * aasf[row] * aasf[col]);
+			fdtbl_UV[k] = 1 / (UVTable[s_jo_ZigZag[k]] * aasf[row] * aasf[col]);
+		}
+	}
+
+	// Write Headers
+	static const unsigned char head0[] = { 0xFF,0xD8,  0xFF,0xE0,0,0x10,'J','F','I','F',0,1,1,0,0,1,0,1,0,0,0xFF,  0xDB,0,0x84,0 };
+	fwrite(head0, sizeof(head0), 1, fp);
+	fwrite(YTable, sizeof(YTable), 1, fp);
+	putc(1, fp);
+	fwrite(UVTable, sizeof(UVTable), 1, fp);
+	const unsigned char head1[] = { 0xFF,0xC0,0,0x11,8,(unsigned char)(height>>8),(unsigned char)(height&0xFF),(unsigned char)(width>>8),(unsigned char)(width&0xFF),3,1,(unsigned char)(subsample?0x22:0x11),0,2,0x11,1,3,0x11,1,0xFF,0xC4,0x01,0xA2,0 };
+	fwrite(head1, sizeof(head1), 1, fp);
+	fwrite(std_dc_luminance_nrcodes+1, sizeof(std_dc_luminance_nrcodes)-1, 1, fp);
+	fwrite(std_dc_luminance_values, sizeof(std_dc_luminance_values), 1, fp);
+	putc(0x10, fp); // HTYACinfo
+	fwrite(std_ac_luminance_nrcodes+1, sizeof(std_ac_luminance_nrcodes)-1, 1, fp);
+	fwrite(std_ac_luminance_values, sizeof(std_ac_luminance_values), 1, fp);
+	putc(1, fp); // HTUDCinfo
+	fwrite(std_dc_chrominance_nrcodes+1, sizeof(std_dc_chrominance_nrcodes)-1, 1, fp);
+	fwrite(std_dc_chrominance_values, sizeof(std_dc_chrominance_values), 1, fp);
+	putc(0x11, fp); // HTUACinfo
+	fwrite(std_ac_chrominance_nrcodes+1, sizeof(std_ac_chrominance_nrcodes)-1, 1, fp);
+	fwrite(std_ac_chrominance_values, sizeof(std_ac_chrominance_values), 1, fp);
+	static const unsigned char head2[] = { 0xFF,0xDA,0,0xC,3,1,0,2,0x11,3,0x11,0,0x3F,0 };
+	fwrite(head2, sizeof(head2), 1, fp);
+
+	// Encode 8x8 macroblocks
+	int ofsG = comp > 1 ? 1 : 0;
+	int ofsB = comp > 1 ? 2 : 0;
+	const unsigned char *dataR = (const unsigned char *)data;
+	const unsigned char *dataG = dataR + ofsG;
+	const unsigned char *dataB = dataR + ofsB;
+
+	int bitBuf=0, bitCnt=0;
+	int DCY=0, DCU=0, DCV=0;
+	if(subsample) {
+		float Y[256], U[256], V[256];
+		for(int y = 0; y < height; y += 16) {
+			for(int x = 0; x < width; x += 16) {
+				int prow, pcol, p, pos, yy, xx, j;
+				float subU[64], subV[64];
+				for(int row = y, pos = 0; row < y+16; ++row) {
+					for(int col = x; col < x+16; ++col, ++pos) {
+						int prow = row >= height ? height-1 : row;
+						int pcol = col >= width ? width-1 : col;
+						int p = prow*width*comp + pcol*comp;
+						jo_calcYUV(&Y[pos], &U[pos], &V[pos], dataR[p], dataG[p], dataB[p]);
+					}
+				}
+				DCY = jo_processDU(fp, &bitBuf, &bitCnt, Y+0, 16, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+				DCY = jo_processDU(fp, &bitBuf, &bitCnt, Y+8, 16, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+				DCY = jo_processDU(fp, &bitBuf, &bitCnt, Y+128, 16, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+				DCY = jo_processDU(fp, &bitBuf, &bitCnt, Y+136, 16, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+				// subsample U,V
+				for(int yy = 0, pos = 0; yy < 8; ++yy) {
+					for(int xx = 0; xx < 8; ++xx, ++pos) {
+						int j = yy*32+xx*2;
+						subU[pos] = (U[j+0] + U[j+1] + U[j+16] + U[j+17]) * 0.25f;
+						subV[pos] = (V[j+0] + V[j+1] + V[j+16] + V[j+17]) * 0.25f;
+					}
+				}
+				DCU = jo_processDU(fp, &bitBuf, &bitCnt, subU, 8, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
+				DCV = jo_processDU(fp, &bitBuf, &bitCnt, subV, 8, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
+			}
+		}
+	} else {
+		float Y[64], U[64], V[64];
+		for(int y = 0; y < height; y += 8) {
+			for(int x = 0; x < width; x += 8) {
+				int prow, pcol, p, pos;
+				for(int row = y, pos = 0; row < y+8; ++row) {
+					for(int col = x; col < x+8; ++col, ++pos) {
+						int prow = row >= height ? height-1 : row;
+						int pcol = col >= width ? width-1 : col;
+						int p = prow*width*comp + pcol*comp;
+						jo_calcYUV(&Y[pos], &U[pos], &V[pos], dataR[p], dataG[p], dataB[p]);
+					}
+				}
+				DCY = jo_processDU(fp, &bitBuf, &bitCnt, Y, 8, fdtbl_Y, DCY, YDC_HT, YAC_HT);
+				DCU = jo_processDU(fp, &bitBuf, &bitCnt, U, 8, fdtbl_UV, DCU, UVDC_HT, UVAC_HT);
+				DCV = jo_processDU(fp, &bitBuf, &bitCnt, V, 8, fdtbl_UV, DCV, UVDC_HT, UVAC_HT);
+			}
+		}
+	}
+
+	// Do the bit alignment of the EOI marker
+	static const unsigned short fillBits[] = {0x7F, 7};
+	jo_writeBits(fp, &bitBuf, &bitCnt, fillBits);
+	putc(0xFF, fp);
+	putc(0xD9, fp);
+	fclose(fp);
+	return 1;
+}
+
+#endif
+
+//#define JO_JPEG_TEST
+#ifdef JO_JPEG_TEST
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
+int main(int argc, char **argv) {
+	int width, height, comp;
+	unsigned char *data = stbi_load("kodim01.png", &width, &height, &comp, 0);
+	jo_write_jpg("kodim01.jpg", data, width, height, comp, 95);
+	unsigned char *data2 = stbi_load("kodim01.jpg", &width, &height, &comp, 0);
+	double mse = 0;
+	for(int i = 0; i < width*height*comp; ++i) mse += (data[i] - data2[i]) * (data[i] - data2[i]);
+	mse /= width*height*comp;
+	printf("MSE: %f\n", mse);
+	stbi_image_free(data);
+	stbi_image_free(data2);
+	return 0;
+}
+
+#endif
+
+```
+
+参考链接 https://blog.csdn.net/zhizhengguan/article/details/106012115
+
+```c++
+//BMP生成的最简单代码
+#include <stdio.h>
+#include <stdlib.h>
+#define w 200
+#define h 500
+void WriteBMP(char*img,const char* filename)
+{
+    int l=(w*3+3)/4*4;
+    int bmi[]= {
+            l*h+54,0,54,40,w,h,1|3*8<<16,0,l*h,0,0,100,0};
+    FILE *fp = fopen(filename,"wb");
+    fprintf(fp,"BM");
+    fwrite(&bmi,52,1,fp);
+    fwrite(img,1,l*h,fp);
+    fclose(fp);
+}
+int main()
+{
+    char img[w*h*3];
+    for(int i=0; i<w*h*3; i++)img[i]=rand()%256;
+    WriteBMP(img,"test.bmp");
+    system("test.bmp");
+    return 0;
+}
+
+// 如果想指定颜色
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdint.h>
+
+/*
+https://blog.csdn.net/nibiewuxuanze/article/details/78805763
+按小端字节序来存储，且数据块一般组织成4字节对齐。
+图像数据区也不例外，按每行图像的数据字节，按4字节对齐。
+
+图像数据按行倒序存放，先存储最后一行图像数据，然后依次存放，直到第一行数据。
+这样设计，可能是为了从文件尾部往前读的时候，能够直接顺序读出图像数据吧。
+*/
+typedef union {
+    uint8_t bytes[4];
+    uint32_t value;
+}LITTLE;
+
+/*
+ * @fileName: bmp file name: test.bmp
+ * @width   : bmp pixel width: 32bit
+ * @height  : bmp pixel width: 32bit
+ * @color   : R[8]/G[8]/B[8]
+ * @note    : BMP is l endian mode
+ */
+int bmp_gen_test(char *fileName, uint32_t width, uint32_t height, uint32_t color)
+{
+    FILE *fp;
+    uint32_t i, j;
+    LITTLE l_width, l_height, l_bfSize, l_biSizeImage;
+
+    uint8_t r = color >> 16;
+    uint8_t g = color >> 8;
+    uint8_t b = color;
+    uint32_t width_r  =  (width * 24 / 8 + 3) / 4 * 4;
+    uint32_t bfSize = width_r * height + 54 + 2;
+    uint32_t biSizeImage = width_r * height;
+
+    l_width.value = width;
+    l_height.value = height;
+    l_bfSize.value = bfSize;
+    l_biSizeImage.value = biSizeImage;
+
+    /* BMP file format: www.cnblogs.com/wainiwann/p/7086844.html */
+    uint8_t bmp_head_map[54] = {
+            /* bmp file header: 14 byte */
+            0x42, 0x4d,
+            // bmp pixel size: width * height * 3 + 54
+            l_bfSize.bytes[0], l_bfSize.bytes[1], l_bfSize.bytes[2], l_bfSize.bytes[3],
+            0, 0 , 0, 0,
+            54, 0 , 0, 0,    /* 14+40=54 */
+
+            /* bmp map info: 40 byte */
+            40, 0, 0, 0,
+            //width
+            l_width.bytes[0], l_width.bytes[1], l_width.bytes[2], l_width.bytes[3],
+            //height
+            l_height.bytes[0], l_height.bytes[1], l_height.bytes[2], l_height.bytes[3],
+            1, 0,
+            24, 00,             /* 24 bit: R[8]/G[8]/B[8] */
+
+            0, 0, 0, 0,     //biCompression:0
+//        0, 0, 0, 0,     //biSizeImage锛欰2 00 00 00=162
+            l_biSizeImage.bytes[0], l_biSizeImage.bytes[1], l_biSizeImage.bytes[2], l_biSizeImage.bytes[3],
+            0, 0, 0, 0,     //biXPelsPerMeter: 60 0F 00 00
+            0, 0, 0, 0,     //biYPelsPerMeter
+            0, 0, 0, 0,     //biClrUsed
+            0, 0, 0, 0      //biClrImportant
+    };
+
+    /* write in binary format */
+    fp = fopen(fileName, "wb+");
+    if(fp == NULL)
+    {
+        printf("%s: file create failed!\n", fileName);
+        return -1;
+    }
+
+    printf("%s: file create success!\n", fileName);
+
+    fwrite(bmp_head_map, sizeof(bmp_head_map), 1, fp);
+
+    for(i = 0; i < height; i++) {
+        for(j = 0; j < width; j++)
+            fprintf(fp, "%c%c%c", b, g, r); /* BGR */
+        //4 byte align
+        for(j = 0; j < width_r-width*3; j++)
+            fprintf(fp, "%c", 0);
+    }
+
+    fprintf(fp, "%c%c", 0, 0); //PhotoShop two byte "0"
+
+    if(fclose(fp))
+    {
+        printf("file close failed!\n");
+        return -1;
+    }
+    fp = NULL;
+
+    printf("width: %d\n", width);
+    printf("height: %d\n", height);
+    printf("R:%d, G:%d, B:%d or #%06x\n", r, g, b, color);
+
+    return 0;
+}
+
+int main(int argc, char *argv[])
+{
+    int ret;
+    char bmpName[200];
+
+    char *name = "test";
+    uint32_t width = 200;
+    uint32_t height = 200;
+    uint32_t color = 0x563412;
+
+    /* generate bmp file name */
+    sprintf(bmpName, "%s_%d_%d_0x%06x.bmp", name, width, height, color);
+    printf("bmpName: %s\n", bmpName);
+
+    ret = bmp_gen_test(bmpName, width, height, color);
+    if(!ret)
+        system(bmpName);
+
+
+
+    return 0;
+}
+
+
+//生成png图片
+//------------------ svpng.h---------------------
+
+/*! \file
+    \brief      svpng() is a minimalistic C function for saving RGB/RGBA image into uncompressed PNG.
+    \author     Milo Yip
+    \version    0.1.1
+    \copyright  MIT license
+    \sa         http://github.com/miloyip/svpng
+*/
+
+#ifndef SVPNG_INC_
+#define SVPNG_INC_
+
+/*! \def SVPNG_LINKAGE
+    \brief User customizable linkage for svpng() function.
+    By default this macro is empty.
+    User may define this macro as static for static linkage,
+    and/or inline in C99/C++, etc.
+*/
+#ifndef SVPNG_LINKAGE
+#define SVPNG_LINKAGE
+#endif
+
+/*! \def SVPNG_OUTPUT
+    \brief User customizable output stream.
+    By default, it uses C file descriptor and fputc() to output bytes.
+    In C++, for example, user may use std::ostream or std::vector instead.
+*/
+#ifndef SVPNG_OUTPUT
+#include <stdio.h>
+#define SVPNG_OUTPUT FILE* fp
+#endif
+
+/*! \def SVPNG_PUT
+    \brief Write a byte
+*/
+#ifndef SVPNG_PUT
+#define SVPNG_PUT(u) fputc(u, fp)
+#endif
+
+
+/*!
+    \brief Save a RGB/RGBA image in PNG format.
+    \param SVPNG_OUTPUT Output stream (by default using file descriptor).
+    \param w Width of the image. (<16383)
+    \param h Height of the image.
+    \param img Image pixel data in 24-bit RGB or 32-bit RGBA format.
+    \param alpha Whether the image contains alpha channel.
+*/
+SVPNG_LINKAGE void svpng(SVPNG_OUTPUT, unsigned w, unsigned h, const unsigned char* img, int alpha) {
+    static const unsigned t[] = { 0, 0x1db71064, 0x3b6e20c8, 0x26d930ac, 0x76dc4190, 0x6b6b51f4, 0x4db26158, 0x5005713c,
+            /* CRC32 Table */    0xedb88320, 0xf00f9344, 0xd6d6a3e8, 0xcb61b38c, 0x9b64c2b0, 0x86d3d2d4, 0xa00ae278, 0xbdbdf21c };
+    unsigned a = 1, b = 0, c, p = w * (alpha ? 4 : 3) + 1, x, y, i;   /* ADLER-a, ADLER-b, CRC, pitch */
+#define SVPNG_U8A(ua, l) for (i = 0; i < l; i++) SVPNG_PUT((ua)[i]);
+#define SVPNG_U32(u) do { SVPNG_PUT((u) >> 24); SVPNG_PUT(((u) >> 16) & 255); SVPNG_PUT(((u) >> 8) & 255); SVPNG_PUT((u) & 255); } while(0)
+#define SVPNG_U8C(u) do { SVPNG_PUT(u); c ^= (u); c = (c >> 4) ^ t[c & 15]; c = (c >> 4) ^ t[c & 15]; } while(0)
+#define SVPNG_U8AC(ua, l) for (i = 0; i < l; i++) SVPNG_U8C((ua)[i])
+#define SVPNG_U16LC(u) do { SVPNG_U8C((u) & 255); SVPNG_U8C(((u) >> 8) & 255); } while(0)
+#define SVPNG_U32C(u) do { SVPNG_U8C((u) >> 24); SVPNG_U8C(((u) >> 16) & 255); SVPNG_U8C(((u) >> 8) & 255); SVPNG_U8C((u) & 255); } while(0)
+#define SVPNG_U8ADLER(u) do { SVPNG_U8C(u); a = (a + (u)) % 65521; b = (b + a) % 65521; } while(0)
+#define SVPNG_BEGIN(s, l) do { SVPNG_U32(l); c = ~0U; SVPNG_U8AC(s, 4); } while(0)
+#define SVPNG_END() SVPNG_U32(~c)
+    SVPNG_U8A("\x89PNG\r\n\32\n", 8);           /* Magic */
+    SVPNG_BEGIN("IHDR", 13);                    /* IHDR chunk { */
+    SVPNG_U32C(w); SVPNG_U32C(h);               /*   Width & Height (8 bytes) */
+    SVPNG_U8C(8); SVPNG_U8C(alpha ? 6 : 2);     /*   Depth=8, Color=True color with/without alpha (2 bytes) */
+    SVPNG_U8AC("\0\0\0", 3);                    /*   Compression=Deflate, Filter=No, Interlace=No (3 bytes) */
+    SVPNG_END();                                /* } */
+    SVPNG_BEGIN("IDAT", 2 + h * (5 + p) + 4);   /* IDAT chunk { */
+    SVPNG_U8AC("\x78\1", 2);                    /*   Deflate block begin (2 bytes) */
+    for (y = 0; y < h; y++) {                   /*   Each horizontal line makes a block for simplicity */
+        SVPNG_U8C(y == h - 1);                  /*   1 for the last block, 0 for others (1 byte) */
+        SVPNG_U16LC(p); SVPNG_U16LC(~p);        /*   Size of block in little endian and its 1's complement (4 bytes) */
+        SVPNG_U8ADLER(0);                       /*   No filter prefix (1 byte) */
+        for (x = 0; x < p - 1; x++, img++)
+            SVPNG_U8ADLER(*img);                /*   Image pixel data */
+    }
+    SVPNG_U32C((b << 16) | a);                  /*   Deflate block end with adler (4 bytes) */
+    SVPNG_END();                                /* } */
+    SVPNG_BEGIN("IEND", 0); SVPNG_END();        /* IEND chunk {} */
+}
+
+#endif /* SVPNG_INC_ */
+
+
+//测试 png
+
+-----------------main.c---------------------------------
+#include "svpng.h"
+
+void test_rgb(void) {
+    unsigned char rgb[256 * 256 * 3], *p = rgb;
+    unsigned x, y;
+    FILE *fp = fopen("C:\\Users\\Administrator\\Pictures\\rgb.png", "wb");
+    for (y = 0; y < 256; y++)
+        for (x = 0; x < 256; x++) {
+            *p++ = (unsigned char)x;    /* R */
+            *p++ = (unsigned char)y;    /* G */
+            *p++ = 128;                 /* B */
+        }
+    svpng(fp, 256, 256, rgb, 0);
+    fclose(fp);
+}
+
+void test_rgba(void) {
+    unsigned char rgba[256 * 256 * 4], *p = rgba;
+    unsigned x, y;
+    FILE* fp = fopen("C:\\Users\\Administrator\\Pictures\\rgba.png", "wb");
+    for (y = 0; y < 256; y++)
+        for (x = 0; x < 256; x++) {
+            *p++ = (unsigned char)x;                /* R */
+            *p++ = (unsigned char)y;                /* G */
+            *p++ = 128;                             /* B */
+            *p++ = (unsigned char)((x + y) / 2);    /* A */
+        }
+    svpng(fp, 256, 256, rgba, 1);
+    fclose(fp);
+}
+
+int main(void) {
+    test_rgb();
+    test_rgba();
+    return 0;
+}
+
+```
