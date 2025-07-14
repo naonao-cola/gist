@@ -16,7 +16,15 @@ export default defineConfig({
         text: 'cxx',
         items: [
           { text: 'cxx', link: '/cxx/cxx' },
-          { text: 'tip', link: '/cxx/tips'}
+          { text: '小技巧', link: '/cxx/tips'}
+        ]
+      },
+      {
+        text: 'compile',
+        items: [
+          { text: '示例', link: '/compile/compile' },
+          { text: 'xmake', link: '/compile/xmake' },
+          { text: 'cmake', link: '/compile/cmake'}
         ]
       },
       {
