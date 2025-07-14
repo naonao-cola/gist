@@ -10,7 +10,9 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: '赞助', link: '/README' }
     ],
-
+    outline: {
+      level:[2,3]
+    },
     sidebar: [
       {
         text: 'cxx',
@@ -20,22 +22,22 @@ export default defineConfig({
         ]
       },
       {
-        text: 'compile',
+        text: '编译',
         items: [
-          { text: '示例', link: '/compile/compile' },
+          { text: '常用示例', link: '/compile/compile' },
           { text: 'xmake', link: '/compile/xmake' },
           { text: 'cmake', link: '/compile/cmake'}
         ]
       },
       {
-        text: 'Math',
+        text: '数学之美',
         items: [
           { text: 'math', link: '/math/math' },
-          { text: 'linear', link: '/math/linear' }
+          { text: '线性代数', link: '/math/linear' }
         ]
       },
       {
-        text: 'Camera',
+        text: '相机',
         items: [
           { text: 'camera', link: '/camera/camera' },
           { text: 'halcon', link: '/camera/halcon' }

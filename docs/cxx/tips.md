@@ -863,6 +863,7 @@ int a = i;
 int b = i;
 ```
 volatile 指出 i 是随时可能发生变化的，每次使用它的时候必须从 i的地址中读取，因而编译器生成的汇编代码会重新从i的地址读取数据放在 b 中。而优化做法是，由于编译器发现两次从 i读数据的代码之间的代码没有对 i 进行过操作，它会自动把上次读的数据放在 b 中。而不是重新从 i 里面读。这样以来，如果 i是一个寄存器变量或者表示一个端口数据就容易出错，所以说 volatile 可以保证对特殊地址的稳定访问。注意，在 VC 6 中，一般调试模式没有进行代码优化，所以这个关键字的作用看不出来。下面通过插入汇编代码，测试有无 volatile 关键字，对程序最终代码的影响，输入下面的代码：
+
 ```c++
 #include <stdio.h>
 
@@ -885,6 +886,7 @@ void main()
 ```
 在 Debug 版本模式运行程序，输出结果如下：`i = 10  i = 32` 在 Release 版本模式运行程序，输出结果如下：`i = 10 i = 10`
 输出的结果明显表明，Release 模式下，编译器对代码进行了优化，第二次没有输出正确的 i 值。下面，我们把 i 的声明加上 volatile 关键字，看看有什么变化：
+
 ```c++
 #include <stdio.h>
 
@@ -906,9 +908,9 @@ void main
 
 这说明这个 volatile 关键字发挥了它的作用。其实不只是内嵌汇编操纵栈"这种方式属于编译无法识别的变量改变，另外更多的可能是多线程并发访问共享变量时，一个线程改变了变量的值，怎样让改变后的值对其它线程 visible。一般说来，volatile用在如下的几个地方：
 
-    1) 中断服务程序中修改的供其它程序检测的变量需要加 volatile；
-    2) 多任务环境下各任务间共享的标志应该加 volatile；
-    3) 存储器映射的硬件寄存器通常也要加 volatile 说明，因为每次对它的读写都可能由不同意义；
+ 1) 中断服务程序中修改的供其它程序检测的变量需要加 volatile；
+ 2) 多任务环境下各任务间共享的标志应该加 volatile；
+ 3) 存储器映射的硬件寄存器通常也要加 volatile 说明，因为每次对它的读写都可能由不同意义；
 
 多线程下的volatile
 
@@ -936,6 +938,7 @@ for(;  nMyCounter<100;nMyCounter++)
 
 
 ```
+
 在此段代码中，nMyCounter 的拷贝可能存放到某个寄存器中（循环中，对 nMyCounter 的测试及操作总是对此寄存器中的值进行），但是另外又有段代码执行了这样的操作：nMyCounter -= 1; 这个操作中，对 nMyCounter 的改变是对内存中的 nMyCounter 进行操作，于是出现了这样一个现象：nMyCounter 的改变不同步。
 
 其他参考链接： https://zhuanlan.zhihu.com/p/112742540
@@ -957,12 +960,13 @@ int main(){
 未用constexpr时，数组的大小必须是常量，在声明数组array时，用函数返回值，此时会报错：error C2131: 表达式的计算结果不是常数，note: 对未定义的函数或为未声明为“constexpr”的函数的调用导致了故障。用constexpr关键字可以解决这种问题，在GetLen函数前加constexpr声明。
 当然，constexpr修饰的函数也有一定的限制：
 
-    函数体尽量只包含一个return语句，多个可能会编译出错；
-    函数体可以包含其他语句，但是不能是运行期语句，只能是编译期语句；
+函数体尽量只包含一个return语句，多个可能会编译出错；
+函数体可以包含其他语句，但是不能是运行期语句，只能是编译期语句；
 
 编译器会将constexpr函数视为内联函数！所以在编译时若能求出其值，则会把函数调用替换成结果值。
 
 在类的构造函数中也可以使用constexpr关键字
+
 constexpr还能修饰类的构造函数，即保证传递给该构造函数的所有参数都是constexpr，那么产生的对象的所有成员都是constexpr。该对象是constexpr对象了，可用于只使用constexpr的场合。注意constexpr构造函数的函数体必须为空，所有成员变量的初始化都放到初始化列表中。
 
 ```c++
@@ -997,12 +1001,13 @@ int main(void)
 ```
 const和constexpr对指针的修饰有什么差别呢？
 
-    const 和 constexpr 变量之间的主要区别在于：const 变量的初始化可以延迟到运行时，而 constexpr 变量必须在编译时进行初始化。所有 constexpr 变量均为常量，因此必须使用常量表达式初始化。
-    constexpr和指针
-    在使用const时，如果关键字const出现在星号左边，表示被指物是常量；如果出现在星号右边，表示指针本身是常量；如果出现在星号两边，表示被指物和指针两者都是常量。
+const 和 constexpr 变量之间的主要区别在于：const 变量的初始化可以延迟到运行时，而 constexpr 变量必须在编译时进行初始化。所有 constexpr 变量均为常量，因此必须使用常量表达式初始化。
 
-    与const不同，在constexpr声明中如果定义了一个指针，限定符constexpr仅对指针有效，与指针所指对象无关。
-    constexpr是一种很强的约束，更好的保证程序的正确定语义不被破坏；编译器可以对constexper代码进行非常大的优化，例如：将用到的constexpr表达式直接替换成结果, 相比宏来说没有额外的开销。
+constexpr和指针
+在使用const时，如果关键字const出现在星号左边，表示被指物是常量；如果出现在星号右边，表示指针本身是常量；如果出现在星号两边，表示被指物和指针两者都是常量。
+
+与const不同，在constexpr声明中如果定义了一个指针，限定符constexpr仅对指针有效，与指针所指对象无关。
+constexpr是一种很强的约束，更好的保证程序的正确定语义不被破坏；编译器可以对constexper代码进行非常大的优化，例如：将用到的constexpr表达式直接替换成结果, 相比宏来说没有额外的开销。
 
 
 ```c++
@@ -1085,6 +1090,7 @@ int main(void)
 	return 0;
 }
 ```
+
 简单的说constexpr所引用的对象必须在编译期就决定地址。还有一个奇葩的地方就是可以通过上例conexprPtrD来修改g_tempA的值，也就是说constexpr修饰的引用不是常量，如果要确保其实常量引用需要constexpr const来修饰。
 
 
@@ -1094,6 +1100,7 @@ mutable的中文意思是“可变的，易变的”，跟constant（既C++中�
 在C++中，mutable也是为了突破const的限制而设置的。被mutable修饰的变量，将永远处于可变的状态，即使在一个const函数中。
 
 我们知道，如果类的成员函数不会改变对象的状态，那么这个成员函数一般会声明成const的。但是，有些时候，我们需要在const的函数里面修改一些跟类状态无关的数据成员，那么这个数据成员就应该被mutalbe来修饰。
+
 ```c++
 class ClxTest
 {
@@ -1109,6 +1116,7 @@ void OutputTest(const ClxTest& lx)
 　lx.Output();
 }
 ```
+
 类ClxTest的成员函数Output是用来输出的，不会修改类的状态，所以被声明为const的。
 
 函数OutputTest也是用来输出的，里面调用了对象lx的Output输出方法，为了防止在函数中调用其他成员函数修改任何成员变量，所以参数也被const修饰。
@@ -1156,13 +1164,16 @@ void OutputTest(const ClxTest& lx)
 }
 
 ```
+
 计数器m_iTimes被mutable修饰，那么它就可以突破const的限制，在被const修饰的函数里面也能被修改。
 
 ### noexecpt
+
 该关键字告诉编译器，函数中不会发生异常,这有利于编译器对程序做更多的优化。
 如果在运行时，noexecpt函数向外抛出了异常（如果函数内部捕捉了异常并完成处理，这种情况不算抛出异常），程序会直接终止，调用std::terminate()函数，该函数内部会调用std::abort()终止程序。
 
 换一句话的意思就是，不传递异常，在异常处直接终止，便于查找bug。
+
 ```c++
     void swap(Type& x, Type& y) throw()   //C++11之前
     {
@@ -1177,14 +1188,13 @@ void OutputTest(const ClxTest& lx)
     {
         x.swap(y);
     }
-
 ```
 使用noexcept表明函数或操作不会发生异常，会给编译器更大的优化空间。然而，并不是加上noexcept就能提高效率，步子迈大了也容易扯着蛋。
 以下情形鼓励使用noexcept：
 
-    移动构造函数（move constructor）
-    移动分配函数（move assignment）
-    析构函数（destructor）。这里提一句，在新版本的编译器中，析构函数是默认加上关键字noexcept的。下面代码可以检测编译器是否给析构函数加上关键字noexcept。
+移动构造函数（move constructor）
+移动分配函数（move assignment）
+析构函数（destructor）。这里提一句，在新版本的编译器中，析构函数是默认加上关键字noexcept的。下面代码可以检测编译器是否给析构函数加上关键字noexcept。
 
 ```c++
     struct X
@@ -1202,6 +1212,7 @@ void OutputTest(const ClxTest& lx)
     }
 ```
 ### explicit
+
 C++中的explicit关键字只能用于修饰只有一个参数的类构造函数, 它的作用是表明该构造函数是显示的, 而非隐式的,
 
 ```c++
@@ -1275,11 +1286,11 @@ string2 = 3;              // 这样也是不行的, 因为取消了隐式转换
 string3 = string1;        // 这样也是不行的, 因为取消了隐式转换, 除非类实现操作符"="的重载
 ```
 
-### __restrict__
+### restrict
 
-restrict 用来定义指针变量，表明该变量没有别名，意思就是：除了该变量以外，没有别的方法可以访问其指向的地址空间。
 
 ```c++
+// __restrict__ 用来定义指针变量，表明该变量没有别名，意思就是：除了该变量以外，没有别的方法可以访问其指向的地址空间。
 /*
 mov eax val;
 add ptrA eax;
@@ -1291,18 +1302,14 @@ void update(int *ptrA, int * ptrB, int * val)
           *ptrA +=*val;
           *ptrB +=*val;
 }
-
 /*
 其中，变量val加载了两次。因为它不知道ptrA，ptrB是否与val有内存上的交叠，所以为了保险起见，只能每次用到val时都从内存里读。如果加上__restrict__:
 mov eax val;
 add ptrA eax;
 add ptrB eax;
-
 */
 void update_restrict(int * __restrict ptrA, int * __restrictptrB, int * __restrict val);
-
 ```
-
 ### register
 
 为寄存器变量分配寄存器是动态完成的，因此，只有局部变量和形式参数才能定义为寄存器变量。寄存器的长度一般和机器的字长一致，所以，只有较短的类型如int、char、short等才适合定义为寄存器变量，诸如double等较大的类型，不推荐将其定义为寄存器类型。注意一般在多层循环用
@@ -1466,12 +1473,13 @@ int main()
     return 0;
 }
 ```
+
 std::atomic_flag 是 C++ 中的一个原子布尔类型，它用于实现原子锁操作。
 
-    std::atomic_flag 默认是清除状态（false）。可以使用 ATOMIC_FLAG_INIT 宏进行初始化，例如：std::atomic_flag flag = ATOMIC_FLAG_INIT;
-    std::atomic_flag 提供了两个成员函数 test_and_set() 和 clear() 来测试和设置标志位。test_and_set() 函数会将标志位置为 true，并返回之前的值；clear() 函数将标志位置为 false。
-    std::atomic_flag 的 test_and_set() 和 clear() 操作是原子的，可以保证在多线程环境下正确执行。
-    std::atomic_flag 只能表示两种状态，即 true 或 false，不能做其他比较操作。通常情况下，std::atomic_flag 被用作简单的互斥锁，而不是用来存储信息。
+std::atomic_flag 默认是清除状态（false）。可以使用 ATOMIC_FLAG_INIT 宏进行初始化，例如：std::atomic_flag flag = ATOMIC_FLAG_INIT;
+std::atomic_flag 提供了两个成员函数 test_and_set() 和 clear() 来测试和设置标志位。test_and_set() 函数会将标志位置为 true，并返回之前的值；clear() 函数将标志位置为 false。
+std::atomic_flag 的 test_and_set() 和 clear() 操作是原子的，可以保证在多线程环境下正确执行。
+std::atomic_flag 只能表示两种状态，即 true 或 false，不能做其他比较操作。通常情况下，std::atomic_flag 被用作简单的互斥锁，而不是用来存储信息。
 
 使用 std::atomic_flag 进行原子锁操作：
 
@@ -1506,27 +1514,30 @@ int main() {
 }
 
 ```
+
 std::atomic_flag 是 C++ 中用于实现原子锁操作的类型，它提供了 test_and_set() 和 clear() 函数来测试和设置标志位，并且保证这些操作是原子的。
 
 store函数
 
-std::atomic<T>::store()是一个成员函数，用于将给定的值存储到原子对象中。
+`std::atomic<T>::store()`是一个成员函数，用于将给定的值存储到原子对象中。
 ```c++
 void store(T desired, std::memory_order order = std::memory_order_seq_cst) volatile noexcept;
 void store(T desired, std::memory_order order = std::memory_order_seq_cst) noexcept;
 //desired：要存储的值。
 //order：存储操作的内存顺序。默认是std::memory_order_seq_cst（顺序一致性）。
 ```
+
 存储操作的内存顺序参数：
 
-| value                | 内存顺序               | 描述                                                                                                                                           |
-| -------------------- | ---------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| memory_order_relaxed | 无序的内存访问         | 不做任何同步，仅保证该原子类型变量的操作是原子化的，对于在访问原子变量周围的同步或者内存重排行为, 则一概不管                                                     |
-| memory_order_acquire | 获取关系的顺序         | 在读取到此原子变量后面的所有读取/写入指令, 不可以被重排到读取此原子变量的前面.                                       |
-| memory_order_release | 释放关系的顺序         |  在写入此变量之前的所有读取/写入指令, 不可以重排到写入此原子变量的后面，并且其他线程可以看到该变量的存储结果。                                         |
-| memory_order_acquire_release | 与消费者关系有关的顺序 | 相当于一次完全内存屏障. 这种内存序需要一次read-modify-write操作, 既有acquire又有release. 用在两个线程交换什么东西的时候.                                      |
-| memory_order_seq_cst | 顺序一致性的顺序       | 序列化一致性和acquire-release区别不大. 比如, 在单生产者单消费者的情况下, 二者没有区别. 区别在于多线程的情况下, 序列化一致性保证, 多个线程观察到修改时, 顺序是一致的. |
-| memory_order_consume | 与消费者关系有关的顺序 | 假如一个线程通过这个内存序load的一个值, 那么与这个值相关的load和store, 不能重排到前面; 如果通过这个内存序Store一个值, 那么与这个值相关的load和store, 不能重排到后 面                              |
+| value                        | 内存顺序               | 描述                                                                                                                                                                 |
+| ---------------------------- | ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| memory_order_relaxed         | 无序的内存访问         | 不做任何同步，仅保证该原子类型变量的操作是原子化的，对于在访问原子变量周围的同步或者内存重排行为, 则一概不管                                                         |
+| memory_order_acquire         | 获取关系的顺序         | 在读取到此原子变量后面的所有读取/写入指令, 不可以被重排到读取此原子变量的前面.                                                                                       |
+| memory_order_release         | 释放关系的顺序         | 在写入此变量之前的所有读取/写入指令, 不可以重排到写入此原子变量的后面，并且其他线程可以看到该变量的存储结果。                                                        |
+| memory_order_acquire_release | 与消费者关系有关的顺序 | 相当于一次完全内存屏障. 这种内存序需要一次read-modify-write操作, 既有acquire又有release. 用在两个线程交换什么东西的时候.                                             |
+| memory_order_seq_cst         | 顺序一致性的顺序       | 序列化一致性和acquire-release区别不大. 比如, 在单生产者单消费者的情况下, 二者没有区别. 区别在于多线程的情况下, 序列化一致性保证, 多个线程观察到修改时, 顺序是一致的. |
+| memory_order_consume         | 与消费者关系有关的顺序 | 假如一个线程通过这个内存序load的一个值, 那么与这个值相关的load和store, 不能重排到前面; 如果通过这个内存序Store一个值, 那么与这个值相关的load和store, 不能重排到后 面 |
+
 
 ```c++
 #include <iostream>
@@ -1544,7 +1555,7 @@ int main()
 }
 ```
 输出`Value stored in atomic object: 10`
-例子中，首先定义了一个std::atomic<int>类型的原子变量atomic_int，初始值为0。然后，使用store()函数将变量val的值存储到atomic_int中。最后，打印出存储在原子对象中的值。
+例子中，首先定义了一个`std::atomic<int>`类型的原子变量atomic_int，初始值为0。然后，使用store()函数将变量val的值存储到atomic_int中。最后，打印出存储在原子对象中的值。
 
 需要注意的是，在多线程环境下使用原子变量和操作时，需要使用适当的内存顺序来保证数据的正确性和一致性。因此，store()函数中的order参数可以用来指定不同的内存顺序。如果不确定如何选择内存顺序，请使用默认值std::memory_order_seq_cst，它是最常用和最保险的。
 
@@ -1567,7 +1578,6 @@ do {
     x = foo.load(std::memory_order_relaxed);  // get value atomically
 } while (x==0);
 ```
-
 exchange函数
 
 访问和修改包含的值，将包含的值替换并返回它前面的值。
