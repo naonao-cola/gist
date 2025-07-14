@@ -5,5 +5,6 @@ build/
 ./obsidian
 # MacOS Cache
 .DS_Store
+./node_modules
 
 
