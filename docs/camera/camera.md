@@ -10,6 +10,11 @@
 
 
 ## 结构光系统标定（下篇）
-[filename](./camera_3.html ':include width=100% height=1500px' )
+![wechat](./Screenshot2025-07-14at23-28-03.png)
+
+
+
 ## 期相机标定的基本原理与经验
-[filename](./camera_4.html ':include width=100% height=1500px' )
+![wechat](./Screenshot2025-07-14at23-29-31.png)
+
+
