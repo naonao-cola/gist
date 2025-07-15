@@ -458,7 +458,9 @@ lambda表达式的语法归纳如下：
 
     5).[bar]按值捕获bar变量，同时不捕获其他变量。
 
-    6).[this]捕获当前类中的this指针，让lambda表达式拥有和当前类成员函数同样的访问权限。如果已经使用了&或者=，就默认添加此选项。捕获this的目的是可以在lamda中使用当前类的成员函数和成员变量。
+    6).[this]捕获当前类中的this指针，让lambda表达式拥有和当前类成员函数同样的访问权限。
+       如果已经使用了&或者=，就默认添加此选项。捕获this的目的是可以在lamda中使用当前类
+       的成员函数和成员变量。
 
 虽然按值捕获的变量值均补复制一份存储在lambda表达式变量中， 修改他们也并不会真正影响到外部，但我们却仍然无法修改它们。
 
@@ -676,7 +678,8 @@ Interface classes则是将细节放在子类中，父类只是包含虚方法和
 
  请记住：
 
-	1. 支持“编译依存性最小化”的一般构想是：相依于声明式，不要相依于定义式，基于此构想的两个手段是Handler classes和Interface classes。
+	1. 支持“编译依存性最小化”的一般构想是：相依于声明式，不要相依于定义式，基于此构想的两个手段
+       是Handler classes和Interface classes。
 
 	2. 程序库头文件应该以“完全且仅有声明式”的形式存在，这种做法不论是否涉及templates都适用。
 
@@ -1286,7 +1289,7 @@ string2 = 3;              // 这样也是不行的, 因为取消了隐式转换
 string3 = string1;        // 这样也是不行的, 因为取消了隐式转换, 除非类实现操作符"="的重载
 ```
 
-### restrict
+### __restrict__ 
 
 
 ```c++
@@ -1335,7 +1338,13 @@ void floyd(){
 
 ## 构造函数
 
-我们用对象a初始化对象b，后对象a我们就不在使用了，但是对象a的空间还在呀（在析构之前），既然拷贝构造函数，实际上就是把a对象的内容复制一份到b中，那么为什么我们不能直接使用a的空间呢？这样就避免了新的空间的分配，大大降低了构造的成本。这就是移动构造函数设计的初衷拷贝构造函数中，对于指针，我们一定要采用深层复制，而移动构造函数中，对于指针，我们采用浅层复制。浅层复制之所以危险，是因为两个指针共同指向一片内存空间，若第一个指针将其释放，另一个指针的指向就不合法了。所以我们只要避免第一个指针释放空间就可以了。避免的方法就是将第一个指针（比如a->value）置为NULL，这样在调用析构函数的时候，由于有判断是否为NULL的语句，所以析构a的时候并不会回收a->value指向的空间；移动构造函数的参数和拷贝构造函数不同，拷贝构造函数的参数是一个左值引用，但是移动构造函数的初值是一个右值引用。意味着，移动构造函数的参数是一个右值或者将亡值的引用。也就是说，只用用一个右值，或者将亡值初始化另一个对象的时候，才会调用移动构造函数。而那个move语句，就是将一个左值变成一个将亡值。
+我们用对象a初始化对象b，后对象a我们就不在使用了，但是对象a的空间还在呀（在析构之前），既然拷贝构造函数，实际上就是把a对象的内容复制一份到b中，那么为什么我们不能直接使用a的空间呢？这样就避免了新的空间的分配，大大降低了构造的成本。这就是移动构造函数设计的初衷拷贝构造函数中，对于指针，我们一定要采用深层复制，而移动构造函数中，对于指针，我们采用浅层复制。
+
+
+浅层复制之所以危险，是因为两个指针共同指向一片内存空间，若第一个指针将其释放，另一个指针的指向就不合法了。所以我们只要避免第一个指针释放空间就可以了。避免的方法就是将第一个指针（比如a->value）置为NULL，这样在调用析构函数的时候，由于有判断是否为NULL的语句，所以析构a的时候并不会回收a->value指向的空间；移动构造函数的参数和拷贝构造函数不同，拷贝构造函数的参数是一个左值引用，但是移动构造函数的初值是一个右值引用。
+
+
+意味着，移动构造函数的参数是一个右值或者将亡值的引用。也就是说，只用用一个右值，或者将亡值初始化另一个对象的时候，才会调用移动构造函数。而那个move语句，就是将一个左值变成一个将亡值。
 
 ### 浅复制
 ```c++
@@ -1448,14 +1457,15 @@ c++ 多线程的资料教程很多，就不自己写了了，放一点自己看�
 
 ### 原子变量
 atomic对象可以通过指定不同的memory orders来控制其对其他非原子对象的访问顺序和可见性，从而实现线程安全。常用的memory orders包括：
+`memory_order_relaxed`
+`memory_order_acquire`
+`memory_order_release` 
+`memory_order_acq_rel` 
+`memory_order_seq_cst` 等。
 
-	memory_order_relaxed、
-    memory_order_acquire、
-    memory_order_release、
-    memory_order_acq_rel
-    memory_order_seq_cst等。
 
 is_lock_free函数
+
 
 is_lock_free函数是一个成员函数，用于检查当前atomic对象是否支持无锁操作。调用此成员函数不会启动任何数据竞争。
 
@@ -1478,6 +1488,7 @@ std::atomic_flag 是 C++ 中的一个原子布尔类型，它用于实现原子�
 
 std::atomic_flag 默认是清除状态（false）。可以使用 ATOMIC_FLAG_INIT 宏进行初始化，例如：std::atomic_flag flag = ATOMIC_FLAG_INIT;
 std::atomic_flag 提供了两个成员函数 test_and_set() 和 clear() 来测试和设置标志位。test_and_set() 函数会将标志位置为 true，并返回之前的值；clear() 函数将标志位置为 false。
+
 std::atomic_flag 的 test_and_set() 和 clear() 操作是原子的，可以保证在多线程环境下正确执行。
 std::atomic_flag 只能表示两种状态，即 true 或 false，不能做其他比较操作。通常情况下，std::atomic_flag 被用作简单的互斥锁，而不是用来存储信息。
 
@@ -1517,6 +1528,7 @@ int main() {
 
 std::atomic_flag 是 C++ 中用于实现原子锁操作的类型，它提供了 test_and_set() 和 clear() 函数来测试和设置标志位，并且保证这些操作是原子的。
 
+
 store函数
 
 `std::atomic<T>::store()`是一个成员函数，用于将给定的值存储到原子对象中。
@@ -1554,10 +1566,13 @@ int main()
     return 0;
 }
 ```
+
 输出`Value stored in atomic object: 10`
 例子中，首先定义了一个`std::atomic<int>`类型的原子变量atomic_int，初始值为0。然后，使用store()函数将变量val的值存储到atomic_int中。最后，打印出存储在原子对象中的值。
 
+
 需要注意的是，在多线程环境下使用原子变量和操作时，需要使用适当的内存顺序来保证数据的正确性和一致性。因此，store()函数中的order参数可以用来指定不同的内存顺序。如果不确定如何选择内存顺序，请使用默认值std::memory_order_seq_cst，它是最常用和最保险的。
+
 
 load函数
 
@@ -1566,9 +1581,11 @@ load函数用于获取原子变量的当前值。它有以下两种形式：
 T load(memory_order order = memory_order_seq_cst) const noexcept;
 operator T() const noexcept;
 ```
+
 使用load函数时，如果不指定memory_order，则默认为memory_order_seq_cst。
 
 load函数的返回值类型为T，即原子变量的类型。在使用load函数时需要指定类型参数T。如果使用第二种形式的load函数，则无需指定类型参数T，程序会自动根据上下文推断出类型。
+
 
 ```c++
 std::atomic<int> foo (0);
@@ -1578,9 +1595,12 @@ do {
     x = foo.load(std::memory_order_relaxed);  // get value atomically
 } while (x==0);
 ```
+
+
 exchange函数
 
 访问和修改包含的值，将包含的值替换并返回它前面的值。
+
 ```c++
 template< class T >
 T exchange( volatile std::atomic<T>* obj, T desired );
@@ -1613,9 +1633,12 @@ int main ()
   return 0;
 }
 ```
+
 compare_exchange_weak函数
 
 这个函数的作用是比较一个值和一个期望值是否相等，如果相等则将该值替换成一个新值，并返回true；否则不做任何操作并返回false。
+
+
 ```c++
 bool compare_exchange_weak (T& expected, T val,memory_order sync = memory_order_seq_cst) volatile noexcept;
 bool compare_exchange_weak (T& expected, T val,memory_order sync = memory_order_seq_cst) noexcept;
@@ -1626,9 +1649,12 @@ bool compare_exchange_weak (T& expected, T val,memory_order success, memory_orde
 //success：表示函数执行成功时内存序的类型，默认为memory_order_seq_cst；
 //failure：表示函数执行失败时内存序的类型，默认为memory_order_seq_cst。
 ```
+
+
 该函数的返回值为bool类型，表示操作是否成功。
 
 注意，compare_exchange_weak函数是一个弱化版本的原子操作函数，因为在某些平台上它可能会失败并重试。如果需要保证严格的原子性，则应该使用compare_exchange_strong函数。
+
 
 ```c++
 #include <iostream>       // std::cout
@@ -1667,9 +1693,13 @@ int main ()
   return 0;
 }
 ```
+
+
 compare_exchange_strong函数
 
 这个函数的作用和compare_exchange_weak类似，都是比较一个值和一个期望值是否相等，并且在相等时将该值替换成一个新值。不同的是，compare_exchange_strong会保证原子性，并且如果比较失败则会返回当前值。
+
+
 ```c++
 bool compare_exchange_strong(T& expected, T desired,
                              memory_order success = memory_order_seq_cst,
@@ -1680,6 +1710,7 @@ bool compare_exchange_strong(T& expected, T desired,
 //success：表示函数执行成功时内存序的类型，默认为memory_order_seq_cst；
 //failure：表示函数执行失败时内存序的类型，默认为memory_order_seq_cst。
 ```
+
 该函数的返回值为bool类型，表示操作是否成功。
 
 注意，compare_exchange_strong函数保证原子性，因此它的效率可能比compare_exchange_weak低。在使用时应根据具体情况选择适合的函数。
@@ -1726,13 +1757,17 @@ int main ()
 
 ```
 ### CAS(Compare & Set/Compare & Swap)
+
+
 CAS是解决多线程并行情况下使用锁造成性能损耗的一种机制。
+::: tip
 
     CAS操作包含三个操作数——内存位置（V）、预期原值（A）、新值(B)。
     如果内存位置的值与预期原值相匹配，那么处理器会自动将该位置值更新为新值。
     否则，处理器不做任何操作。
     无论哪种情况，它都会在CAS指令之前返回该位置的值。
-    CAS有效地说明了“我认为位置V应该包含值A；如果包含该值，则将B放到这个位置；否则，不要更改该位置，只告诉我这个位置现在的值即可。
+    CAS有效地说明了“我认为位置V应该包含值A；如果包含该值，则将B放到这个位置；否则，不要更改该位置，
+    只告诉我这个位置现在的值即可。
 
 一个 CAS 涉及到以下操作：假设内存中的原数据V，旧的预期值A，需要修改的新值B
 
@@ -1740,15 +1775,23 @@ CAS是解决多线程并行情况下使用锁造成性能损耗的一种机制�
     如果比较相等，将 B 写入 V
     返回操作是否成功
 
+:::
+
 CAS算法原理描述
 
-    在对变量进行计算之前(如 ++ 操作)，首先读取原变量值，称为 旧的预期值 A
-    然后在更新之前再获取当前内存中的值，称为 当前内存值 V
-    如果 A==V 则说明变量从未被其他线程修改过，此时将会写入新值 B
-    如果 A!=V 则说明变量已经被其他线程修改过，当前线程应当什么也不做。
+::: tip
+在对变量进行计算之前(如 ++ 操作)，首先读取原变量值，称为 旧的预期值 A
+然后在更新之前再获取当前内存中的值，称为 当前内存值 V
+如果 A==V 则说明变量从未被其他线程修改过，此时将会写入新值 B
+如果 A!=V 则说明变量已经被其他线程修改过，当前线程应当什么也不做。
 
 用C语言来描述该操作
 看一看内存*reg里的值是不是oldval，如果是的话，则对其赋值newval。
+:::
+
+
+
+
 ```c++
 int compare_and_swap (int* reg, int oldval, int newval)
 {
@@ -1758,6 +1801,7 @@ int compare_and_swap (int* reg, int oldval, int newval)
       return old_reg_val;
 }
 ```
+
 变种为返回bool值形式的操作
 返回 bool值的好处在于，调用者可以知道有没有更新成功
 
@@ -1772,17 +1816,25 @@ bool compare_and_swap (int *accum, int *dest, int newval)
       return false;
 }
 ```
+
 GCC的CAS，GCC4.1+版本中支持CAS的原子操作。
+
 ```c++
 1）bool __sync_bool_compare_and_swap (type *ptr, type oldval, type newval, ...)
 2）type __sync_val_compare_and_swap (type *ptr, type oldval, type newval, ...)
 ```
 C++11中的CAS，C++11中的STL中的atomic类的函数可以让你跨平台。
+
 ```c++
 template< class T > bool atomic_compare_exchange_weak( std::atomic* obj,T* expected, T desired );
 template< class T > bool atomic_compare_exchange_weak( volatile std::atomic* obj,T* expected, T desired );
+
 ```
+
+
 基于链表的非阻塞堆栈实现
+
+
 ```c++
 //数据结构
 template
@@ -1810,17 +1862,18 @@ void Stack::push(const T& data)
     }
 }
 ```
-上述过程描述：
 
-    从单一线程的角度来看，创建了一个新节点，它的 next 指针指向堆栈的顶部。
-    接下来，调用 CAS 内置函数，把新的节点复制到 top 位置。
-    从多个线程的角度来看，完全可能有两个或更多线程同时试图把数据压入堆栈。
-    假设线程 A 试图把 20 压入堆栈，线程 B 试图压入 30，而线程 A 先获得了时间片。
-    但是，在 n->next = top 指令结束之后，调度程序暂停了线程 A。
-    现在，线程 B 获得了时间片（它很幸运），它能够完成 CAS，把 30 压入堆栈后结束。
-    接下来，线程 A 恢复执行，显然对于这个线程 *top 和 n->next 不匹配，因为线程 B 修改了 top 位置的内容。
-    因此，代码回到循环的开头，指向正确的 top 指针（线程 B 修改后的），调用 CAS，把 20 压入堆栈后结束。
-    整个过程没有使用任何锁。
+上述过程描述：
+::: tip
+从单一线程的角度来看，创建了一个新节点，它的 next 指针指向堆栈的顶部。接下来，调用 CAS 内置函数，把新的节点复制到 top 位置。
+从多个线程的角度来看，完全可能有两个或更多线程同时试图把数据压入堆栈。
+假设线程 A 试图把 20 压入堆栈，线程 B 试图压入 30，而线程 A 先获得了时间片。
+但是，在 n->next = top 指令结束之后，调度程序暂停了线程 A。
+现在，线程 B 获得了时间片（它很幸运），它能够完成 CAS，把 30 压入堆栈后结束。
+接下来，线程 A 恢复执行，显然对于这个线程 *top 和 n->next 不匹配，因为线程 B 修改了 top 位置的内容。
+因此，代码回到循环的开头，指向正确的 top 指针（线程 B 修改后的），调用 CAS，把 20 压入堆栈后结束。
+整个过程没有使用任何锁。
+:::
 
 ```c++
 //从非阻塞堆栈弹出数据(pop)
@@ -1842,6 +1895,7 @@ T Stack::pop( )
 无锁队列的链表实现
 
 用CAS实现的入队操作
+
 ```c++
 EnQueue(x)//进队列
 {
@@ -1861,9 +1915,9 @@ EnQueue(x)//进队列
 
 为什么我们的“置尾结点”的操作不判断是否成功:
 
-    如果有一个线程T1，它的while中的CAS如果成功的话，那么其它所有随后线程的CAS都会失败，然后就会再循环，
-    此时，如果T1 线程还没有更新tail指针，其它的线程继续失败，因为tail->next不是NULL了。
-    直到T1线程更新完tail指针，于是其它的线程中的某个线程就可以得到新的tail指针，继续往下走了。
+如果有一个线程T1，它的while中的CAS如果成功的话，那么其它所有随后线程的CAS都会失败，然后就会再循环，
+此时，如果T1 线程还没有更新tail指针，其它的线程继续失败，因为tail->next不是NULL了。
+直到T1线程更新完tail指针，于是其它的线程中的某个线程就可以得到新的tail指针，继续往下走了。
 
 这里有一个潜在的问题——如果T1线程在用CAS更新tail指针的之前，线程停掉了，那么其它线程就进入死循环了。下面是改良版的EnQueue()
 
@@ -1908,7 +1962,7 @@ DeQueue的代码操作的是 head->next，而不是head本身。这样考虑是�
 
 总结:上述我们设计了支持并发访问的数据结构。可以看到，设计可以基于互斥锁，也可以是无锁的。无论采用哪种方式，要考虑的问题不仅仅是这些数据结构的基本功能 — 具体来说，必须一直记住线程会争夺执行权，要考虑线程重新执行时如何恢复操作。目前，解决方案（尤其是无锁解决方案）与平台/编译器紧密相关。
 
-
+::: tip
 CAS的ABA问题
 
 ABA问题描述：
@@ -1921,17 +1975,22 @@ ABA问题描述：
 
 举例1：
 
-    比如上述的DeQueue()函数，因为我们要让head和tail分开，所以我们引入了一个dummy指针给head，当我们做CAS的之前，如果head的那块内存被回收并被重用了，而重用的内存又被EnQueue()进来了，这会有很大的问题。（内存管理中重用内存基本上是一种很常见的行为）
+    比如上述的DeQueue()函数，因为我们要让head和tail分开，所以我们引入了一个dummy指针给head，
+    当我们做CAS的之前，如果head的那块内存被回收并被重用了，而重用的内存又被EnQueue()进来了，
+    这会有很大的问题。（内存管理中重用内存基本上是一种很常见的行为）
 
 举例2：
 
-    我们假设一个提款机的例子。假设有一个遵循CAS原理的提款机，小灰有100元存款，要用这个提款机来提款50元。
-    由于提款机硬件出了点问题，小灰的提款操作被同时提交了两次，开启了两个线程，两个线程都是获取当前值100元，要更新成50元。
+    我们假设一个提款机的例子。假设有一个遵循CAS原理的提款机，小灰有100元存款，要用这个提款机来
+    提款50元。由于提款机硬件出了点问题，小灰的提款操作被同时提交了两次，开启了两个线程，两个线
+    程都是获取当前值100元，要更新成50元。
+
     理想情况下，应该一个线程更新成功，一个线程更新失败，小灰的存款值被扣一次。
     线程1首先执行成功，把余额从100改成50.线程2因为某种原因阻塞。这时，小灰的妈妈刚好给小灰汇款50元。
     线程2仍然是阻塞状态，线程3执行成功，把余额从50改成了100。
-    线程2恢复运行，由于阻塞之前获得了“当前值”100，并且经过compare检测，此时存款实际值也是100，所以会成功把变量值100更新成50。
-    原本线程2应当提交失败，小灰的正确余额应该保持100元，结果由于ABA问题提交成功了。
+    线程2恢复运行，由于阻塞之前获得了“当前值”100，并且经过compare检测，此时存款实际值也是100，
+    所以会成功把变量值100更新成50。原本线程2应当提交失败，小灰的正确余额应该保持100元，结果由
+    于ABA问题提交成功了。
 
 
 解决ABA问题
@@ -1947,7 +2006,8 @@ ABA问题描述：
 
 ![](./images/33.jpg)
 
-    随后线程1恢复运行，进行compare操作。经过比较，线程1所获得的值和地址的实际值都是A，但是版本号不相等，所以这一次更新失败
+    随后线程1恢复运行，进行compare操作。经过比较，线程1所获得的值和地址的实际值都是A，但是版本号不相等，所以
+    这一次更新失败
 
 ![](./images/34.jpg)
 
@@ -1957,7 +2017,9 @@ ABA问题
 
     因为CAS需要在操作值的时候，检查值有没有发生变化，没有发生变化才去更新。
     但是如果一个值原来是A变成了B，又变成了A，CAS检查会判断该值未发生变化，实际却变化了。
-    解决思路：增加版本号，每次变量更新时把版本号+1，A-B-A就变成了1A-2B-3A。JDK5之后的atomic包提供了AtomicStampedReference来解决ABA问题，它的compareAndSet方法会首先检查当前引用是否等于预期引用，并且当前标志是否等于预期标志。全部相等，才会以原子方式将该引用、该标志的值设置为更新值。
+    解决思路：增加版本号，每次变量更新时把版本号+1，A-B-A就变成了1A-2B-3A。JDK5之后的atomic包提供了
+    AtomicStampedReference来解决ABA问题，它的compareAndSet方法会首先检查当前引用是否等于预期引用，
+    并且当前标志是否等于预期标志。全部相等，才会以原子方式将该引用、该标志的值设置为更新值。
 
 时间长、开销大
 
@@ -1968,7 +2030,9 @@ ABA问题
 
     对一个共享变量执行操作时，可以循环CAS方式确保原子操作。
     但是对多个共享变量，就不灵了。
-    这里可以使用锁，或把多个共享变量合并为1个共享变量，如i=2,j=a,合并为ij=2a。然后用CAS操作ij。在JDK5后，提供了AtomicReference类来保证对象间的原子性，可以把多个共享变量放在一个对象里进行CAS操作。
+    这里可以使用锁，或把多个共享变量合并为1个共享变量，如i=2,j=a,合并为ij=2a。然后用CAS操作ij。在JDK5后，
+    提供了AtomicReference类来保证对象间的原子性，可以把多个共享变量放在一个对象里进行CAS操作。
+:::
 
 ### 原子内存序
 
@@ -2026,11 +2090,14 @@ assert(f.load(memory_order_relaxed));//D
 ![](./images/26.jpg)
 
 多线程并发是为了提高效率，多线程同步是为了解决同时访问同一个变量的问题，线程1中g.store（release）写变量和线程2中g.load(acquire)读变量组合使用，并不是保证g.store（release）一定在g.load(acquire)之前执行，如果线程1一直sleep几秒，线程2会执行g.load(acquire)命令。这里的同步是指线程1中g.store（release）之前读写不能被重排到g.store（release）之后，线程2 g.load(acquire)之后的读写不能被重排到g.load(acquire)之前，如果g.store（release）先于g.load(acquire)之前执行（前提），那么线程1中g.store（release）之前的读写对线程2中g.load(acquire)之后的读写可见。如果g.load(acquire)先于g.store（release）之前执行，那么无法保证线程1中g.store（release）之前的读写对线程2中g.load(acquire)之后的读写可见。总结三点如下：
-
-	（1） load(acquire)所在的线程中load(acquire)之后的所有写操作（包含非依赖关系），不允许被移动到这个load()的前面，一定在load之后执行。
-	（2） store（release）之前的所有读写操作（包含非依赖关系），不允许被重排到这个store(release)的后面，一定在store之前执行。
-	（3） 如果store(release)在load（acquire）之前执行了（前提），那么store(release)之前的写操作对 load(acquire)之后的读写操作可见。
-
+::: tip
+	（1） load(acquire)所在的线程中load(acquire)之后的所有写操作（包含非依赖关系），
+    不允许被移动到这个load()的前面，一定在load之后执行。
+	（2） store（release）之前的所有读写操作（包含非依赖关系），不允许被重排到这个
+    store(release)的后面，一定在store之前执行。
+	（3） 如果store(release)在load（acquire）之前执行了（前提），那么store(release)
+    之前的写操作对 load(acquire)之后的读写操作可见。
+:::
 ```c++
 bool f=false;
 atomic<bool> g=false;
@@ -2179,14 +2246,26 @@ int main()
 
 
 其他资料
+::: tip
+	memory_order_relaxed: 最宽松的内存序，不提供任何同步保证。它只保证原子操作本身是原子的，但不保证
+    操作之间的顺序。
 
-	memory_order_relaxed: 最宽松的内存序，不提供任何同步保证。它只保证原子操作本身是原子的，但不保证操作之间的顺序。
-	memory_order_consume: 消费者内存序，用于同步依赖关系。它保证了依赖于原子操作结果的后续操作将按照正确的顺序执行。
-	memory_order_acquire: 获取内存序，用于同步对共享数据的访问。它保证了在获取操作之后对共享数据的所有读取操作都将看到最新的数据。
-	memory_order_release: 释放内存序，用于同步对共享数据的访问。它保证了在释放操作之前对共享数据的所有写入操作都已完成，并且对其他线程可见。
-	memory_order_acq_rel: 获取-释放内存序，结合了获取和释放两种内存序的特点。它既保证了获取操作之后对共享数据的所有读取操作都将看到最新的数据，又保证了在释放操作之前对共享数据的所有写入操作都已完成，并且对其他线程可见。
-	memory_order_seq_cst: 顺序一致性内存序，提供了最严格的同步保证。它保证了所有线程都将看到相同的操作顺序，并且所有原子操作都将按照程序顺序执行。
+	memory_order_consume: 消费者内存序，用于同步依赖关系。它保证了依赖于原子操作结果的后续操作将按照
+    正确的顺序执行。
 
+	memory_order_acquire: 获取内存序，用于同步对共享数据的访问。它保证了在获取操作之后对共享数据的所
+    有读取操作都将看到最新的数据。
+
+	memory_order_release: 释放内存序，用于同步对共享数据的访问。它保证了在释放操作之前对共享数据的所
+    有写入操作都已完成，并且对其他线程可见。
+
+	memory_order_acq_rel: 获取-释放内存序，结合了获取和释放两种内存序的特点。它既保证了获取操作之后
+    对共享数据的所有读取操作都将看到最新的数据，又保证了在释放操作之前对共享数据的所有写入操作都已完成，
+    并且对其他线程可见。
+
+	memory_order_seq_cst: 顺序一致性内存序，提供了最严格的同步保证。它保证了所有线程都将看到相同的操
+    作顺序，并且所有原子操作都将按照程序顺序执行。
+:::
 
 下面是一个简单的例子，展示了如何使用 memory_order_acquire 和 memory_order_release 来实现一个简单的生产者-消费者模型：
 ```c++

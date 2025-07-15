@@ -137,7 +137,9 @@ github链接： https://github.com/parallel101/course
 ![](../images/c++_1.png)
 
 
-[filename](./Template.html ':include width=1200 height=1600px' )
+
+![wechat](./Screenshot2025-07-15at10-48-53CTemplate-屋顶上的鱼.png)
+![wechat](./Screenshot2025-07-15at10-49-47CTemplate-屋顶上的鱼.png)
 
 ---
 

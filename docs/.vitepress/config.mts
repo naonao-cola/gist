@@ -14,11 +14,18 @@ export default defineConfig({
       level:[2,3]
     },
     sidebar: [
-      {
-        text: 'cxx',
+       {
+        text: '数学之美',
         items: [
-          { text: 'cxx', link: '/cxx/cxx' },
-          { text: '小技巧', link: '/cxx/tips'}
+          { text: 'math', link: '/math/math' },
+          { text: '线性代数', link: '/math/linear' }
+        ]
+      },
+       {
+        text: '相机',
+        items: [
+          { text: 'camera', link: '/camera/camera' },
+          { text: 'halcon', link: '/camera/halcon' }
         ]
       },
       {
@@ -30,19 +37,54 @@ export default defineConfig({
         ]
       },
       {
-        text: '数学之美',
+        text: 'cxx',
         items: [
-          { text: 'math', link: '/math/math' },
-          { text: '线性代数', link: '/math/linear' }
+          { text: 'cxx', link: '/cxx/cxx' },
+          { text: '小技巧', link: '/cxx/tips'}
         ]
       },
       {
-        text: '相机',
+        text: 'python',
         items: [
-          { text: 'camera', link: '/camera/camera' },
-          { text: 'halcon', link: '/camera/halcon' }
+          { text: 'deeplearning', link: '/py/DeepLearning' },
+          { text: 'prompt', link: '/py/prompt' },
+          { text: 'py', link: '/py/py' },
+          { text: '小技巧', link: '/py/tips' },
         ]
-      }
+      },
+       {
+        text: 'nvidia',
+        items: [
+          { text: 'nvidia', link: '/nvidia/nvidia' },
+        ]
+      },
+      {
+        text: 'Opencv',
+        items: [
+          { text: 'opencv', link: '/opencv/opencv' }
+        ]
+      },
+      {
+        text: 'Linux',
+        items: [
+          { text: 'linux', link: '/linux/tools' }
+        ]
+      },
+      {
+        text: 'docker',
+        items: [
+          { text: 'docker', link: '/docker/docker' }
+        ]
+      },
+       {
+        text: 'Github',
+        items: [
+          { text: 'github', link: '/github/github' }
+        ]
+      },
+      
+     
+     
     ],
 
     socialLinks: [
