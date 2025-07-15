@@ -1,18 +1,26 @@
 ﻿## 第一章 机器视觉概述
-[filename](./halcon_1.html ':include width=2000 height=1500px' )
+
+![wechat](./Screenshot2025-07-15at22-22-23.png)
+
 
 ## 第二章 数字图像基础
-[filename](./halcon_2.html ':include width=2000 height=1500px' )
+
+![wechat](./Screenshot2025-07-15at22-24-26.png)
 
 
 ## 第三章 了解和熟悉HALCON
-[filename](./halcon_3.html ':include width=2000 height=1500px' )
+
+![wechat](./Screenshot2025-07-15at22-25-45.png)
 
 
 ## 第四章 图像预处理
-[filename](./halcon_4.html ':include width=2000 height=1500px' )
+
+![wechat](./Screenshot2025-07-15at22-29-28.png)
+
+![wechat](./Screenshot2025-07-15at22-30-48.png)
 
 ### ROI选择
+```c++
     * 关闭窗口
     dev_close_window ()
     *读取图像
@@ -35,8 +43,9 @@
     reduce_domain (ImageZoomed, Rectangle, ImageReduced)
     *显示分割后的ROI图像
     dev_display (ImageReduced)
-
+```
 ### 仿射变换
+```c++
     dev_close_window ()
     read_image (Image, 'C:/Users/Dear/Desktop/《机器视觉案例》/案例原图/第四章/4-2.png')
     get_image_size (Image, Width, Height)
@@ -52,11 +61,11 @@
     affine_trans_image (ImageAffinTrans, ImageAffinTrans1, HomMat2DRotate, 'constant', 'false')
     hom_mat2d_scale (HomMat2DIdentity, 1.5, 1.5, Height/2, Width/2, HomMat2DScale)
     affine_trans_image (ImageAffinTrans1, ImageAffinTrans2, HomMat2DScale, 'constant', 'false')
-
+```
 
 
 ### 二维码校正
-
+```c++
     dev_close_window ()
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第四章/4-3.png')
     dev_open_window_fit_image (Image, 0, 0, -1, -1, WindowHandle)
@@ -69,10 +78,10 @@
     dev_display (Crosses)
     hom_vector_to_proj_hom_mat2d (X, Y, [1,1,1,1], [75,360,360,75], [110,110,360,360], [1,1,1,1], 'normalized_dlt', HomMat2D)
     projective_trans_image (Image, Image_rectified, HomMat2D, 'bilinear', 'false', 'false')
-
+```
 
 ### 线性灰度变换
-
+```c++
     *关闭窗口
     dev_close_window ()
     *获取图像
@@ -95,10 +104,10 @@
     dev_display (ImageInvert)
     dev_display (ImageEmphasize)
     dev_display (ImageScaled)
-
+```
 
 ### 直方图均衡化
-
+```c++
     *关闭窗口
     dev_close_window ()
     *获取图像
@@ -111,10 +120,10 @@
     rgb1_to_gray (Image, GrayImage)
     *直方图均衡化
     equ_histo_image (GrayImage, ImageEquHisto)
-
+```
 
 ### 均值滤波
-
+```c++
     *读取图像
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第四章/4-6 4-7.jpg')
     *关闭窗口
@@ -131,9 +140,9 @@
     mean_image (ImageNoise, ImageMean, 5, 5)
     *显示图像
     dev_display (ImageMean)
-
+```
 ### 中值滤波
-
+```c++
     *读取图像
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第四章/4-6 4-7.jpg')
     rgb1_to_gray (Image, GrayImage)
@@ -150,10 +159,10 @@
     median_image (ImageNoise, ImageMedian, 'circle', 3, 'mirrored')
     *显示图像
     dev_display (ImageMedian)
-
+```
 
 ### sobel算子
-
+```c++
     *读取图像
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第四章/4-8.png')
     *边缘检测
@@ -168,10 +177,10 @@
     dev_set_color ('red')
     *显示边缘框架
     dev_display (Skeleton)
-
+```
 
 ### 拉普拉斯算子
-
+```c++
     *关闭窗口
     dev_close_window ()
     *获取图像
@@ -186,10 +195,10 @@
     laplace (Image, ImageLaplace, 'signed', 3, 'n_8_isotropic')
     *显示处理后的图像
     dev_display (ImageLaplace)
-
+```
 
 ### 低通滤波处理
-
+```c++
     *读取带有椒盐噪声图像
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第四章/4-10.png')
     *获得图像尺寸
@@ -210,10 +219,10 @@
     convol_fft (ImageFFT, ImageLowpass, ImageConvol)
     *对频率图像进行傅里叶变换
     fft_generic (ImageConvol, ImageFFT1, 'from_freq',1, 'sqrt', 'dc_center', 'complex')
-
+```
 
 ### 高通滤波处理
-
+```c++
     *关闭窗口
     dev_close_window ()
     *读取图像
@@ -234,14 +243,17 @@
     fft_generic(ImageConvol,ImageResult,'from_freq',1,'none','dc_center','byte')
     *显示图像
     dev_display (ImageResult)
-
+```
 
 
 ## 第五章 图像分割
-[filename](./halcon_5.html ':include width=2000 height=1500px' )
+
+
+![wechat](./Screenshot2025-07-15at22-35-39.png)
+![wechat](./Screenshot2025-07-15at22-36-57.png)
 
 ### 直方图谷底确定阈值分割
-
+```c++
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第五章/5-1.png')
     get_image_size (Image, Width, Height)
     dev_close_window ()
@@ -253,19 +265,19 @@
     dev_set_colored (12)
     threshold (Image, Region, MinThresh[0], MaxThresh[0])
     dev_display (Region)
-
+```
 ### 基于直方图的自动阈值分割
-
+```c++
     *获取图像
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第五章/5-2.png')
     *自动阈值分割
     auto_threshold (Image, Regions, 5)
     *显示分割区域
     dev_display (Regions)
-
+```
 
 ### 局部阈值分割算子dyn_threshold
-
+```c++
     *关闭窗口
     dev_close_window ()
     *获取图像
@@ -282,9 +294,9 @@
     dev_display (Image)
     *显示提取区域
     dev_display (RegionDynThresh)
-
+```
 ### Prewitt边缘提取实例
-
+```c++
     *读取图像
     read_image (Image, 'fabrik')
     *用prewitt算子进行边缘提取
@@ -299,9 +311,9 @@
     dev_set_color ('red')
     *显示骨骼图像
     dev_display (Skeleton)
-
+```
 ### Kirsch边缘提取实例
-
+```c++
     *读取图像
     read_image (Image, 'fabrik')
     *用kirsch算子进行边缘检测
@@ -316,9 +328,10 @@
     dev_set_color ('red')
     *显示骨骼图像
     dev_display (Skeleton)
-
+```
 
 ### Canny边缘提取分割实例
+```c++
     *获取图像
     read_image (Image, 'fabrik')
     *使用canny算法进行边缘提取
@@ -335,8 +348,9 @@
     dev_set_colored (6)
     *显示XLD
     dev_display (Contours)
-
+```
 ### 亚像素级别的边缘提取实例
+```c++
     * 关闭窗口
     dev_close_window ()
     * 读取图像
@@ -349,10 +363,10 @@
     dev_set_part (160, 250, 210, 300)
     dev_display (Image)
     dev_display (Edges)
-
+```
 
 ### 区域生长法实例
-
+```c++
     *读取图像
     read_image (Image, 'fabrik')
     *对图像进行均值处理，选用circle类型的中值滤波器
@@ -366,10 +380,10 @@
     area_center (SingleCenters, Area, Row, Column)
     *以均值灰度图像为输入，进行区域增长计算，计算的起始坐标为上一步的各区域中心
     regiongrowing_mean (ImageMedian, RegionsMean, Row, Column, 25, 100)
-
+```
 
 ### Hough变换图像分割实例
-
+```c++
     *读取图像
     read_image (Image, 'fabrik')
     *获得目标区域图像
@@ -398,9 +412,9 @@
     dev_set_draw ('fill')
     *显示Lines
     dev_display (Lines)
-
+```
 ### 分水岭算法分割实例
-
+```c++
     *获取图像
     read_image (Br2, 'particle')
     *对单通道图像进行高斯平滑处理，去除噪声
@@ -410,13 +424,14 @@
     *对高斯平滑后的图像进行分数岭处理与阈值分割，提取出盆地区域
     watersheds (ImageInvert, Basins, Watersheds)
     watersheds_threshold (ImageInvert, Basins1,30)
-
+```
 
 ## 第六章 特征提取
-[filename](./halcon_6.html ':include width=2000 height=1500px' )
 
+![wechat](./Screenshot2025-07-15at22-39-58.png)
 
 ### 获取区域的面积和中线点特征实例
+```c++
     *获取图像
     read_image (Image, 'fabrik')
     *关闭窗口
@@ -440,8 +455,9 @@
     for I := 0 to center-1 by 1
         disp_message (WindowID, Area[I], 'image', Row[I] - TxtHeight / 2, Column[I] - TxtWidth / 2, 'white', 'false')
     endfor
-
+```
 ### 计算封闭区域面积实例
+```c++
     *关闭窗口
     dev_close_window ()
     *读取图像
@@ -461,9 +477,10 @@
     *将面积计算结果以字符串形式显示在窗口中
     disp_message (WindowHandle, 'Size of enclosed area (holes): ' + Area + ' pixel', 'window', 12, 12, 'black', 'true')
 
-
+```
 
 ### 利用Select_shape选择区域实例
+```c++
     *读取图像
     read_image (Image, 'monkey')
     *二值化
@@ -474,9 +491,9 @@
     select_shape (ConnectedRegions, SelectedRegions, ['area','anisometry'], 'and', [500,1], [2000,1.7])
     *显示结果区域
     dev_display (SelectedRegions)
-
+```
 ### 使用inner circle算子计算图像区域内接圆
-
+```c++
     *读取图像
     read_image (Image, 'fabrik')
     *关闭窗口
@@ -495,9 +512,9 @@
     dev_set_color ('red')
     *显示每个区域的内接圆
     disp_circle (WindowID, Row, Column, Radius)
-
+```
 ### 求图像中的外接矩形实例
-
+```c++
     *关闭窗口
     dev_close_window ()
     *读取图像
@@ -520,9 +537,10 @@
     smallest_rectangle2 (Regions, Row, Column, Phi, Length1, Length2)
     *根据矩形参数绘制矩形的轮廓
     gen_rectangle2 (Rectangle1, Row, Column, Phi, Length1, Length2)
-
+```
 
 ### gray_features算子实例
+```c++
     * 读取图片
     read_image (Image, 'monkey')
     *对图像进行阈值处理，主要是将图像转化为区域
@@ -532,9 +550,9 @@
     *提取区域中最大灰度值
     gray_features (Region, Image, 'max', MaxDisp)
 
-
+```
 ### 运用intensity算子计算区域的灰度值平均值和偏差
-
+```c++
     * 读取图像
     read_image (Image, 'mreut')
     *关闭窗口
@@ -556,8 +574,9 @@
     *提取区域2中灰度值的平均值与偏差
     intensity (Rectangle2, Image, Mean2, Deviation2)
 
-
+```
 ### 使用min_max_gray算子提取区域中最大灰度以及最小灰度值
+```c++
     * 读取图像
     read_image (Image, 'mreut')
     *关闭窗口
@@ -578,17 +597,19 @@
     min_max_gray (Rectangle1, Image, 5, Min1, Max1, Range1)
     *提取区域2中最大与最小灰度值
     min_max_gray (Rectangle2, Image, 5, Min2, Max2, Range2)
-
+```
 ### 运用area_center_gray 计算一幅灰度值图像的面积和中心实例
+```c++
     * 读取图像
     read_image (Image, 'mreut')
     * 创建矩形区域
     gen_rectangle1 (Rectangle1, 350, 100, 450, 200)
     * 计算区域内总灰度值以及中心的行、列坐标
     area_center_gray (Rectangle1, Image, Area, Row, Column)
-
+```
 
 ### select_gray算子运算实例
+```c++
     *读取图像
     read_image (Image, 'fabrik')
     *关闭窗口
@@ -605,13 +626,17 @@
     dev_set_color ('red')
     *使用select_gray算子快速选择出灰度值在199-255碱的区域
     select_gray (Regions, Image, SelectedRegions, 'mean', 'and',190, 250)
+```
 
 ## 第七章 图像的形态学处理
-[filename](./halcon_7.html ':include width=2000 height=1500px' )
+
+
+
+![wechat](./Screenshot2025-07-15at22-42-41.png)
 
 
 ### 利用不同的腐蚀算子得到不同的腐蚀结果实例
-
+```c++
     dev_close_window ()
     *获取图像
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第七章/7-1.png')
@@ -635,9 +660,10 @@
     erosion1 (Regions, Ellipse, RegionErosion2, 1)
     *使用生成的椭圆形结构元素腐蚀得到区域（可设置参考点）
     erosion2 (Regions, Ellipse, RegionErosion3, 0, 0, 1)
-
+```
 
 ### 利用不同的膨胀算子得到不同的膨胀结果实例
+```c++
     dev_close_window ()
     *获取图像
     read_image (Image71, 'D:/《机器视觉》图片/第七章/7-1.png')
@@ -660,10 +686,10 @@
     dilation1 (Regions, Ellipse, RegionDilation2, 1)
     *使用生成的椭圆形结构元素膨胀得到区域（可设置参考点）
     dilation2 (Regions, Ellipse, RegionDilation3, 0, 0, 1)
-
+```
 
 ### HALCON闭运算实例
-
+```c++
     read_image (Image, 'E:/《机器视觉案例》/案例原图/第七章/7-3 闭运算.png')
     dev_close_window ()
     rgb1_to_gray (Image, GrayImage)
@@ -694,9 +720,10 @@
     dev_display (RegionOpening)
     dev_display (RegionOpening1)
     dev_display (RegionOpening2)
-
+```
 
 ### 灰度图像的腐蚀与膨胀、开运算与闭运算操作实例
+```c++
     *关闭窗口
     dev_close_window ()
     *获取图像
@@ -716,9 +743,9 @@
     *对灰度图像进行闭运算操作
     gray_closing_shape (Image, ImageClosing, 5, 5, 'octagon')
 
-
+```
 ### 灰度图像的顶帽、底帽运算
-
+```c++
     *关闭窗口
     dev_close_window ()
     *获取图像
@@ -737,10 +764,10 @@
     gray_tophat (GrayImage, SE, ImageTopHat)
     *对图像进行底帽运算处理
     gray_bothat (GrayImage, SE, ImageBotHat)
-
+```
 
 ### 边界提取实例
-
+```c++
     *关闭窗口
     dev_close_window ()
     *获取图像
@@ -755,17 +782,19 @@
     threshold (Image76, Regions, 76, 255)
     *边界提取
     boundary (Regions, RegionBorder, 'inner')
-
+```
 ### 孔洞填充实例
+```c++
     *获取图像
     read_image (Aegyt1, 'egypt1')
     *将图像二值化
     threshold (Aegyt1, Region, 0, 140)
     *填充孔洞
     fill_up (Region, RegionFillUp)
-
+```
 
 ### 骨架提取实例
+```c++
     read_image (Image, 'fabrik')
     dev_close_window ()
     get_image_size (Image, Width, Height)
@@ -777,14 +806,14 @@
     threshold (ImaAmp, Region, 8, 255)
     *提取骨架
     skeleton (Region, Skeleton)
-
+```
 
 ## 第八章 图像模板匹配
-[filename](./halcon_8.html ':include width=2000 height=1500px' )
 
+![wechat](./Screenshot2025-07-15at22-46-20.png)
 
 ### 基于像素灰度值的模板匹配
-
+```c++
     read_image (Image, 'smd/smd_on_chip_05')
     get_image_size (Image, Width, Height)
     dev_close_window ()
@@ -812,9 +841,10 @@
         stop ()
     endfor
     clear_ncc_model (ModelID)
-
+```
 
 ### 基于形状的模板匹配
+```c++
     *读取图像
     read_image (Image, 'green-dot')
     get_image_size (Image, Width, Height)
@@ -856,9 +886,9 @@
     endfor
     *清除模版
     clear_shape_model (ModelID)
-
+```
 ### 图像金字塔应用
-
+```c++
     *使用采集助手读取图像
     open_framegrabber ('File', 1, 1, 0, 0, 0, 0, 'default', -1, 'default', -1, 'default', 'rings/rings.seq', 'default', -1, 1, FGHandle)
     grab_image (ModelImage, FGHandle)
@@ -900,17 +930,20 @@
     *清除模版和关闭采集助手
     clear_shape_model (ModelID)
     close_framegrabber (FGHandle)
-
+```
 
 ## 第九章 3D立体视觉
-[filename](./halcon_9.html ':include width=2000 height=1500px' )
+
+
+![wechat](./Screenshot2025-07-15at22-49-57.png)
 
 
 ## 第十章 HALCON相关实例和算法
-[filename](./halcon_10.html ':include width=2000 height=1500px' )
 
+![wechat](./Screenshot2025-07-15at22-51-49.png)
 
 ### 卡号识别系统案例
+```c++
     dev_clear_window ()
 
     read_image (Image1, '9-3_0.bmp')
@@ -986,3 +1019,4 @@
         endif
     endfor
 
+```

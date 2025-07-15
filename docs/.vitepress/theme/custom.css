@@ -1,0 +1,15 @@
+﻿/* 居中对齐图片 */
+img.center {
+    display: block;
+    margin: 0 auto;
+}
+/* 图片之间空一行*/
+.vp-doc img+img {
+    margin-top: 2em;
+    /* 控制间距 */
+}
+
+/* 调整正文区域宽度 */
+.VPDoc .content {
+    max-width: 2000px !important;
+    margin: 0 auto; }

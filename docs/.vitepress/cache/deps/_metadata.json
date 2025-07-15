@@ -1,35 +1,56 @@
 {
-  "hash": "0a3eec0c",
-  "configHash": "928b0311",
+  "hash": "ce4ee687",
+  "configHash": "fe287cdf",
   "lockfileHash": "435d3142",
-  "browserHash": "6ee83d0d",
+  "browserHash": "502f2deb",
   "optimized": {
     "vue": {
       "src": "../../../../node_modules/vue/dist/vue.runtime.esm-bundler.js",
       "file": "vue.js",
-      "fileHash": "3ac6b16c",
+      "fileHash": "c5b7e0b7",
       "needsInterop": false
     },
     "vitepress > @vue/devtools-api": {
       "src": "../../../../node_modules/@vue/devtools-api/dist/index.js",
       "file": "vitepress___@vue_devtools-api.js",
-      "fileHash": "d1542100",
+      "fileHash": "26118b18",
       "needsInterop": false
     },
     "vitepress > @vueuse/core": {
       "src": "../../../../node_modules/@vueuse/core/index.mjs",
       "file": "vitepress___@vueuse_core.js",
-      "fileHash": "f557af71",
+      "fileHash": "0ee4bf5a",
+      "needsInterop": false
+    },
+    "vitepress > @vueuse/integrations/useFocusTrap": {
+      "src": "../../../../node_modules/@vueuse/integrations/useFocusTrap.mjs",
+      "file": "vitepress___@vueuse_integrations_useFocusTrap.js",
+      "fileHash": "9372f75c",
+      "needsInterop": false
+    },
+    "vitepress > mark.js/src/vanilla.js": {
+      "src": "../../../../node_modules/mark.js/src/vanilla.js",
+      "file": "vitepress___mark__js_src_vanilla__js.js",
+      "fileHash": "f72dd6d2",
+      "needsInterop": false
+    },
+    "vitepress > minisearch": {
+      "src": "../../../../node_modules/minisearch/dist/es/index.js",
+      "file": "vitepress___minisearch.js",
+      "fileHash": "7f4ac0b7",
       "needsInterop": false
     },
     "vitepress-plugin-image-viewer": {
       "src": "../../../../node_modules/vitepress-plugin-image-viewer/lib/viewer.js",
       "file": "vitepress-plugin-image-viewer.js",
-      "fileHash": "ab5d8207",
+      "fileHash": "82ac0186",
       "needsInterop": false
     }
   },
   "chunks": {
+    "chunk-3GYA4YLH": {
+      "file": "chunk-3GYA4YLH.js"
+    },
     "chunk-DDXJJ377": {
       "file": "chunk-DDXJJ377.js"
     }

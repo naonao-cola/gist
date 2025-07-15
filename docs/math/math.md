@@ -288,14 +288,23 @@ cv::Vec2d getPolarLine(cv::Vec4d p) {
 ### 特征值与特征向量
 A为n阶矩阵，若数λ和n维非0列向量x满足Ax=λx，那么数λ称为A的特征值，x称为A的对应于特征值λ的特征向量。式Ax=λx也可写成( A-λE)x=0，并且|λE-A|叫做A 的特征多项式。当特征多项式等于0的时候，称为A的特征方程，特征方程是一个齐次线性方程组，求解特征值的过程其实就是求解特征方程的解。
 
-![](../images/mat_1.png)
-![](../images/mat_2.png)
-![](../images/mat_3.png)
-![](../images/mat_4.png)
+
+<img src="../images/mat_1.png" alt="描述" class="center" />
+
+
+
+<img src="../images/mat_2.png" alt="描述" class="center" />
+
+
+<img src="../images/mat_3.png" alt="描述" class="center" />
+
+
+
+<img src="../images/mat_4.png" alt="描述" class="center" />
+
+
 
 计算A的特征值与特征向量
-
-
 
 
 ```c++
@@ -309,7 +318,8 @@ eigen(src, eValuesMat, eVectorsMat);//通过openCV中eigen函数得到特征值�
 求出特征值和特征向量有什么好处呢？ 就是我们可以将矩阵A特征分解。如果我们求出了矩阵A的n个特征值 ，以及这n个特征值所对应的特征向量。那么矩阵A就可以用下式的特征分解表示：
 
 
-![](../images/mat_5.png)
+
+<img src="../images/mat_5.png" alt="描述" class="center" />
 
 其中W是这n个特征向量所张成的n×n维矩阵，而Σ为这n个特征值为主对角线的n×n维矩阵。要进行特征分解，矩阵A必须为方阵。
 
@@ -317,23 +327,30 @@ eigen(src, eValuesMat, eVectorsMat);//通过openCV中eigen函数得到特征值�
 #### svd分解
 SVD也是对矩阵进行分解，但是和特征分解不同，SVD并不要求要分解的矩阵为方阵。假设我们的矩阵A是一个m×n的矩阵，那么我们定义矩阵A的SVD为：
 
-![](../images/mat_6.png)
+
+<img src="../images/mat_6.png" alt="描述" class="center" />
 
 其中U是一个m * m的矩阵， 中间的是一个m * n的矩阵，除了主对角线上的元素以外全为0，主对角线上的每个元素都称为奇异值， V是一个 n*n的矩阵。 U和V都是酉矩阵，即满足它的共轭转置与自身相乘等于单位矩阵。酉矩阵是满秩的，每一列都是单位向量，其每两列都是正交的。这类矩阵性质非常好。
 
-![](../images/mat_7.png)
 
-![](../images/mat_8.png)
+
+<img src="../images/mat_7.png" alt="描述" class="center" />
+
+<img src="../images/mat_8.png" alt="描述" class="center" />
+
+
 
 对于奇异值,它跟我们特征分解中的特征值类似，在奇异值矩阵中也是按照从大到小排列，而且奇异值的减少特别的快，在很多情况下，前10%甚至1%的奇异值的和就占了全部的奇异值之和的99%以上的比例。也就是说，我们也可以用最大的k个的奇异值和对应的左右奇异向量来近似描述矩阵。
 
-![](../images/mat_9.png)
+<img src="../images/mat_9.png" alt="描述" class="center" />
+
 
 如下图所示，现在我们的矩阵A只需要灰色的部分的三个小矩阵就可以近似描述了。
 
-![](../images/mat_10.png)
 
-![](../images/mat_11.png)
+<img src="../images/mat_10.png" alt="描述" class="center" />
+<img src="../images/mat_11.png" alt="描述" class="center" />
+
 
 
 #### QR分解
@@ -341,32 +358,40 @@ SVD也是对矩阵进行分解，但是和特征分解不同，SVD并不要求�
 
 ## 二维变化
 
-![](../images/rotate.jpg)
 
-![](../images/rotate_1.png)
+<img src="../images/rotate.jpg" alt="描述" class="center" />
+<img src="../images/rotate_1.png" alt="描述" class="center" />
+
 
 
 ## 三维空间中的旋转变换
 
 绕Z轴旋转
 
-![](../images/rotate_2.jpg)
+<img src="../images/rotate_2.jpg" alt="描述" class="center" />
+
+
 
 绕X轴旋转
 
-![](../images/rotate_3.jpg)
+
+<img src="../images/rotate_3.jpg" alt="描述" class="center" />
 
 绕Y轴旋转
 
-![](../images/rotate_4.jpg)
+
+<img src="../images/rotate_4.jpg" alt="描述" class="center" />
 
 绕任意轴旋转的公式：给定具有单位长的
 
-![](../images/rotate_6.jpg)
+<img src="../images/rotate_6.jpg" alt="描述" class="center" />
+
+
 
 则物体绕OA轴旋转变换的矩阵表示可确定如下：
 
-![](../images/rotate_5.jpg)
+
+<img src="../images/rotate_5.jpg" alt="描述" class="center" />
 
 
 ### 根据对应的三维点估计刚体变换的旋转平移矩阵
@@ -1290,17 +1315,22 @@ void cv::transform(
 	cv::InputArray mtx // Transform matrix (Ds-by-Dd) 变换矩阵是Ds * Dd矩阵
 );
 ```
+
 如何避免大数吃小数的
 
 https://blog.csdn.net/aqzwss/article/details/53959570#:~:text=kahan%E6%B1%82%E5%92%8C%E7%AE%97%E6%B3%95%E8%83%BD
 
-    首先，这个算法就是用来求和的，求a1+a2+a3+...为什么不直接相加呢，而要用Kahan求和公式呢，这个算法的用武之地在哪呢，一一道来,kahan求和算法能避免大数吃小数的情况。
+首先，这个算法就是用来求和的，求a1+a2+a3+...为什么不直接相加呢，而要用Kahan求和公式呢，这个算法的用武之地在哪呢，一一道来,kahan求和算法能避免大数吃小数的情况。
 
-    大数吃小数是什么意思呢？举个例子，我们用两个float相加，float是32位，它的精度是小数点后6-7位，设有a=123456;b=2.189；a+b应该是123458.189但是由于float的精度只有小数点后6-7位，所以必然得不到123458.189，后面的89可能会截掉，8不一定，9是必然会截掉的。好的，才做一个加法就产生至少了0.009的误差，做1000个这样的加法，误差就是9了，这显然不是我们想要的。
 
-    kahan求和算法可以避免这种情况，它有一个数用来记住那个被截断的小数，同样做下面的计算，设有a=123456;b=2.189；计算a+b。kahan求和算法是这样做的：sum=a+b（不准确）; temp= (a+b)-a-b;temp等于多少呢，初看这不就是0吗？不是的，计算机此时算的可不是0，而是等于-0.009，就是被截断的那个小数。通过一个临时变量我们就记住了这个误差，当计算下一个加法的时候，可以把这个误差补上，并且更新误差到sum。
+大数吃小数是什么意思呢？举个例子，我们用两个float相加，float是32位，它的精度是小数点后6-7位，设有a=123456;b=2.189；a+b应该是123458.189但是由于float的精度只有小数点后6-7位，所以必然得不到123458.189，后面的89可能会截掉，8不一定，9是必然会截掉的。好的，才做一个加法就产生至少了0.009的误差，做1000个这样的加法，误差就是9了，这显然不是我们想要的。
 
-    其实也可以这样理解，sum不是由于数太大，占用了小数的精度吗，而这个小数在当前一步看似是可以忽略的，但是由于，迭代的次数旁道，小数会累积成大误差，那么我们另外用的float专门记住这个误差小数不就得了吗。
+
+kahan求和算法可以避免这种情况，它有一个数用来记住那个被截断的小数，同样做下面的计算，设有a=123456;b=2.189；计算a+b。kahan求和算法是这样做的：sum=a+b（不准确）; temp= (a+b)-a-b;temp等于多少呢，初看这不就是0吗？不是的，计算机此时算的可不是0，而是等于-0.009，就是被截断的那个小数。通过一个临时变量我们就记住了这个误差，当计算下一个加法的时候，可以把这个误差补上，并且更新误差到sum。
+
+
+其实也可以这样理解，sum不是由于数太大，占用了小数的精度吗，而这个小数在当前一步看似是可以忽略的，但是由于，迭代的次数旁道，小数会累积成大误差，那么我们另外用的float专门记住这个误差小数不就得了吗。
+
 
 ```python
 function KahanSum(input)

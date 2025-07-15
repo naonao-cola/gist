@@ -5,6 +5,9 @@ export default defineConfig({
   title: "闹闹",
   description: "成都古寺卧秋晚，落日偏傍僧窗明。",
   themeConfig: {
+    search: {
+      provider: 'local'
+    },
     // https://vitepress.dev/reference/default-theme-config
     nav: [
       { text: 'Home', link: '/' },
@@ -82,9 +85,9 @@ export default defineConfig({
           { text: 'github', link: '/github/github' }
         ]
       },
-      
-     
-     
+
+
+
     ],
 
     socialLinks: [
