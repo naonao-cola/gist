@@ -47,7 +47,7 @@ sudo systemctl restart docker
 # https://www.cnproxy.top/docker
 # https://www.cnblogs.com/dechinphy/p/18350332/docker-pull-continue
 {
-  "default-runtime": "nvidia",
+    "default-runtime": "nvidia",
     "experimental": true,
     "registry-mirrors": [
         "https://docker.rainbond.cc",
@@ -55,22 +55,20 @@ sudo systemctl restart docker
         "https://docker.m.daocloud.io",
         "https://docker.xuanyuan.me",
         "https://docker.1ms.run",
-        "https://docker.m.daocloud.io",
-        "https://xdark.top",
-        "https://docker.1ms.run",
-        "https://docker.xuanyuan.me"
+        "https://xdark.top"
     ],
     "runtimes": {
         "nvidia": {
             "args": [],
             "path": "nvidia-container-runtime"
         }
-    }，
+    },
     "features": {
-    "buildkit": true,
-    "containerd-snapshotter": true
-  }
+        "buildkit": true,
+        "containerd-snapshotter": true
+    }
 }
+
 
 # 4 每次修改 daemon.json 后，都需要重启 Docker 服务。
 
@@ -619,9 +617,9 @@ services:
       resources:
         reservations:
           devices:
-          - driver: “nvidia”
-            count: ”all“
-            capabilities: [“gpu”]
+          - driver: 'nvidia'
+            count: 'all'
+            capabilities: ['gpu']
     tty: true
     stdin_open: true
     volumes:
