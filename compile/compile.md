@@ -1675,3 +1675,136 @@ target("test02")
     add_files("src/*.cpp")
 
 ```
+
+
+
+## 英伟达 jetson 编译脚本
+```lua
+
+set_project("HQ_AI_Model")
+set_version("0.0.1")
+set_languages("c++17")
+
+add_rules("mode.debug", "mode.release")
+
+-- 编译链
+toolchain("my_toolchain")
+    set_kind("standalone")
+    set_toolset("cc", "aarch64-linux-gnu-gcc")
+    set_toolset("cxx", "aarch64-linux-gnu-g++")
+    set_toolset("ld", "aarch64-linux-gnu-g++")
+    set_toolset("sh", "aarch64-linux-gnu-g++")
+toolchain_end()
+
+rule("rule_display")
+     after_build(function (target)
+     cprint("${green} BIUD TARGET: %s", target:targetfile())
+    end)
+rule_end()
+
+--系统oepncv
+add_requires("opencv4",{system = true})
+add_includedirs("/usr/include/opencv4/")
+--HQ_common
+add_includedirs("HQ_Common/Http/")
+add_includedirs("HQ_Common/Json/")
+add_includedirs("HQ_Common/")
+add_headerfiles("HQ_Common/**.h")
+add_files("HQ_Common/**.cpp")
+
+--HQ_Kernel
+--HQ_Kernel/include/Kernel
+add_includedirs("HQ_Kernel/include/Kernel")
+add_includedirs("HQ_Kernel/include")
+add_includedirs("HQ_Kernel")
+add_headerfiles("HQ_Kernel/**.h")
+add_files("HQ_Kernel/**.cpp")
+--HQ_share
+add_includedirs("HQ_Share/include")
+add_includedirs("HQ_Share/include/AI")
+add_includedirs("HQ_Share/include/Entity")
+add_includedirs("HQ_Share/include/Interface")
+add_headerfiles("HQ_Share/include/**.h")
+
+--trt cudnn
+add_includedirs("/usr/include/aarch64-linux-gnu/")
+add_linkdirs("/usr/lib/aarch64-linux-gnu/")
+add_links("nvinfer",
+"nvinfer_plugin",
+"nvparsers",
+"nvonnxparser",
+"cudnn",
+"cudnn_adv_infer",
+"cudnn_adv_train",
+"cudnn_cnn_infer",
+"cudnn_cnn_train",
+"cudnn_ops_infer",
+"cudnn_ops_train")
+
+target("HQ_AI_Model")
+    --set_toolchains("my_toolchain")
+    --qt
+    add_rules("rule_display")
+    add_rules("qt.shared")
+    add_defines("QT_DEMO_LIBRARY")
+    add_frameworks("QtCore")
+    add_frameworks("QtGui")
+    add_packages("opencv4")
+    --源文件
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/")
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/Plugin/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/Plugin/**.h")
+    add_files("HQ_AI_Model/HQ_AI_Model/Plugin/**.cpp")
+
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/CModelManager.h","HQ_AI_Model/HQ_AI_Model/CYoloExecute.h")
+    add_files("HQ_AI_Model/HQ_AI_Model/CModelManager.cpp","HQ_AI_Model/HQ_AI_Model/CYoloExecute.cpp")
+
+    --tensorRTPro common
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/")
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/common/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/common/**.hpp")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/common/**.cuh")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/common/**.cpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/common/**.cu")
+
+    --tensorRTPro infer
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/infer/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/infer/**.hpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/infer/**.cpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/tensorRT/import_lib.cpp")
+
+    --common
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/")
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/common/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/common/**.hpp")
+
+    --deimv2
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_deimv2/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_deimv2/**.hpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_deimv2/**.cpp")
+    --yolocls
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_cls/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_cls/**.hpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_cls/**.cpp")
+    --yolo
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo/**.hpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo/**.cpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo/**.cu")
+    --yoloobb
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_obb/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_obb/**.hpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_obb/**.cpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_obb/**.cu")
+    --yolopose
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_pose/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_pose/**.hpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_pose/**.cpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_pose/**.cu")
+    --yoloseg
+    add_includedirs("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_seg/")
+    add_headerfiles("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_seg/**.hpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_seg/**.cpp")
+    add_files("HQ_AI_Model/HQ_AI_Model/tensorRTPro/application/app_yolo_seg/**.cu")
+
+```
