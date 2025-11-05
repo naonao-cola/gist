@@ -59,6 +59,8 @@ xmake project -k cmakelists
 #生成compiler_commands
 xmake project -k compile_commands
 
+## 设置版本
+set_version("1.0.1", {soname = true})
 
 add_requires("opencv",{system = true})
 add_packages("opencv")
@@ -100,6 +102,14 @@ function mirror(url)
      --return string.format("https://github.moeyy.xyz/%s", url)
 	 return url:gsub("https://github.com", "https://github.moeyy.xyz/https://github.com")
 end
+
+## 内置 Github 代理镜像配置
+xmake g --proxy_pac=github_mirror.lua
+## 清除pac
+xmake g --proxy_pac=""
+xmake g -c
+# 添加仓库
+xrepo add-repo gitee https://gitee.com/tboox/xmake-repo master
 ```
 
 ```
