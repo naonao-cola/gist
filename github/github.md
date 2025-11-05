@@ -198,7 +198,7 @@ git reset --hard master
 // 合并提交信息
 git add <file>
 git commit --amend --no-edit
-git commit --amend -m "Added lines to README.md" 
+git commit --amend -m "Added lines to README.md"
 ```
 
 git stash 命令
@@ -767,6 +767,8 @@ jobs:
     yolo tensorrt
     https://github.com/laugh12321/TensorRT-YOLO.git
 
+    小样本检测(样本量少)
+    https://github.com/Sompote/DINOV3-YOLOV12
 
     从头构建神经网络
     https://github.com/wang-xinyu/tensorrtx
