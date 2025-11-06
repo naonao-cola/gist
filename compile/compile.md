@@ -48,6 +48,11 @@ xmake project -k vsxmake2022 -m "release,debug" v2022
 
 # 快速检测系统上指定的包信息,请切换到非工程目录下执行上面的命令
 xmake l find_package x264
+xmake l find_package pkgconfig
+xmake l find_package pacman
+xmake l find_package brew
+xmake l hash.sha256 xxx
+
 # 追加第三方包管理器前缀来测试
 xmake l find_package conan::OpenSSL/1.0.2g
 # 图形化菜单
