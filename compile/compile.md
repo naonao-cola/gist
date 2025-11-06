@@ -21,6 +21,8 @@ https://zhuanlan.zhihu.com/p/412503965
 gcc -dumpmachine
 ldd --version
 
+# 安装 aarch gcc
+sudo apt install gcc-aarch64-linux-gnu
 
 xmake create -l C++ -P ./hello
 
