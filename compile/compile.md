@@ -17,6 +17,11 @@ https://zhuanlan.zhihu.com/p/412503965
 ### 命令行
 
 ```bash
+# gcc - 获取当前的 GCC 架构
+gcc -dumpmachine
+ldd --version
+
+
 xmake create -l C++ -P ./hello
 
 #清除配置
