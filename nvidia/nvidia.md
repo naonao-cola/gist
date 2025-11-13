@@ -3,6 +3,10 @@
 
 单指令流多数据流(SIMD, Single Instruction stream Multiple Data stream)
 
+知乎 :
+https://zhuanlan.zhihu.com/p/591900754
+
+
 github 仓库：
 
 https://github.com/xtensor-stack/xsimd

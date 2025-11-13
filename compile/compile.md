@@ -14,6 +14,16 @@ xmake 远程包管理入门,参考链接:
 
 https://zhuanlan.zhihu.com/p/412503965
 
+
+知乎: XMake 源码——编译依赖图构建
+
+https://zhuanlan.zhihu.com/p/17209365768
+
+
+知乎: C++ 大型项目接入 XMake 编译工具的最佳实践
+
+https://zhuanlan.zhihu.com/p/709871458
+
 ### 命令行
 
 ```bash

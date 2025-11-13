@@ -218,6 +218,22 @@ BRANCH=${BRANCH:-master}
 https://zhuanlan.zhihu.com/p/294938381?utm_medium=social&utm_psn=1819891349903785984&utm_source=wechat_session
 
 
+知乎: 苦练一年后总结的 Vim 使用技巧，送你，拿好了！
+
+https://zhuanlan.zhihu.com/p/294938381
+
+
+
+知乎: 用vim被人说装逼，怎么办?
+
+https://www.zhihu.com/question/58488056/answer/26604290662
+
+
+
+知乎: 在使用Vim的过程中，你最喜欢的技巧是什么？
+
+https://www.zhihu.com/question/19730145/answer/73162939014
+
 ### 命令模式
 1、移动光标
 1）上下左右移动光标

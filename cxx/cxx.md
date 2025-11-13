@@ -126,6 +126,16 @@ void f()
 
 ## 模板编程
 
+知乎: C++ 模板元编程从易到难
+
+https://zhuanlan.zhihu.com/p/659060939
+
+
+知乎: 一些C++元编程常用技巧（1）
+
+https://zhuanlan.zhihu.com/p/6641047943
+
+
 github 的一个仓库这个可以主要看一下。参考链接： https://github.com/wuye9036/CppTemplateTutorial
 
 小彭老师的课程也可以看一下,看一下模板编程的内容。
@@ -1254,9 +1264,87 @@ int main()
 
 显示当前调用函数堆栈中的函数 backtrace
 
+### gdb 调试技巧
+
+https://www.zhihu.com/people/89-34-76-44/posts
 
 ## lldb调试
 
 参考链接：
 
 https://www.cnblogs.com/pandamohist/p/14166382.html
+
+
+
+## c++ 奇淫巧技
+
+https://www.zhihu.com/question/298981020/answer/519864425
+
+```c++
+
+//内联变量
+// A.h
+inline int k = 10; //不需要为一个简单的变量分一个.cpp写定义了
+
+
+//折叠表达式和泛型lambda
+//before
+if(x=='x'||x=='X'||x=='e'||x=='E'||x=='.'){
+    work();
+}
+
+//after
+static auto anyone = [](auto&& k, auto&&... args) ->bool { return ((args == k) || ...); };
+if(anyone(x,'x','X','e','E','.')){
+    work();
+}
+
+
+
+//继承构造函数
+struct Base{
+    Base(int a,char b,double c, std::string d,float f)
+    :a(a),b(b),c(c),d(std::move(d)),f(f){}
+
+    int a;
+    char b;
+    double c;
+    std::string d;
+    float f;
+};
+
+//before
+struct Derive : public Base{
+    Derive(int a,char b,double c, std::string d,float f):Base(a,b,c,d,f){}
+};
+
+//after
+struct Derive : public Base{
+    using Base::Base;
+};
+
+
+
+
+//+lambda转换
+// before
+int8_t (*CreateLonglink)(const std::string& name, const std::string& host,
+ const std::vector<uint16_t> ports, const std::string& debugip)
+ = +[](const std::string& name,
+                         const std::string& host,
+                         const std::vector<uint16_t> ports,
+                         const std::string& debugip)->int8_t{
+
+    ...
+    return 0;
+};
+// after
+auto CreateLonglink= +[](const std::string& name,
+                         const std::string& host,
+                         const std::vector<uint16_t> ports,
+                         const std::string& debugip)->int8_t{
+
+    ...
+    return 0;
+};
+```

@@ -1441,6 +1441,18 @@ int main()
 //b的p成员的值与a不同，c的p值与a.p相同
 ```
 
+
+## STL
+
+知乎
+
+https://zhuanlan.zhihu.com/p/381607411
+
+https://www.zhihu.com/question/270085840/answer/2286348783
+
+https://zhuanlan.zhihu.com/p/55550273
+
+
 ## 异步基础
 c++ 多线程的资料教程很多，就不自己写了了，放一点自己看到不错的链接。
 

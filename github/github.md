@@ -11,9 +11,18 @@ https://mp.weixin.qq.com/s/J8IByWMSQEj_y2xhhoz4sg
 
 https://mp.weixin.qq.com/s/VSnkoeWLu7D8c6d73LEAxQ
 
+知乎:十年开发Git操作总结，应该是很全面了
+
+https://zhuanlan.zhihu.com/p/283126789
+
 git图展示高频Git命令,参考链接：
 
 https://mp.weixin.qq.com/s/DThGiP_fPG_szIZZ_3Jpdw
+
+
+知乎: 每日一个小工具：Git Hook—— 代码管理的魔法助手
+
+https://zhuanlan.zhihu.com/p/11223168462
 
 .gitkeep 文件是防止空目录不上传的文件
 .gitattributes 文件是控制格式的文件，
@@ -107,6 +116,23 @@ git commit 规范
 | build |	影响项目构建或依赖项修改	|build: 增加登录单元测试|
 | ci	  | 持续集成相关文件修改	|ci: 更新ci配置|
 | revert	  | 恢复上一次提交	|revert: 更新webpack配置|
+
+
+知乎: 帮助你养成良好的 Git 使用习惯
+
+https://zhuanlan.zhihu.com/p/1897303521113666192
+
+
+分支命名规范
+
+
+| 分支类型     | 命名格式                           | 示例                      |
+| -------- | ------------------------------ | ------------------------- |
+| 功能开发     |  feature/功能名                        | feature/user-auth     |
+| Bug修复      | fix/问题描述                        | fix/login-error     |
+| 发布版本     |  release/版本号                       | release/v1.2.0     |
+| 个人开发     | dev/姓名/功能     | dev/alice/search-opt |
+
 
 
 
