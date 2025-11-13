@@ -20,6 +20,10 @@ https://zhuanlan.zhihu.com/p/412503965
 # gcc - 获取当前的 GCC 架构
 gcc -dumpmachine
 ldd --version
+whereis gcc
+which gcc
+type gcc
+gcc -v
 
 # 安装 aarch gcc
 sudo apt install gcc-aarch64-linux-gnu
