@@ -135,6 +135,18 @@ valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --undef-value-e
 
 ```
 
+windows 上内存检测工具
+
+Dr Memory
+
+下载地址:
+
+https://drmemory.org/page_download.html
+
+使用说明:
+
+https://www.cnblogs.com/phpandmysql/p/10953058.html
+
 ---
 
 ## C++ DLL导出类 知识大全
