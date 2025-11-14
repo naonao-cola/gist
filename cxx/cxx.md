@@ -49,6 +49,92 @@ https://blog.csdn.net/daidi1989/article/details/79916399
 
 参考链接：http://www.chunel.cn/archives/topic-01-performanceoptimization
 
+
+### 内存泄漏
+
+知乎:
+
+https://zhuanlan.zhihu.com/p/15101814919  深入内存调试：Valgrind工具的终极指南
+
+```bash
+sudo apt-get update
+sudo apt-get install valgrind
+brew install valgrind  # mac
+```
+
+```c++
+#include <iostream>
+#include<stdlib.h>
+
+void k(void)
+{
+    int *x = new int[8];
+    x[9] = 0;              //数组下标越界
+}                        //内存未释放
+
+int main(void)
+{
+    k();
+    return 0;
+}
+
+```
+
+```lua
+add_rules("mode.debug", "mode.release")
+set_policy("build.sanitizer.address", true)
+--set_policy("build.sanitizer.thread", true)
+--set_policy("build.sanitizer.memory", true)  --clang only
+set_policy("build.sanitizer.leak", true)
+set_policy("build.sanitizer.undefined", true)
+set_policy("run.autobuild", true)
+target("scan_test")
+    set_kind("binary")
+    add_files("src/*.cpp")
+
+```
+
+```bash
+
+valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all --undef-value-errors=no --log-file=log ./可执行文件名
+
+
+==24263== Memcheck, a memory error detector
+==24263== Copyright (C) 2002-2024, and GNU GPL'd, by Julian Seward et al.
+==24263== Using Valgrind-3.24.0 and LibVEX; rerun with -h for copyright info
+==24263== Command: ./scan_test
+==24263== Parent PID: 5866
+==24263==
+==24263== Invalid write of size 4
+==24263==    at 0x401144: k() (main.cpp:7)
+==24263==    by 0x401155: main (main.cpp:12)
+==24263==  Address 0x4df40a4 is 4 bytes after a block of size 32 alloc'd
+==24263==    at 0x48465B3: operator new[](unsigned long) (vg_replace_malloc.c:729)
+==24263==    by 0x401137: k() (main.cpp:6)
+==24263==    by 0x401155: main (main.cpp:12)
+==24263==
+==24263==
+==24263== HEAP SUMMARY:
+==24263==     in use at exit: 32 bytes in 1 blocks
+==24263==   total heap usage: 2 allocs, 1 frees, 73,760 bytes allocated
+==24263==
+==24263== 32 bytes in 1 blocks are definitely lost in loss record 1 of 1
+==24263==    at 0x48465B3: operator new[](unsigned long) (vg_replace_malloc.c:729)
+==24263==    by 0x401137: k() (main.cpp:6)
+==24263==    by 0x401155: main (main.cpp:12)
+==24263==
+==24263== LEAK SUMMARY:
+==24263==    definitely lost: 32 bytes in 1 blocks
+==24263==    indirectly lost: 0 bytes in 0 blocks
+==24263==      possibly lost: 0 bytes in 0 blocks
+==24263==    still reachable: 0 bytes in 0 blocks
+==24263==         suppressed: 0 bytes in 0 blocks
+==24263==
+==24263== For lists of detected and suppressed errors, rerun with: -s
+==24263== ERROR SUMMARY: 2 errors from 2 contexts (suppressed: 0 from 0)
+
+```
+
 ---
 
 ## C++ DLL导出类 知识大全
