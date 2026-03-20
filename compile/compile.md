@@ -100,6 +100,16 @@ add_values("cuda.build.devlink", true).
 # 查看内置规则
 xmake show -l rules
 
+#卸载所有的包
+xrepo scan opencv
+xrepo remove --all opencv
+
+#指定vs 版本
+xmake f --vs=2019 -c
+xmake f --toolchain=msvc[vs=2019] -c
+set_toolchains("msvc", {vs = "2019"})
+# set_policy("build.c++.msvc.runtime", "MD")
+
 #添加cuda
 add_rules("cuda")
 add_cugencodes("native")
