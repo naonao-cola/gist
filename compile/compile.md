@@ -108,6 +108,8 @@ xrepo remove --all opencv
 xmake f --vs=2019 -c
 xmake f --toolchain=msvc[vs=2019] -c
 set_toolchains("msvc", {vs = "2019"})
+xmake global --clean
+xmake f -p windows -a x64 --vs=2019 -c
 # set_policy("build.c++.msvc.runtime", "MD")
 
 #添加cuda
