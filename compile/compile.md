@@ -35,19 +35,24 @@ which gcc
 type gcc
 gcc -v
 
+
+
 # 安装 aarch gcc
 sudo apt install gcc-aarch64-linux-gnu
-
+# 创建模板
 xmake create -l C++ -P ./hello
+
 
 #清除配置
 xmake f -c
 #清除所有东西，包括缓存，生成的
 xmake clean -a
 xmake f -v
+
 # 确认安装包
 xmake f -y
 xmake -rv
+
 # 输出调用各种工具操作，编译的详细参数，如果出错还会打印 xmake 的栈回溯
 xmake -vD
 xmake show
@@ -58,7 +63,9 @@ xmake check
 # 调用clang-tidy 检查代码
 xmake check clang-tidy
 
+
 xmake project -k vsxmake2022 -m "release,debug" v2022
+
 
 # 快速检测系统上指定的包信息,请切换到非工程目录下执行上面的命令
 xmake l find_package x264
@@ -66,6 +73,7 @@ xmake l find_package pkgconfig
 xmake l find_package pacman
 xmake l find_package brew
 xmake l hash.sha256 xxx
+
 
 # 追加第三方包管理器前缀来测试
 xmake l find_package conan::OpenSSL/1.0.2g
@@ -104,13 +112,21 @@ xmake show -l rules
 xrepo scan opencv
 xrepo remove --all opencv
 
-#指定vs 版本
+#指定vs studio的 版本
 xmake f --vs=2019 -c
 xmake f --toolchain=msvc[vs=2019] -c
 set_toolchains("msvc", {vs = "2019"})
+set_toolchains("msvc", {vs = "2022", vs_toolset = "14.29.30133"})
 xmake global --clean
 xmake f -p windows -a x64 --vs=2019 -c
 # set_policy("build.c++.msvc.runtime", "MD")
+
+# ********************注意事项***************************#
+# xmake 在初始化 CUDA toolchain 时，会优先从系统查找最新的 VS 环境并将其环境变量硬塞给 nvcc
+# 此时需要清除缓存 ~/.xmake/cache/detect
+xmake f -c --vs=2022 --vs_toolset=14.29.30133 -m releasedbg
+xmake global --clean
+
 
 #添加cuda
 add_rules("cuda")
@@ -129,8 +145,10 @@ xmake require --info boost
 # 删除库, 加引号
 xrepo remove "opencv 4.8.0"
 
-#离线包搜索目录
+#离线包搜索目录,需要加引号
 xmake g --pkg_searchdirs="/download/packages"
+
+
 
 # 设置代理
 xmake g --proxy_pac=E:/demo/xmake/pac.lua
@@ -140,6 +158,8 @@ function mirror(url)
      --return string.format("https://github.moeyy.xyz/%s", url)
 	 return url:gsub("https://github.com", "https://github.moeyy.xyz/https://github.com")
 end
+
+
 
 ## 内置 Github 代理镜像配置
 xmake g --proxy_pac=github_mirror.lua
