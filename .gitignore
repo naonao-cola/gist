@@ -12,4 +12,7 @@ node_modules/
 # OpenCode
 .omo/
 
+# Obsidian
+.obsidian/
+
 
