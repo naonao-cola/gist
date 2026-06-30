@@ -1,0 +1,12 @@
+{
+  "name": "strip-frontmatter",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "quartz": {
+    "name": "strip-frontmatter",
+    "displayName": "Strip Frontmatter",
+    "category": "transformer",
+    "defaultOrder": 0
+  }
+}

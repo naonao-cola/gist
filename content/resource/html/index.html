@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Document</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Description">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify@4/lib/themes/vue.css">
+
+
+  <!-- 侧边栏插件的样式 -->
+  <link rel="stylesheet" href="//vox.cab/npm/docsify-sidebar-collapse/dist/sidebar.min.css" />
+  <meta name="theme-color" content="#ffffff">
+</head>
+
+<body>
+  <div id="app">🏃‍🏃‍🏃‍💨加载中...</div>
+  <script>
+    window.$docsify = {
+      name: 'Blog',
+      repo: 'https://github.com/naonao-cola',
+      el: '#app',
+      loadNavbar: true, // 默认加载 _navbar.md，作为顶部导航栏
+      loadSidebar: true,
+      // 开启目录,最大层级为2
+      subMaxLevel: 6,
+      // 切换页面后是否自动跳转到页面顶部
+      auto2top: true,
+      // 小屏设备下合并导航栏到侧边栏
+      mergeNavbar: true,
+      themeColor: '#ff2f54',
+      alias: {
+        "/.*/_sidebar.md": "/_sidebar.md",
+      },
+      coverpage: true,
+      disqus: 'shortname',
+      // 页面右侧toc
+      toc: {
+        tocMaxLevel: 6,
+        target: " h1, h2, h3, h4, h5, h6",
+      },
+      // 全文搜索
+      search: {
+        maxAge: 86400000,// 过期时间，单位毫秒，默认一天
+        paths: 'auto',// 注意：仅适用于 paths: 'auto' 模式
+        // 占位文字
+        placeholder: {
+          '/zh-cn/': '搜索',
+          '/': 'Type to search'
+        },
+        // 支持本地化
+        noData: {
+          '/zh-cn/': '找不到结果',
+          '/': 'No Results'
+        },
+        // Headline depth, 1 - 6
+        depth: 6,
+        // whether or not to hide other sidebar content
+        hideOtherSidebarContent: true,
+        // To avoid search index collision between multiple websites under the same domain
+        namespace: 'This website',
+      },
+
+      // 字数统计
+      count: {
+        countable: true,
+        position: "top",
+        margin: "10px",
+        float: "right",
+        fontsize: "0.9em",
+        color: "red",
+        language: "chinese",
+        localization: {
+          words: "",
+          minute: "",
+        },
+        isExpected: true,
+      },
+      // 文章最后更新时间
+      timeUpdater: {
+        text: "<div align='right' width='100%' style='color:gray; font-s1ze:16px; margin--top:l0px;'> Last Update:  {docsify-updated}</div>",
+        formatUpdated: "{YYYY}-{MM}-{DD} {HH}:{mm}",
+      },
+      // 前后翻页
+      pagination: {
+        previousText: 'Previous Page',
+        nextText: 'Next Page',
+        crossChapter: true,
+        crossChapterText: true,
+      },
+      // 回到顶部按钮  <!-- 🔝 -->
+      docsifyBackTop: {
+        size: 32,           	// 数值，组件大小，默认值32。
+        bottom: 15,         	// 数值，组件底部偏移距离，默认值15。
+        right: 15,          	// 数值，组件右侧偏移距离，默认值15。
+        logo: '🔝',				// logo:字符串或svg矢量图代码，默认为svg代码图标。
+        bgColor: '#2096ff'    	// 背景颜色，#fff、pink等，logo为svg图标时，不填。
+      },
+      giscus: {
+        repo: "SeaHI-Robot/docsify_template",
+        repoId: "R_kgDOKG_QPQ",
+        category: "Announcements",
+        categoryId: "DIC_kwDOKG_QPc4CY4CR",
+        mapping: "url",
+        strict: "1",
+        reactionsEnabled: "0",
+        emitMetadata: "0",
+        inputPosition: "top",
+        theme: "light",
+        lang: "zh-CN",
+        loading: "lazy"
+      },
+      markdown: {
+        renderer: {
+          image: function (href, title, text) {
+            // 按照原来的渲染 img
+            var image_html = this.origin.image.apply(this, arguments)
+            // 用 figure 包一下图片，实现居中
+            return '<figure>' + image_html + '<figcaption>' + text +
+              '</figcaption></figure>'
+          }
+
+
+        }
+      }
+    }
+  </script>
+  <style>
+    figure {
+      text-align: center
+    }
+  </style>
+
+  <!-- Docsify v4 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify@4"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-bash.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-c.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-json.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-shell-session.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-cmake.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-java.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-csharp.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-docker.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-lua.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/prismjs@1/components/prism-powershell.min.js"></script>
+  <!-- 多tab支持 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-tabs@1/dist/docsify-tabs.min.js"></script>
+  <!-- 代码复制 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-copy-code@2/dist/docsify-copy-code.min.js"></script>
+  <!-- 底部 上一页下一页 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-pagination@2/dist/docsify-pagination.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/external-script.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/ga.min.js"></script>
+  <!-- 全文搜索 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/search.js"></script>
+  <!-- 图片放大缩小 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify@4/lib/plugins/zoom-image.min.js"></script>
+  <!-- 字数统计 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-count@latest/dist/countable.min.js"></script>
+  <!-- 侧边栏目录折叠 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-sidebar-collapse/dist/docsify-sidebar-collapse.min.js"></script>
+  <!-- 页面右侧 TOC -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-plugin-toc@1.1.0/dist/docsify-plugin-toc.min.js"></script>
+  <!-- emoji -->
+  <script src="//cdn.jsdelivr.net/npm/docsify/lib/plugins/emoji.min.js"></script>
+
+  <!-- 回到顶部 -->
+  <script src="https://cdn.jsdelivr.net/gh/Sumsung524/docsify-backTop/dist/docsify-backTop.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/jerryc127/butterfly_cdn@2.1.0/js/click_heart.js"></script>
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  <script src="https://sidecar.gitter.im/dist/sidecar.v1.js" async defer></script>
+
+  <!-- 接入giscus 推荐使用，大大滴好，有很多配置选项可以自定义配置 https://giscus.app/zh-CN
+          https://www.bilibili.com/video/BV1rR4y1q7y2/?spm_id_from=333.788&vd_source=489a733550a7c846fcce2e3eb3a683cc
+          https://www.npmjs.com/package/docsify-giscus -->
+  <link rel="stylesheet" href="https://unpkg.com/docsify-giscus@1.0.2/dist/giscus.css">
+  <script src="https://unpkg.com/docsify-giscus@1.0.2/dist/docsify-giscus.min.js"></script>
+  <!-- docsify-pangu 对中英文之间自动加空格 -->
+  <script src="//cdn.jsdelivr.net/npm/docsify-pangu/lib/pangu.min.js"></script>
+
+  <!-- 显示文章最后更新时间 --> <!-- https://www.npmjs.com/package/docsify-updated -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-updated/src/time-updater.js"></script>
+  <!-- busuanzi 不蒜子, 统计网站访问量  https://busuanzi.ibruce.info    https://www.npmjs.com/package/docsify-busuanzi -->
+  <script src="https://unpkg.com/docsify-busuanzi@1.0.1/dist/docsify-busuanzi.min.js"></script>
+
+  <!-- 阅读进度条 -->
+  <script src="https://cdn.jsdelivr.net/npm/docsify-progress@latest/dist/progress.min.js"></script>
+
+  <!-- PDFObject.js is a required dependency of this plugin -->
+  <script src="//cdnjs.cloudflare.com/ajax/libs/pdfobject/2.1.1/pdfobject.min.js"></script>
+  <!-- This is the source code of the pdf embed plugin -->
+  <script src="path-to-file/docsify-pdf-embed.js"></script>
+  <!-- or use this if you are not hosting the file yourself -->
+  <script src="//unpkg.com/docsify-pdf-embed-plugin/src/docsify-pdf-embed.js"></script>
+
+</body>
+
+</html>

@@ -1,18 +1,13 @@
-﻿# Xmake cache
-.xmake/
-build/
-./history
-./obsidian
-# MacOS Cache
 .DS_Store
-
-# Node
-node_modules/
-
-# OpenCode
-.omo/
-
-# Obsidian
-.obsidian/
-
-
+.gitignore
+node_modules
+public
+prof
+tsconfig.tsbuildinfo
+.obsidian
+.quartz-cache
+private/
+.replit
+replit.nix
+.quartz/
+quartz/cli/tui/dist/
