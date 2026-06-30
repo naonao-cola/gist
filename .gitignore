@@ -6,4 +6,10 @@ build/
 # MacOS Cache
 .DS_Store
 
+# Node
+node_modules/
+
+# OpenCode
+.omo/
+
 
