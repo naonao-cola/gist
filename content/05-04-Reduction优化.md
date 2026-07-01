@@ -20,7 +20,7 @@ tags: ["CUDA", "GPU", "SIMD", "并行计算"]
 #### 跨度
 
 相邻配对：元素与他们相邻的元素配对
-<center>![](resource/image/nvidia/nvi_4.png)</center>
+<div align="center"><img src="resource/image/nvidia/nvi_4.png" alt=""></div>
 ```c++
 /*
 在这个kernel里面，有两个global memory array，一个用来存放数组所有数据，另一个用来存放部分和。所有block独立的执行求和操作。__syncthreads用来保证每次迭代，所有的求和操作都做完，然后进入下一步迭代。
@@ -77,7 +77,7 @@ __global__ void reduceNeighboredLess (int *g_idata, int *g_odata, unsigned int n
 对于一个有512个thread的block来说，前八个warp执行第一轮reduction，剩下八个warp什么也不干；第二轮，前四个warp执行，剩下十二个什么也不干。因此，就彻底不存在divergence了（重申，divergence只发生于同一个warp）。最后的五轮还是会导致divergence，因为这个时候需要执行threads已经凑不够一个warp了。
 
 交错配对：元素与一定距离的元素配对
-<center>![](resource/image/nvidia/nvi_5.png)</center>
+<div align="center"><img src="resource/image/nvidia/nvi_5.png" alt=""></div>
  Interleaved Pair模式的初始步调是block大小的一半，每个thread处理像个半个block的两个数据求和。和之前的图示相比，工作的thread数目没有变化，但是，每个thread的load/store global memory的位置是不同的。
 
 ```c++

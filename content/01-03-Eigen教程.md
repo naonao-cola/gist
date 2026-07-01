@@ -267,7 +267,7 @@ Eigen 几何
     四元数（4X1）:Eigen::Quaterniond
     平移向量（3X1）:Eigen::Vector3d
     变换矩阵（4X4）:Eigen::Isometry3d
-<center>![](resource/image/common/rotate_7.jpg)</center>
+<div align="center"><img src="resource/image/common/rotate_7.jpg" alt=""></div>
 中间变量t_V t_R t_Q
 
 ```c++

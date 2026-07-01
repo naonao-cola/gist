@@ -239,9 +239,9 @@ https://xmake.io/mirror/zh-cn/guide/faq.html
 执行完上面的命令后，它不会立即退出，会一直处于等待调试状态，有可能没有任何输出。这个时候，我们不要急着退出它，继续打开 VSCode，并在 VSCode 中打开 Xmake 的 Lua 脚本源码目录。也就是这个目录：Xmake Lua Scripts，我们可以下载的本地，也可以直接打开 Xmake 安装目录中的 lua 脚本目录。然后切换到 VSCode 的调试 Tab 页，点击 RunDebug -> Emmylua New Debug 就能连接到我们的 xmake build 命令调试端，开启调试。
 
 如下图所示，默认的起始断点会自动中断到 debugger:_start_emmylua_debugger 内部，我们可以点击单步跳出当前函数，就能进入 main 入口。
-<center>![](resource/image/cxx/xmake_1.png)</center>
+<div align="center"><img src="resource/image/cxx/xmake_1.png" alt=""></div>
 然后设置自己的断点，点击继续运行，就能中断到自己想要调试的代码位置。我们也可以在项目工程的配置脚本中设置断点，也可以实现快速调试自己的配置脚本，而不仅仅是 Xmake 自身源码。
-<center>![](resource/image/cxx/xmake_2.png)</center>
+<div align="center"><img src="resource/image/cxx/xmake_2.png" alt=""></div>
 ### lua脚本
 ```bash
 # 编译模式选择
