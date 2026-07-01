@@ -1,3 +1,8 @@
 @use "./variables.scss" as *;
 
 // put your custom CSS here!
+
+// 居中独立图片（Obsidian 默认行为）
+.article-content p:has(img:only-child) {
+  text-align: center;
+}
