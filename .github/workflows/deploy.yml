@@ -32,7 +32,7 @@ jobs:
         run: npm ci
 
       - name: Install Quartz plugins
-        run: node scripts/install-plugins.mjs
+        run: npx tsx scripts/install-plugins.ts
 
       - name: Build Quartz
         run: npx quartz build
